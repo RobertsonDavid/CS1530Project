@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.ImageIcon;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -70,6 +71,22 @@ public class GUI implements ActionListener {
 		LayoutManager layout = new GridLayout(8, 8);
     	boardPanel.setLayout(layout);
     	boolean white;
+
+    	ImageIcon WhitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
+    	ImageIcon BlackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
+    	ImageIcon WhiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
+    	ImageIcon BlackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
+    	ImageIcon WhiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
+    	ImageIcon BlackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
+    	ImageIcon WhiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
+    	ImageIcon BlackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
+    	ImageIcon WhiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
+    	ImageIcon BlackKQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
+    	ImageIcon WhiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
+    	ImageIcon BlackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+
+
+
     	for(int i = 7; i >= 0; i--)
 		{
     		if(i % 2 == 0){
@@ -89,12 +106,57 @@ public class GUI implements ActionListener {
 					white = false;
 				}
 				else {
-					button.setBackground(Color.BLACK);
+					button.setBackground(Color.GRAY);
 					white = true;
 				}
 				button.setUI(new BasicButtonUI());
 				button.addActionListener(this);
-				button.setLabel("b");
+				button.setLabel("");
+
+				if (i == 0){
+					if (j == 0 || j == 7){
+						button.setIcon(BlackRook);
+					}
+					if(j == 1 || j == 6){
+						button.setIcon(BlackKnight);
+					}
+					if(j == 2 || j == 5){
+						button.setIcon(BlackBishop);
+					}
+					if(j == 3){
+						button.setIcon(BlackKQueen);
+					}
+					if(j == 4){
+						button.setIcon(BlackKing);
+					}
+				}
+				//creating black pawns
+				else if (i == 1){
+					button.setIcon(BlackPawn);
+				}
+				//creating white pawns
+				else if (i == 6){
+					button.setIcon(WhitePawn);
+				}
+				else if(i == 7)
+				{
+					if (j == 0 || j == 7){
+						button.setIcon(WhiteRook);
+					}
+					if(j == 1 || j == 6){
+						button.setIcon(WhiteKnight);
+					}
+					if(j == 2 || j == 5){
+						button.setIcon(WhiteBishop);
+					}
+					if(j == 3){
+						button.setIcon(WhiteQueen);
+					}
+					if(j == 4){
+						button.setIcon(WhiteKing);
+					}
+				}	
+
 				squares[i][j] = button;
 				boardPanel.add(button);
 			}

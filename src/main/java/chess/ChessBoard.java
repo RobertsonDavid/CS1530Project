@@ -1,13 +1,13 @@
 package chess;
 
 public class ChessBoard {
-	
+
 	private ChessPiece[][] b;
-	
+
 	public ChessBoard() {
-		
+
 		b = new ChessPiece[8][8];
-		
+
 		//white pieces
 		b[0][0] = b[7][0] = new ChessPiece("rock", true); //white rock
 		b[1][0] = b[6][0] = new ChessPiece("knight", true); //white knight
@@ -16,7 +16,7 @@ public class ChessBoard {
 		b[4][0] = new ChessPiece("king", true); //white king
 		for(int i = 0; i < 8; i++)
 			b[i][1] = new ChessPiece("pawn", true); //white pawn
-		
+
 		//black pieces
 		b[0][7] = b[7][7] = new ChessPiece("rock", false); //black rock
 		b[1][7] = b[6][7] = new ChessPiece("knight", false); //black knight
@@ -26,20 +26,19 @@ public class ChessBoard {
 		for(int i = 0; i < 8; i++)
 			b[i][6] = new ChessPiece("pawn", false); //black pawn
 	}
-	
+
 	public ChessPiece getPieceAt(int r, int c) {
 		return b[r][c];
 	}
-	
+
 	//return updated board to refresh GUI and test purpose
 	public ChessPiece[][] update(int rOrigin, int cOrigin, int rDest, int cDest) {
-		
+
 		if(b[rOrigin][cOrigin]!=null) {
 			b[rDest][cDest] = b[rOrigin][cOrigin];
 			b[rOrigin][cOrigin] = null;
 		}
-		
+
 		return b;
 	}
-	
 }

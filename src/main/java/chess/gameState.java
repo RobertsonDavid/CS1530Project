@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.File;
 public class gameState
@@ -62,15 +63,15 @@ public class gameState
   //need method for clearing chessboard
   //need method for adding pieces to empty board one by one
   // need to add support for multiple saves
-  public ChessBoard load()
+  public ChessBoard load() throws FileNotFoundException
   {
     ChessBoard loadGame= new ChessBoard();
     //need method of clearing pieces from 2d array
-    loadGame.clear();
+    loadGame.clearBoard();
     Scanner scan=new Scanner(new File("filename.txt"));
     scan.useDelimiter(",");
     String type;
-    Boolean color;
+    boolean color;
     int xcoord;
     int ycoord;
     
@@ -78,16 +79,33 @@ public class gameState
     {
       String pieceInfo=scan.next();
       String []split = pieceInfo.split(" ");
-      xcoord= Integer.parseInt(split[0]);
-      ycoord=Integer.parseInt(split[1]);
+      //if the file is corrupted, return a new game
+      try
+      {
+        xcoord= Integer.parseInt(split[0]);
+        ycoord=Integer.parseInt(split[1]);
+      }
+      catch (NumberFormatException e)
+      {
+        System.out.println("Save File Corrupted!");
+        return loadGame= new ChessBoard();
+      }
       type=split[2];
+      String[] typesPoss= new String[6];    //array of possible piece types
+      typesPoss[0]= "pawn"; typesPoss[1]="rook"; typesPoss[2]="knight"; typesPoss[3]="bishop"; typesPoss[4]="queen"; typesPoss[5]="king";
+      if(!type.equals(typesPoss[0]) && !type.equals(typesPoss[1]) && !type.equals(typesPoss[2]) && !type.equals(typesPoss[3]) && !type.equals(typesPoss[4]) && !type.equals(typesPoss[5]))
+      {
+        System.out.println("Save File Corrupted!");
+        return loadGame= new ChessBoard();
+      }
       if(split[3].equals("false"))
         color=false;
       else if(split[3].equals("true"))
         color=true;
       else
       {
-        System.out.println("Error determining piece color!");
+        System.out.println("Save File Corrupted!");
+        return loadGame= new ChessBoard();
       }
       
       ///needed method addPiece(int, int, String, boolean)

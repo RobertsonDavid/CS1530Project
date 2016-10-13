@@ -2,6 +2,7 @@ package chess;
 
 public class ChessPiece {
 
+
 	private String type;
 	//true if piece is white, false if piece is black
 	private boolean side;
@@ -18,4 +19,5 @@ public class ChessPiece {
 	public boolean getSide() {
 		return side;
 	}
+
 }

@@ -1,7 +1,7 @@
 package chess;
 
 import static org.junit.Assert.*;
-import org.mockito.*; 
+import org.mockito.*;
 import org.junit.Test;
 
 public class ChessBoardTest {
@@ -23,7 +23,7 @@ public class ChessBoardTest {
 		assertEquals(p.getType(), b.getPieceAt(0, 0).getType());
 		assertEquals(p.getSide(), b.getPieceAt(0, 0).getSide());
 	}
-	
+
 	//test if there is no piece on a empty square
 	//the getPieceAt() should return null on 4,5 which is an empty square
 	@Test
@@ -31,7 +31,7 @@ public class ChessBoardTest {
 		ChessBoard b = new ChessBoard();
 		assertNull(b.getPieceAt(4, 5));
 	}
-	
+
 	//test if a piece is moved to destination index
 	@Test
 	public void testMovePieceToDest() {
@@ -40,7 +40,7 @@ public class ChessBoardTest {
 		testBoard.update(0, 1, 0, 2);
 		assertEquals(testPawn, testBoard.getPieceAt(0, 2));
 	}
-	
+
 	//test if after a piece is moved the origin place is empty
 	@Test
 	public void testOriginAfterMovePiece() {

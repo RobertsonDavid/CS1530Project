@@ -9,7 +9,7 @@ public class ChessBoard {
   b = new ChessPiece[8][8];
 
   //white pieces
-  b[0][0] = b[7][0] = new ChessPiece("rook", true); //white rock
+  b[0][0] = b[7][0] = new ChessPiece("rock", true); //white rock
   b[1][0] = b[6][0] = new ChessPiece("knight", true); //white knight
   b[2][0] = b[5][0] = new ChessPiece("bishop", true); //white bishop
   b[3][0] = new ChessPiece("queen", true); //white queen
@@ -41,14 +41,14 @@ public class ChessBoard {
 
   return b;
  }
- 
+
  //clear pieces
  public void clearBoard()
  {
    ChessPiece[][] clearedArray= new ChessPiece[8][8];
    b= clearedArray;
  }
- 
+
  //add a piece to the chessPiece array
  //needed for loads
  public void addPiece(int x, int y, String type, boolean color)

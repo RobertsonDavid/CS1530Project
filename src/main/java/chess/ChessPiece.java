@@ -10,7 +10,7 @@ public class ChessPiece {
 
 	public ChessPiece(boolean firstMove, boolean topOfBoard, String pieceName, int row, int column){
     	
-    	this.pieceValue = pieceName;
+    	this.firstMove = firstMove;
     	this.topOfBoard = topOfBoard;
     	this.pieceValue = pieceName;
     	this.row = row;
@@ -50,12 +50,9 @@ public class ChessPiece {
     	{	
 	    	//moving Pawn by rows [a][b]... a=row b=column
 	    	if(piece.pieceValue == "Pawn"){
-	    		System.out.println(newRow + " " + piece.getRow());
-	    		System.out.println(piece.topOfBoard);
-	    		System.out.println(--newRow);
 	    		// if they want to move 2 spaces and first move and top piece
 	    		if ((newRow+2 == piece.getRow()) && piece.firstMove && piece.topOfBoard==false){
-	    			System.out.println("HELLO1");
+
 	    			piece.updateCord(newRow, newCol);
 	    			//board[piece.getRow()][piece.getColumn()] = piece;
 	    			return board;
@@ -64,22 +61,19 @@ public class ChessPiece {
 	    		//if they want to move 2 spaces and first move and bottom piece
 	    		else if ((newRow-2 == piece.getRow())&& piece.firstMove && piece.topOfBoard)
 	    		{
-	    			System.out.println("HELLO2");
 	    			piece.updateCord(newRow, newCol);
 	    			//board[piece.getRow()][piece.getColumn()] = piece;
 	    			return board;
 	    		}
 	    		//move 1 and top 
-	    		else if ((++newRow == piece.getRow()) && piece.topOfBoard == false){
-	    			System.out.println("HELLO3");
-	    			newRow = newRow +1;
+	    		else if ((newRow+1 == piece.getRow()) && piece.topOfBoard == false){
+
 	    			piece.updateCord(newRow, newCol);
 	    			//board[piece.getRow()][piece.getColumn()] = piece;
 	    			return board;
 	    		}
-	    		else if ((--newRow == piece.getRow()) && piece.topOfBoard){
-	    			System.out.println("HELLO");
-	    			newRow = newRow -1;
+	    		else if ((newRow-1 == piece.getRow()) && piece.topOfBoard){
+
 	    			piece.updateCord(newRow, newCol);
 	    			//board[piece.getRow()][piece.getColumn()] = piece;
 	    			return board;
@@ -203,63 +197,10 @@ public class ChessPiece {
 
 			//Move Queen which has the same moves as a Rook or Bishop
 			if(piece.pieceValue == "Queen"){
-				int changed= 0;
 
 				//run Rook code if board changed =1 then do not run bishop code
 				if(piece.getRow() != newRow && piece.getColumn() != newCol){
-					//Did not move along one rank/file
-					changed =0;
-				}
-
-	    		int offset;
-	    		//moving the row
-	    		if(piece.getRow() != newRow){
-					if(piece.getRow()< newRow){
-						offset = 1;
-					}
-					else{
-						offset = -1;
-					}
-				
-					for(int x = piece.getRow() + offset; x != newRow; x += offset){
-						//Go from currentRow to newRow, and check every space
-						//change 0 to null when object entered
-						if(board[x][piece.getColumn()] != 0){
-							//blocked by a piece 
-							continue;
-						}
-					}
-					changed =1;
-					piece.updateCord(newRow, newCol);
-					//board[piece.getRow()][piece.getColumn()]=piece;
-					return board;
-				}	
-			
-				//Now do the same for columns
-				if(piece.getColumn() != newCol){
-
-					if(piece.getColumn() < newCol){
-						offset = 1;
-					}
-					else{
-						offset = -1;
-					}
-					
-					for(int x = piece.getColumn() + offset; x != newCol; x += offset){
-						//Go from currentCol to newCol, and check every space
-						//change 0 to null when object entered
-						if(board[piece.getRow()][x] != 0){
-							//blocked by a piece 
-							continue;
-						}
-					}
-					changed =1;
-					piece.updateCord(newRow, newCol);
-					//board[piece.getRow()][piece.getColumn()]=piece;
-					return board;
-				}
-				//board hasnt changed so run Bishop code
-				if (changed == 0){
+					//Did not move along one rank/file so run bishop code
 					if(piece.getRow() == newRow || piece.getColumn() == newCol){
 						//Didn't move diagonally
 						return board;
@@ -295,6 +236,52 @@ public class ChessPiece {
 						y += colOffset;
 					}
 
+					piece.updateCord(newRow, newCol);
+					//board[piece.getRow()][piece.getColumn()]=piece;
+					return board;
+				}
+
+	    		int offset;
+	    		//moving the row
+	    		if(piece.getRow() != newRow){
+					if(piece.getRow()< newRow){
+						offset = 1;
+					}
+					else{
+						offset = -1;
+					}
+				
+					for(int x = piece.getRow() + offset; x != newRow; x += offset){
+						//Go from currentRow to newRow, and check every space
+						//change 0 to null when object entered
+						if(board[x][piece.getColumn()] != 0){
+							//blocked by a piece 
+							return board;
+						}
+					}
+					piece.updateCord(newRow, newCol);
+					//board[piece.getRow()][piece.getColumn()]=piece;
+					return board;
+				}	
+			
+				//Now do the same for columns
+				if(piece.getColumn() != newCol){
+
+					if(piece.getColumn() < newCol){
+						offset = 1;
+					}
+					else{
+						offset = -1;
+					}
+					
+					for(int x = piece.getColumn() + offset; x != newCol; x += offset){
+						//Go from currentCol to newCol, and check every space
+						//change 0 to null when object entered
+						if(board[piece.getRow()][x] != 0){
+							//blocked by a piece 
+							continue;
+						}
+					}
 					piece.updateCord(newRow, newCol);
 					//board[piece.getRow()][piece.getColumn()]=piece;
 					return board;

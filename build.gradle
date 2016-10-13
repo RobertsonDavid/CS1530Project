@@ -1,12 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 mainClassName="chess.LaboonChess"
 
 repositories {
    mavenCentral()
+   jcenter()
 }
 
 dependencies {
   testCompile 'junit:junit:4.12'
+  testCompile 'org.mockito:mockito-all:1.+'
 }

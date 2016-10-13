@@ -1,6 +1,6 @@
 package chess;
 
-public class ChessPiece {
+public class ChessPieces {
 
 	private boolean firstMove;
 	private boolean topOfBoard;
@@ -8,7 +8,7 @@ public class ChessPiece {
 	private int row;
 	private int column;
 
-	public ChessPiece(boolean firstMove, boolean topOfBoard, String pieceName, int row, int column){
+	public ChessPieces(boolean firstMove, boolean topOfBoard, String pieceName, int row, int column){
     	
     	this.firstMove = firstMove;
     	this.topOfBoard = topOfBoard;
@@ -43,7 +43,7 @@ public class ChessPiece {
     		return false;
     }
     //will change board with chessboard object 
-    public int[][] movePiece(ChessPiece piece, int board[][], int newRow, int newCol){
+    public int[][] movePiece(ChessPieces piece, int board[][], int newRow, int newCol){
 
     	//checking if space is available
     	if (checkMove(board, newRow, newCol))

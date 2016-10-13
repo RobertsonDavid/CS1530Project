@@ -9,7 +9,7 @@ public class ChessPieceTests {
 	//test constructor works
 	@Test
 	public void testConstructor() {
-		assertNotNull(new ChessPiece(false,false,"Pawn", 6,0));
+		assertNotNull(new ChessPieces(false,false,"Pawn", 6,0));
 	}
 
 	//test move top pawn
@@ -17,7 +17,7 @@ public class ChessPieceTests {
 	public void testTopPawnMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempPawn = new ChessPiece(false, true,"Pawn",1,0);
+		ChessPieces tempPawn = new ChessPieces(false, true,"Pawn",1,0);
 		tempPawn.movePiece(tempPawn, board,2,0);
 		assertEquals(tempPawn.getRow(), 2);
 
@@ -28,7 +28,7 @@ public class ChessPieceTests {
 	public void testBottomPawnMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempPawn = new ChessPiece(false, false,"Pawn",6,0);
+		ChessPieces tempPawn = new ChessPieces(false, false,"Pawn",6,0);
 		tempPawn.movePiece(tempPawn, board,5,0);
 		assertEquals(tempPawn.getRow(), 5);
 
@@ -39,7 +39,7 @@ public class ChessPieceTests {
 	public void testFirstMoveDoublePawnMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempPawn = new ChessPiece(true, false,"Pawn",6,0);
+		ChessPieces tempPawn = new ChessPieces(true, false,"Pawn",6,0);
 		tempPawn.movePiece(tempPawn, board,4,0);
 		assertEquals(tempPawn.getRow(), 4);
 
@@ -50,7 +50,7 @@ public class ChessPieceTests {
 	public void testFirstMoveFalseDoublePawnMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempPawn = new ChessPiece(false, false,"Pawn",6,0);
+		ChessPieces tempPawn = new ChessPieces(false, false,"Pawn",6,0);
 		tempPawn.movePiece(tempPawn, board,4,0);
 		assertEquals(tempPawn.getRow(), 6);
 
@@ -61,7 +61,7 @@ public class ChessPieceTests {
 	public void testValidRookMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempRook = new ChessPiece(false, false,"Rook",6,0);
+		ChessPieces tempRook = new ChessPieces(false, false,"Rook",6,0);
 		tempRook.movePiece(tempRook, board,3,0);
 		assertEquals(tempRook.getRow(), 3);
 		assertEquals(tempRook.getColumn(), 0);
@@ -73,7 +73,7 @@ public class ChessPieceTests {
 	public void testInValidRookMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempRook = new ChessPiece(false, false,"Rook",6,0);
+		ChessPieces tempRook = new ChessPieces(false, false,"Rook",6,0);
 		tempRook.movePiece(tempRook, board,3,4);
 		assertEquals(tempRook.getRow(), 6);
 		assertEquals(tempRook.getColumn(), 0);
@@ -85,7 +85,7 @@ public class ChessPieceTests {
 	public void testValidBishopMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempBishop = new ChessPiece(false, false,"Bishop",4,4);
+		ChessPieces tempBishop = new ChessPieces(false, false,"Bishop",4,4);
 		tempBishop.movePiece(tempBishop, board,2,6);
 		assertEquals(tempBishop.getRow(), 2);
 		assertEquals(tempBishop.getColumn(), 6);
@@ -97,7 +97,7 @@ public class ChessPieceTests {
 	public void testInValidBishopMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempBishop = new ChessPiece(false, false,"Bishop",4,4);
+		ChessPieces tempBishop = new ChessPieces(false, false,"Bishop",4,4);
 		tempBishop.movePiece(tempBishop, board,4,6);
 		assertEquals(tempBishop.getRow(), 4);
 		assertEquals(tempBishop.getColumn(), 4);
@@ -109,7 +109,7 @@ public class ChessPieceTests {
 	public void testValidKnightMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempKnight = new ChessPiece(false, false,"Knight",4,4);
+		ChessPieces tempKnight = new ChessPieces(false, false,"Knight",4,4);
 		tempKnight.movePiece(tempKnight, board,2,5);
 		assertEquals(tempKnight.getRow(), 2);
 		assertEquals(tempKnight.getColumn(), 5);
@@ -121,7 +121,7 @@ public class ChessPieceTests {
 	public void testInValidKnightMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempKnight = new ChessPiece(false, false,"Knight",4,4);
+		ChessPieces tempKnight = new ChessPieces(false, false,"Knight",4,4);
 		tempKnight.movePiece(tempKnight, board,4,7);
 		assertEquals(tempKnight.getRow(), 4);
 		assertEquals(tempKnight.getColumn(), 4);
@@ -134,7 +134,7 @@ public class ChessPieceTests {
 	public void testValidQueenMovementOne()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempQueen = new ChessPiece(false, false,"Queen",4,4);
+		ChessPieces tempQueen = new ChessPieces(false, false,"Queen",4,4);
 		tempQueen.movePiece(tempQueen, board,2,6);
 		assertEquals(tempQueen.getRow(), 2);
 		assertEquals(tempQueen.getColumn(), 6);
@@ -146,7 +146,7 @@ public class ChessPieceTests {
 	public void testValidQueenMovementTwo()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempQueen = new ChessPiece(false, false,"Queen",4,4);
+		ChessPieces tempQueen = new ChessPieces(false, false,"Queen",4,4);
 		tempQueen.movePiece(tempQueen, board,4,7);
 		assertEquals(tempQueen.getRow(), 4);
 		assertEquals(tempQueen.getColumn(), 7);
@@ -158,7 +158,7 @@ public class ChessPieceTests {
 	public void testInValidQueenMovement()
 	{
 		int [][] board = new int[8][8];
-		ChessPiece tempQueen = new ChessPiece(false, false,"Queen",4,4);
+		ChessPieces tempQueen = new ChessPieces(false, false,"Queen",4,4);
 		tempQueen.movePiece(tempQueen, board,2,5);
 		assertEquals(tempQueen.getRow(), 4);
 		assertEquals(tempQueen.getColumn(), 4);

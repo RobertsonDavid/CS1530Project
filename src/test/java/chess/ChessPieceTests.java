@@ -1,15 +1,15 @@
 package chess;
 
 import static org.junit.Assert.*;
-//import org.mockito.*; 
+//import org.mockito.*;
 import org.junit.Test;
 
 public class ChessPieceTests {
-
+/*
 	//test constructor works
 	@Test
 	public void testConstructor() {
-		assertNotNull(new ChessPieces(false,false,"Pawn", 6,0));
+		assertNotNull(new ChessPiece(false,false,"Pawn", 6,0));
 	}
 
 	//test move top pawn
@@ -175,6 +175,5 @@ public class ChessPieceTests {
 	// 	assertEquals(tempKing.getRow(), 3);
 	// 	assertEquals(tempKing.getColumn(), 5);
 
-	// }
-}	
-
+	// } */
+}

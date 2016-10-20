@@ -44,7 +44,6 @@ public class Bishop extends ChessPiece {
       y += colOffset;
     }
     super.updateCoord(newRow, newCol);
-    //board[piece.getRow()][piece.getColumn()]=piece;
     return this.position;
   }
 

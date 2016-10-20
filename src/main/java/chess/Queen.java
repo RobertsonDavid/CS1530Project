@@ -45,7 +45,6 @@ public class Queen extends ChessPiece {
       }
 
       super.updateCoord(newRow, newCol);
-      //board[piece.getRow()][piece.getColumn()]=piece;
       return this.position;
     }
 
@@ -68,7 +67,6 @@ public class Queen extends ChessPiece {
         }
       }
       super.updateCoord(newRow, newCol);
-      //board[piece.getRow()][piece.getColumn()]=piece;
       return this.position;
     }
 
@@ -91,7 +89,6 @@ public class Queen extends ChessPiece {
         }
       }
       super.updateCoord(newRow, newCol);
-      //board[piece.getRow()][piece.getColumn()]=piece;
       return this.position;
     }
     return this.position;

@@ -16,17 +16,16 @@ public class Pawn extends ChessPiece {
         return this.position;
       }
       //if they want to move 2 spaces and first move and bottom piece
-      else if ((newRow-2 == this.row)&& this.firstMove && this.topOfBoard)
-      {
+      else if ((newRow-2 == this.row)&& this.firstMove && this.topOfBoard) {
         super.updateCoord(newRow, newCol);
         return this.position;
       }
       //move 1 and top
-      else if ((newRow+1 == this.row) && !this.topOfBoard){
+      else if ((newRow+1 == this.row) && !this.topOfBoard) {
         super.updateCoord(newRow, newCol);
         return this.position;
       }
-      else if ((newRow-1 == this.row) && this.topOfBoard){
+      else if ((newRow-1 == this.row) && this.topOfBoard) {
         super.updateCoord(newRow, newCol);
         return this.position;
       }

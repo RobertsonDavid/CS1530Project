@@ -1,5 +1,7 @@
 package chess;
 
+import java.text.SimpleDateFormat;
+import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,9 +9,13 @@ import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.DefaultListModel;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -22,44 +28,154 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
+import java.util.concurrent.TimeUnit;
+import javax.swing.ButtonGroup;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.FlowLayout;
+
 
 public class GUI implements ActionListener {
 
 	private static JFrame window;
+	private static JFrame chooseColor;
 	private static JPanel boardPanel;
+	private static JLabel timer;
+	private static JLabel timer2;
 	private static BoardSquare[][] squares = new BoardSquare[8][8];
 	private ChessBoard board; //Initalize this with an array of initial piece positions
 	String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	//Holds the color choice
+	public String colorChoice = "White";
+	private static int seconds = 100000;
 	//Include a board object here
 	
 	//Going to want to be able to pass a board object, initialize and reset board!
 	public GUI(ChessBoard board) {
 		this.board = board;	//This isn't used yet
+
 		window = new JFrame("Laboon Chess");
         window.setSize(800, 700);
         window.setLayout(new BoxLayout(window, BoxLayout.X_AXIS));
         boardPanel = resetBoard(); //Pass it the array of ChessPieces so it can put them on the board
-        
+        timer = generateTimer();
+  		timer2 = generateTimer();
         JToolBar toolbar = new JToolBar();
         toolbar.setFloatable(false);
-	    toolbar.add(new JButton("New Game"));	//When they click this, bring up the same window that appears normally (choose color)
+        JButton newGame = new JButton("New Game");
+	    toolbar.add(newGame);	//When they click this, bring up the same window that appears normally (choose color)
 	    toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
 	    toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
         
-        JPanel gameWindow = resetWindow(boardPanel, toolbar); //Pass it the chessboard panel
+        JPanel gameWindow = resetWindow(boardPanel, toolbar, timer, timer2); //Pass it the chessboard panel
         window.setContentPane(gameWindow);
         window.setVisible(true);
+
+        //if new Game is selected
+        newGame.addActionListener(new ActionListener() { 
+  			public void actionPerformed(ActionEvent e) {
+  				getColor(); 
+  			} 
+		} );
+
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+	} 	
 	
-	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar){
+	private void getColor(){
+
+		//String colorChoice = "White";
+		chooseColor = new JFrame("Choose color");
+		chooseColor.setSize(700,300);
+		chooseColor.setLayout(new GridLayout(3,1));
+
+		JLabel headerLabel = new JLabel("", JLabel.CENTER);
+		headerLabel.setText("Please select the color you wish to be");
+
+		JRadioButton white = new JRadioButton("White", true);
+		JRadioButton black = new JRadioButton("Black");
+
+		JPanel controlPanel = new JPanel();
+      	controlPanel.setLayout(new FlowLayout());
+
+      	JToolBar confirmation = new JToolBar();
+      	confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JButton startGame = new JButton("Start Game");
+        JButton cancel = new JButton("Cancel");
+        confirmation.add(startGame);
+        confirmation.add(cancel);
+
+		white.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent e){
+				colorChoice = "White";
+				System.out.println(colorChoice);
+			}
+		});
+		black.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent e){
+				colorChoice = "Black";
+				System.out.println(colorChoice);
+			}
+		});
+
+		startGame.addActionListener(new ActionListener() { 
+  			public void actionPerformed(ActionEvent e) {
+  				chooseColor.setVisible(false);
+  			} 
+		} );
+
+		cancel.addActionListener(new ActionListener() { 
+  			public void actionPerformed(ActionEvent e) {
+  				chooseColor.setVisible(false);
+  			} 
+		} );
+
+
+		ButtonGroup group = new ButtonGroup();
+      	group.add(white);
+      	group.add(black);
+
+      	controlPanel.add(white);
+      	controlPanel.add(black);
+
+      	chooseColor.add(headerLabel);
+      	chooseColor.add(controlPanel);
+      	chooseColor.add(confirmation);
+      	chooseColor.setVisible(true);
+	}
+
+	private JLabel generateTimer(){
+		JLabel label = new JLabel();
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                seconds--;
+                long minute = TimeUnit.SECONDS.toMinutes(seconds)
+                        - (TimeUnit.SECONDS.toHours(seconds) * 60);
+                long second = TimeUnit.SECONDS.toSeconds(seconds)
+                        - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+                label.setText(minute + ":"
+                        + second);
+                if (seconds == 0) {
+                    System.exit(0);
+                }
+            }
+        });
+        timer.start();
+
+        return label;
+	}
+
+	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JLabel timer, JLabel timer2){
 		JPanel gameWindow = new JPanel();
 		//This is where we can initialize things like the side panel where captured pieces will go,
 		//the timer, the light, etc. and add them to the game window. 
+		gameWindow.add(timer);
+		gameWindow.add(timer2);
 		gameWindow.add(toolbar);
 		gameWindow.add(boardPanel);
 		return gameWindow;
@@ -171,3 +287,5 @@ public class GUI implements ActionListener {
 	}
 
 }
+
+

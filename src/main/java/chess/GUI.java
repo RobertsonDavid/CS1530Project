@@ -30,7 +30,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
     this.setSize(800, 700);
-    //this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     boardPanel = resetBoard();
 
     JToolBar toolbar = new JToolBar();

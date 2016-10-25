@@ -31,14 +31,12 @@ public class King extends ChessPiece {
         }
         else{
           super.updateCoord(newRow, newCol);
-          //board[piece.getRow()][piece.getColumn()]=piece;
           return this.position;
         }
       }
       //normal move
       else{
         super.updateCoord(newRow, newCol);
-        //board[piece.getRow()][piece.getColumn()]=piece;
         return this.position;
       }
     }

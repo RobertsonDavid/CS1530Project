@@ -53,6 +53,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		return gameWindow;
 	}
 
+  //Resets the board by resetting all pieces and the array of BoardSquares.
 	private JPanel resetBoard(){
 		boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
@@ -148,6 +149,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		return boardPanel;
 	}
 
+  //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
 		piece = null;
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
@@ -163,11 +165,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		layeredPane.add(piece, JLayeredPane.DRAG_LAYER);
 	}
 
+  //Waits for the mouse to be dragged, and displays the updated location.
 	public void mouseDragged(MouseEvent e) {
 		if (piece == null) return;
 		piece.setLocation(e.getX() + deltaX, e.getY() + deltaY);
 	}
 
+  /*
+  * Waits for the mouse to be released, and then sets the piece down at the current BoardSquare,
+  * replacing the piece that was there if the move was legal.
+  */
 	public void mouseReleased(MouseEvent e) {
 		if(piece == null) return;
 
@@ -187,18 +194,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		piece.setVisible(true);
 	}
 
+  //Not used but needed interface implementation
  	public void mouseClicked(MouseEvent e) {
 
  	}
-
+  //Not used but needed interface implementation
  	public void mouseMoved(MouseEvent e) {
 
  	}
-
+  //Not used but needed interface implementation
  	public void mouseEntered(MouseEvent e){
 
  	}
-
+  //Not used but needed interface implementation
  	public void mouseExited(MouseEvent e) {
 
  	}

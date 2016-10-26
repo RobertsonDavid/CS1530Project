@@ -9,6 +9,9 @@ import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
@@ -45,14 +48,13 @@ public class GUI implements ActionListener {
 	private static JFrame window;
 	private static JFrame chooseColor;
 	private static JPanel boardPanel;
-	private static JLabel timer;
-	private static JLabel timer2;
+	private static JLabel timerLabel = new JLabel();
 	private static BoardSquare[][] squares = new BoardSquare[8][8];
 	private ChessBoard board; //Initalize this with an array of initial piece positions
 	String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
 	//Holds the color choice
 	public String colorChoice = "White";
-	private static int seconds = 100000;
+	private static int seconds = 300;
 	//Include a board object here
 	
 	//Going to want to be able to pass a board object, initialize and reset board!
@@ -63,16 +65,38 @@ public class GUI implements ActionListener {
         window.setSize(800, 700);
         window.setLayout(new BoxLayout(window, BoxLayout.X_AXIS));
         boardPanel = resetBoard(); //Pass it the array of ChessPieces so it can put them on the board
-        timer = generateTimer();
-  		timer2 = generateTimer();
+
+        //Creating a border for the timers
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        //Creating a ToolBar that holds both timers
+        JToolBar timers = new JToolBar();
+
+        //creating a timer for the 
+        Timer timer = new Timer(1000, new ActionListener(){
+        	 @Override
+            public void actionPerformed(ActionEvent e) {
+                seconds--;
+                long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
+                long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+                timerLabel.setText(minute + ":"+ second);
+                if (seconds == 0) {
+                    System.exit(0);
+                }
+            }
+        });
+        timer.start();
+
+        timerLabel.setBorder(blackline);
+  		timers.add(timerLabel);
+
         JToolBar toolbar = new JToolBar();
         toolbar.setFloatable(false);
         JButton newGame = new JButton("New Game");
-	    toolbar.add(newGame);	//When they click this, bring up the same window that appears normally (choose color)
+	    toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
 	    toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
 	    toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
         
-        JPanel gameWindow = resetWindow(boardPanel, toolbar, timer, timer2); //Pass it the chessboard panel
+        JPanel gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
         window.setContentPane(gameWindow);
         window.setVisible(true);
 
@@ -86,22 +110,26 @@ public class GUI implements ActionListener {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	} 	
 	
+	//Method that gets the color the user chooses
 	private void getColor(){
 
-		//String colorChoice = "White";
+		//Color window
 		chooseColor = new JFrame("Choose color");
 		chooseColor.setSize(700,300);
 		chooseColor.setLayout(new GridLayout(3,1));
 
+		//label that tells the user to choose a color
 		JLabel headerLabel = new JLabel("", JLabel.CENTER);
 		headerLabel.setText("Please select the color you wish to be");
 
+		//displaying the radio choices black and white
 		JRadioButton white = new JRadioButton("White", true);
 		JRadioButton black = new JRadioButton("Black");
 
 		JPanel controlPanel = new JPanel();
       	controlPanel.setLayout(new FlowLayout());
 
+      	//creating the start game button and the cancel button
       	JToolBar confirmation = new JToolBar();
       	confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
         JButton startGame = new JButton("Start Game");
@@ -109,12 +137,15 @@ public class GUI implements ActionListener {
         confirmation.add(startGame);
         confirmation.add(cancel);
 
+        //if white is selected colorChoice is white
 		white.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "White";
 				System.out.println(colorChoice);
 			}
 		});
+
+		//if black is selected colorChoice is black
 		black.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "Black";
@@ -122,19 +153,21 @@ public class GUI implements ActionListener {
 			}
 		});
 
+		//if start game is chosen remove window
 		startGame.addActionListener(new ActionListener() { 
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
   			} 
 		} );
 
+		//if cancel is chosen remove window
 		cancel.addActionListener(new ActionListener() { 
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
   			} 
 		} );
 
-
+		//grouping the buttons together
 		ButtonGroup group = new ButtonGroup();
       	group.add(white);
       	group.add(black);
@@ -142,41 +175,20 @@ public class GUI implements ActionListener {
       	controlPanel.add(white);
       	controlPanel.add(black);
 
+      	//adding panels and displaying 
       	chooseColor.add(headerLabel);
       	chooseColor.add(controlPanel);
       	chooseColor.add(confirmation);
       	chooseColor.setVisible(true);
 	}
 
-	private JLabel generateTimer(){
-		JLabel label = new JLabel();
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                seconds--;
-                long minute = TimeUnit.SECONDS.toMinutes(seconds)
-                        - (TimeUnit.SECONDS.toHours(seconds) * 60);
-                long second = TimeUnit.SECONDS.toSeconds(seconds)
-                        - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
-                label.setText(minute + ":"
-                        + second);
-                if (seconds == 0) {
-                    System.exit(0);
-                }
-            }
-        });
-        timer.start();
-
-        return label;
-	}
-
-	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JLabel timer, JLabel timer2){
+	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
 		JPanel gameWindow = new JPanel();
 		//This is where we can initialize things like the side panel where captured pieces will go,
 		//the timer, the light, etc. and add them to the game window. 
-		gameWindow.add(timer);
-		gameWindow.add(timer2);
 		gameWindow.add(toolbar);
+		gameWindow.setLayout(new BoxLayout(gameWindow, BoxLayout.Y_AXIS));
+		gameWindow.add(timers);
 		gameWindow.add(boardPanel);
 		return gameWindow;
 	}
@@ -287,5 +299,7 @@ public class GUI implements ActionListener {
 	}
 
 }
+
+
 
 

@@ -3,6 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.BorderFactory; 
+import javax.swing.border.Border;
+import java.util.concurrent.TimeUnit;
+import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 
@@ -39,7 +43,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		layeredPane.setPreferredSize(new Dimension(600, 600));
     	this.setSize(800, 700);
     	boardPanel = resetBoard();
-		
 
         //Creating a border for the timers
         Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -156,6 +159,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       	chooseColor.setVisible(true);
 	}
 
+	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
+		gameWindow = new JPanel();
+		//This is where we can initialize things like the side panel where captured pieces will go,
+		//the timer, the light, etc. and add them to the game window.
+		gameWindow.setLayout(new BoxLayout(gameWindow, BoxLayout.Y_AXIS));
+		gameWindow.add(toolbar);
+		gameWindow.add(timers);
+		gameWindow.add(boardPanel);
+		return gameWindow;
+	}
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){

@@ -11,14 +11,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
  	private static final long serialVersionUID = 1L;
 	private JPanel boardPanel;
 	private JPanel gameWindow;
-	private JLabel piece = null;
 	private JLayeredPane layeredPane;
 
-	private BoardSquare[][] squares = new BoardSquare[8][8];
-	private ChessBoard board; //Initalize this with an array of initial piece positions
+  private JLabel space = null;
+  private BoardSquare square = null;
+  private ChessPiece piece = null;
+  private int oldRow, oldCol, newRow, newCol;
+
+	private BoardSquare[][] squares = new BoardSquare[8][8]; //Array of BoardSquares which makes up the actual UI board
+	private ChessBoard board;  //Backing ChessBoard object
 	String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
 	int deltaX, deltaY;
-	//Include a board object here
+
 
 	//Going to want to be able to pass a board object, initialize and reset board!
 	public GUI(ChessBoard board) {
@@ -53,7 +57,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		return gameWindow;
 	}
 
-  //Resets the board by resetting all pieces and the array of BoardSquares.
+  //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
 		boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
@@ -146,12 +150,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				boardPanel.add(square);
 			}
 		}
+    board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
+
 		return boardPanel;
 	}
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
-		piece = null;
+		space = null;
+    piece = null;
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
 		if (spotOnBoard instanceof JPanel) return;
@@ -159,16 +166,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
-		piece = (JLabel)spotOnBoard;
-		piece.setLocation(e.getX() + deltaX, e.getY() + deltaY);
-		piece.setSize(piece.getWidth(), piece.getHeight());
-		layeredPane.add(piece, JLayeredPane.DRAG_LAYER);
+		space = (JLabel)spotOnBoard;
+
+
+		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		space.setSize(space.getWidth(), space.getHeight());
+		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
 	}
 
   //Waits for the mouse to be dragged, and displays the updated location.
 	public void mouseDragged(MouseEvent e) {
-		if (piece == null) return;
-		piece.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		if (space == null) return;
+		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
 	}
 
   /*
@@ -176,22 +185,23 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   * replacing the piece that was there if the move was legal.
   */
 	public void mouseReleased(MouseEvent e) {
-		if(piece == null) return;
+		if(space == null) return;
 
-		piece.setVisible(false);
+		space.setVisible(false);
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
 		if (spotOnBoard instanceof JLabel){
+
 			Container parent = spotOnBoard.getParent();
 			parent.remove(0);
-			parent.add(piece);
+			parent.add(space);
 		}
 		else {
 			Container parent = (Container)spotOnBoard;
-			parent.add(piece);
+			parent.add(space);
 		}
 
-		piece.setVisible(true);
+		space.setVisible(true);
 	}
 
   //Not used but needed interface implementation

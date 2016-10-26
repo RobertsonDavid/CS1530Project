@@ -20,6 +20,9 @@ public class ChessPiece {
 		return this.side;
 	}
 
+	/*
+	*	Constructor for ChessPiece that sets relevant properties
+	*/
 	public ChessPiece(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
 		this.type = type;
 		this.side = side;
@@ -31,6 +34,9 @@ public class ChessPiece {
 		this.position[1] = column;
 	}
 
+	/*
+	*	Updates the current coordinates of the ChessPiece.
+	*/
 	public void updateCoord(int newrow, int newcolumn) {
 		this.row = newrow;
 		this.column = newcolumn;

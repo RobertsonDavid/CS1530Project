@@ -42,7 +42,7 @@ public class ChessBoard {
   return b;
  }
 
- //clear pieces
+ //clear pieces by resetting the array
  public void clearBoard()
  {
    ChessPiece[][] clearedArray= new ChessPiece[8][8];

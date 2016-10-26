@@ -27,7 +27,7 @@ public class Rook implements ChessPiece {
     return this.topOfBoard;
   }
 
-  public Rook(String type, boolean color, boolean firstMove, boolean topOfBoard, int row, int column) {
+  public Rook(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
     this.side = side;
     this.firstMove = firstMove;

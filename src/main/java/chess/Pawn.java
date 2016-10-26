@@ -27,7 +27,7 @@ public class Pawn implements ChessPiece {
     return this.topOfBoard;
   }
 
-  public Pawn(String type, boolean color, boolean firstMove, boolean topOfBoard, int row, int column) {
+  public Pawn(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
 		this.side = side;
 		this.firstMove = firstMove;

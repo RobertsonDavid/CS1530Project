@@ -1,13 +1,19 @@
 package chess;
 
-import javax.swing.JButton;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
 
-public class BoardSquare extends JButton {
-	
+public class BoardSquare extends JPanel {
+
 	private int row;
     private int column;
     private static final long serialVersionUID = 1L;
-    
+
+		/*
+		* Constructor for board square - calls super for JPanel constructor
+		*/
     public BoardSquare(int row, int column)
     {
     	super();

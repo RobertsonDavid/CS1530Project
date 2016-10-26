@@ -27,10 +27,10 @@ public class GameState {
         for(int y=0; y<=7; y++) {
           savePiece=game.getPieceAt(x,y);
           if(savePiece!=null) {
-            String type= savePiece.type;
-            Boolean color= savePiece.side;
-            Boolean firstMove = savePiece.firstMove;
-            Boolean topOfBoard = savePiece.topOfBoard;
+            String type= savePiece.getType();
+            Boolean color= savePiece.getSide();
+            Boolean firstMove = savePiece.getFirstMove();
+            Boolean topOfBoard = savePiece.getTopOfBoard();
             writer.write(x+ " " +y+ " " +type+" "+color + " " +firstMove + " " +topOfBoard +",");
           }
         }

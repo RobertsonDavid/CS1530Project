@@ -9,22 +9,22 @@ public class ChessBoard {
   b = new ChessPiece[8][8];
 
   //white pieces
-  b[0][0] = b[7][0] = new Rook("rook", side, true, false, 7, 0); //top rook
-  b[1][0] = b[6][0] = new Knight("knight", side, true, false, 6, 0); //top knight
-  b[2][0] = b[5][0] = new Bishop("bishop", side, true, false, 5, 0); //top bishop
-  b[3][0] = new Queen("queen", side, true, false, 3, 0); //top queen
-  b[4][0] = new King("king", side, true, false, 4, 0); //top king
+  b[0][0] = b[7][0] = new Rook("rook", true, true, false, 7, 0); //top rook
+  b[1][0] = b[6][0] = new Knight("knight", true, true, false, 6, 0); //top knight
+  b[2][0] = b[5][0] = new Bishop("bishop", true, true, false, 5, 0); //top bishop
+  b[3][0] = new Queen("queen", true, true, false, 3, 0); //top queen
+  b[4][0] = new King("king", true, true, false, 4, 0); //top king
   for(int i = 0; i < 8; i++)
-   b[i][1] = new Pawn("pawn", side, true, false, i, 1); //top pawn
+   b[i][1] = new Pawn("pawn", true, true, false, i, 1); //top pawn
 
   //black pieces
-  b[0][7] = b[7][7] = new Rook("rook", side, true, true, 7, 7); //bottom rook
-  b[1][7] = b[6][7] = new Knight("knight", side, true, true, 6, 7); //bottom knight
-  b[2][7] = b[5][7] = new Bishop("bishop", side, true, true, 5, 7); //bottom bishop
-  b[3][7] = new Queen("queen", side, true, true, 3, 7); //bottom queen
-  b[4][7] = new King("king", side, true, true, 4, 7); //bottom king
+  b[0][7] = b[7][7] = new Rook("rook", false, true, true, 7, 7); //bottom rook
+  b[1][7] = b[6][7] = new Knight("knight", false, true, true, 6, 7); //bottom knight
+  b[2][7] = b[5][7] = new Bishop("bishop", false, true, true, 5, 7); //bottom bishop
+  b[3][7] = new Queen("queen", false, true, true, 3, 7); //bottom queen
+  b[4][7] = new King("king", false, true, true, 4, 7); //bottom king
   for(int i = 0; i < 8; i++)
-   b[i][6] = new Pawn("pawn", side, true, true, i, 6); //bottom pawn
+   b[i][6] = new Pawn("pawn", false, true, true, i, 6); //bottom pawn
  }
 
 //This returns the piece at the given coordinates

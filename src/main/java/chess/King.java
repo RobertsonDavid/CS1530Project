@@ -3,7 +3,7 @@ package chess;
 public class King implements ChessPiece {
 
   protected String type;
-	protected boolean side; //true if white, false if black
+	protected boolean side; //true if top, false if bottom
 	protected boolean firstMove;
 	protected boolean topOfBoard;
 	protected String pieceValue;
@@ -45,9 +45,9 @@ public class King implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(int [][] board,int x, int y) {
+  public boolean checkMove(ChessBoard board,int x, int y) {
 		//change 0 to null when object entered
-		if (board[y][x] == 0){
+		if (board.getPieceAt(x, y) == null){
 			return true;
 		}
 		else
@@ -55,14 +55,14 @@ public class King implements ChessPiece {
 	}
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
-  public int[] move(int board[][], int newRow, int newCol) {
+  public int[] move(ChessBoard board, int newRow, int newCol) {
 
       //moving one to the left or right
     if(Math.abs(newRow - this.row) > 1 || Math.abs(newCol - this.column) > 1) {
       //Castling logic
       if(newCol - this.column == 2 && this.row == newRow){
         //Castle kingside
-        if(board[newRow][this.column + 1] != 0 || board[newRow][this.column + 2] != 0){
+        if(board.getPieceAt(newRow, (this.column + 1)) != null || board.getPieceAt(newRow, (this.column + 2)) != null){
           //cant castle pieces in the way
           return this.position;
         }
@@ -73,7 +73,7 @@ public class King implements ChessPiece {
       }
       else if(this.column - newCol == 3 && this.column == newRow){
         //castling queenside
-        if(board[newRow][this.column - 1] != 0 || board[newRow][this.column - 2] != 0|| board[newRow][this.column - 3] != 0){
+        if(board.getPieceAt(newRow, (this.column - 1)) != null || board.getPieceAt(newRow, (this.column - 2)) != null || board.getPieceAt(newRow, (this.column -3)) != null){
           //cant castle pieces in the way
           return this.position;
         }

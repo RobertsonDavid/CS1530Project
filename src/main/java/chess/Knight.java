@@ -3,7 +3,7 @@ package chess;
 public class Knight implements ChessPiece {
 
   protected String type;
-	protected boolean side; //true if white, false if black
+	protected boolean side; //true if top, false if bottom
 	protected boolean firstMove;
 	protected boolean topOfBoard;
 	protected String pieceValue;
@@ -45,9 +45,9 @@ public class Knight implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(int [][] board,int x, int y) {
+  public boolean checkMove(ChessBoard board,int x, int y) {
 		//change 0 to null when object entered
-		if (board[y][x] == 0){
+		if (board.getPieceAt(x, y) == null){
 			return true;
 		}
 		else
@@ -55,7 +55,7 @@ public class Knight implements ChessPiece {
 	}
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
-  public int[] move(int board[][], int newRow, int newCol) {
+  public int[] move(ChessBoard board, int newRow, int newCol) {
 
       if(Math.abs(newRow - this.row) == 2 && Math.abs(newCol - this.column) == 1){
         updateCoord(newRow, newCol);

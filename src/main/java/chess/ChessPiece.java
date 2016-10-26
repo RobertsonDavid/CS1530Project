@@ -18,8 +18,8 @@ public interface ChessPiece {
 	public void updateCoord(int newrow, int newcolumn);
 
 	//checks to see if space is open
-	public boolean checkMove(int [][] board,int x, int y);
+	public boolean checkMove(ChessBoard board,int x, int y);
 
-	public int[] move(int board[][], int newRow, int newCol);
+	public int[] move(ChessBoard board, int newRow, int newCol);
 
 }

@@ -19,9 +19,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private static JLabel timerLabel = new JLabel();
 
 	private JLabel space = null;
-  	private BoardSquare square = null;
-  	private ChessPiece piece = null;
-  	private int oldRow, oldCol, newRow, newCol;
+  private BoardSquare square = null;
+  private BoardSquare square2 = null;
+
+  private ChessPiece piece = null;
+  private int oldRow, oldCol, newRow, newCol;
 
 	private BoardSquare[][] squares = new BoardSquare[8][8]; //Array of BoardSquares which makes up the actual UI board
 	private ChessBoard board;  //Backing ChessBoard object
@@ -315,7 +317,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				boardPanel.add(square);
 			}
 		}
-    
+
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
 		return boardPanel;
 	}
@@ -327,6 +329,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
 		if (spotOnBoard instanceof JPanel) return;
+
+    Container parent = spotOnBoard.getParent();
+    square = (BoardSquare)parent;
+
+    oldRow = square.getRow();
+    oldCol = square.getColumn();
+
+    piece = board.getPieceAt(oldRow, oldCol);
 
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
@@ -358,6 +368,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		if (spotOnBoard instanceof JLabel){
 
 			Container parent = spotOnBoard.getParent();
+      square2 = (BoardSquare)parent;
+
+      newRow = square2.getRow();
+      newCol = square2.getColumn();
+
 			parent.remove(0);
 			parent.add(space);
 		}

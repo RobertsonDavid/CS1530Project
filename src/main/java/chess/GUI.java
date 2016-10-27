@@ -24,6 +24,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Container oldParent;
 
   private ChessPiece piece = null;
+  private ChessPiece takenPiece = null;
   private int oldRow, oldCol, newRow, newCol;
   private int[] position = null;
 
@@ -342,6 +343,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     piece = board.getPieceAt(oldRow, oldCol);
 
+    System.out.println(piece.getType());
+
 
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
@@ -376,6 +379,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       newRow = square2.getRow();
       newCol = square2.getColumn();
+
+      takenPiece = board.getPieceAt(newRow, newCol);
 
       position = piece.move(board, newRow, newCol);
 

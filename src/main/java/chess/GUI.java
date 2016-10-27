@@ -37,6 +37,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public String colorChoice = "White";
 	private static int seconds = 300;
 
+  //This method constructs the entire GUI. It will reset the board, and the panel
+  //that the board is on.
 	public GUI(ChessBoard board) {
 		layeredPane = new JLayeredPane();
 		this.board = board;
@@ -69,7 +71,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
      timer.start();
 
      timerLabel.setBorder(blackline);
-	    timers.add(timerLabel);
+	  timers.add(timerLabel);
 
   	JToolBar toolbar = new JToolBar();
   	toolbar.setFloatable(false);
@@ -83,7 +85,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	gameWindow.setBounds(0, 0, 600, 600);
   	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
 
-  	    //if new Game is selected
+  	//if new Game is selected
   	newGame.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
   			getColor();
@@ -136,11 +138,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		startGame.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
-  				space.setVisible(false);
   				gameWindow.remove(boardPanel);
-  				JPanel panel = resetBoard();
-  				panel.setVisible(true);
-  				gameWindow.add(panel);
+  				boardPanel = resetBoard();
+  				gameWindow.add(boardPanel);
+          boardPanel.setVisible(true);
   			}
 		});
 
@@ -166,6 +167,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	  chooseColor.setVisible(true);
 	}
 
+  //Resets the panel that the board is on, along with the toolbar and the timer.
+  //This will also reset any additional panels that we add.
 	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
 		gameWindow = new JPanel();
 		//This is where we can initialize things like the side panel where captured pieces will go,
@@ -203,8 +206,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	  	else {
 	  		white = true;
 	  	}
+      //First, decides what
 			for(int j = 0; j < 8; j++) {
-				//Put the piece images as an ImageIcon object on the button (button.setIcon())
 				BoardSquare square = new BoardSquare(i, j);
 				JLabel pieceImage = null;
 				square.setSize(new Dimension(100, 100));
@@ -218,55 +221,107 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 					white = true;
 				}
 
-				if (i == 0){
-					if (j == 0 || j == 7){
-						pieceImage = new JLabel(BlackRook);
-					}
-					if(j == 1 || j == 6){
-					  pieceImage = new JLabel(BlackKnight);
-					}
-					if(j == 2 || j == 5){
-						pieceImage = new JLabel(BlackBishop);
-					}
-					if(j == 3){
-						pieceImage = new JLabel(BlackQueen);
-					}
-					if(j == 4){
-						pieceImage = new JLabel(BlackKing);
-					}
-					square.add(pieceImage);
-				}
-				//creating black pawns
-				else if (i == 1){
-					pieceImage = new JLabel(BlackPawn);
-					square.add(pieceImage);
-				}
-				//creating white pawns
-				else if (i == 6){
-					pieceImage = new JLabel(WhitePawn);
-					square.add(pieceImage);
-				}
-				else if(i == 7)
-				{
-					if (j == 0 || j == 7){
-						pieceImage = new JLabel(WhiteRook);
-					}
-					if(j == 1 || j == 6){
-						pieceImage = new JLabel(WhiteKnight);
-					}
-					if(j == 2 || j == 5){
-						pieceImage = new JLabel(WhiteBishop);
-					}
-					if(j == 3){
-						pieceImage = new JLabel(WhiteQueen);
-					}
-					if(j == 4){
-						pieceImage = new JLabel(WhiteKing);
-					}
-					square.add(pieceImage);
-				}
-				squares[i][j] = square;
-				boardPanel.add(square);
+        if(colorChoice.equals("White")) {
+
+  				if (i == 0){
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(BlackRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(BlackKnight);
+  					}
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(BlackBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(BlackQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(BlackKing);
+  					}
+  					square.add(pieceImage);
+  				}
+  				//creating black pawns
+  				else if (i == 1){
+  					pieceImage = new JLabel(BlackPawn);
+  					square.add(pieceImage);
+  				}
+  				//creating white pawns
+  				else if (i == 6){
+  					pieceImage = new JLabel(WhitePawn);
+  					square.add(pieceImage);
+  				}
+  				else if(i == 7)
+  				{
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(WhiteRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(WhiteKnight);
+  					}
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(WhiteBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(WhiteQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(WhiteKing);
+  					}
+  					square.add(pieceImage);
+  				}
+        }
+        else {
+          if (i == 0){
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(WhiteRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(WhiteKnight);
+ 					  }
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(WhiteBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(WhiteQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(WhiteKing);
+  					}
+  					square.add(pieceImage);
+  				}
+  				//creating white pawns
+  				else if (i == 1){
+  					pieceImage = new JLabel(WhitePawn);
+  					square.add(pieceImage);
+  				}
+  				//creating black pawns
+  				else if (i == 6){
+  					pieceImage = new JLabel(BlackPawn);
+  					square.add(pieceImage);
+  				}
+  				else if(i == 7)
+  				{
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(BlackRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(BlackKnight);
+  					}
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(BlackBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(BlackQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(BlackKing);
+  					}
+  					square.add(pieceImage);
+  				}
+        }
+			squares[i][j] = square;
+			boardPanel.add(square);
 			}
 		}
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces

@@ -122,7 +122,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		white.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "White";
-				System.out.println(colorChoice);
 			}
 		});
 
@@ -130,7 +129,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		black.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "Black";
-				System.out.println(colorChoice);
 			}
 		});
 
@@ -291,14 +289,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	  piece = board.getPieceAt(oldRow, oldCol);
 
-    System.out.println(piece.getType());
-
-
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
 		space = (JLabel)spotOnBoard;
-
 
 		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
 		space.setSize(space.getWidth(), space.getHeight());

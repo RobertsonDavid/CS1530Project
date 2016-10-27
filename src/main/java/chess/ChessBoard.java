@@ -9,22 +9,28 @@ public class ChessBoard {
   b = new ChessPiece[8][8];
 
   //white pieces
-  b[0][0] = b[7][0] = new Rook("rook", true, true, false, 7, 0); //top rook
-  b[1][0] = b[6][0] = new Knight("knight", true, true, false, 6, 0); //top knight
-  b[2][0] = b[5][0] = new Bishop("bishop", true, true, false, 5, 0); //top bishop
-  b[3][0] = new Queen("queen", true, true, false, 3, 0); //top queen
-  b[4][0] = new King("king", true, true, false, 4, 0); //top king
+  b[0][0] = new Rook("rook", true, true, false, 0, 0); //top left rook
+  b[0][7] = new Rook("rook", true, true, false, 0, 7); //top right rook
+  b[0][1] = new Knight("knight", true, true, false, 0, 1); //top left knight
+  b[0][6] = new Knight("knight", true, true, false, 0, 6); //top right knight
+  b[0][2] = new Bishop("bishop", true, true, false, 0, 2); //top left bishop
+  b[0][5] = new Bishop("bishop", true, true, false, 0, 5); //top rght bishop
+  b[0][3] = new Queen("queen", true, true, false, 0, 3); //top queen
+  b[0][4] = new King("king", true, true, false, 0, 4); //top king
   for(int i = 0; i < 8; i++)
-   b[i][1] = new Pawn("pawn", true, true, false, i, 1); //top pawn
+   b[1][i] = new Pawn("pawn", true, true, false, 1, i); //top pawn
 
   //black pieces
-  b[0][7] = b[7][7] = new Rook("rook", false, true, true, 7, 7); //bottom rook
-  b[1][7] = b[6][7] = new Knight("knight", false, true, true, 6, 7); //bottom knight
-  b[2][7] = b[5][7] = new Bishop("bishop", false, true, true, 5, 7); //bottom bishop
-  b[3][7] = new Queen("queen", false, true, true, 3, 7); //bottom queen
-  b[4][7] = new King("king", false, true, true, 4, 7); //bottom king
+  b[7][0] = new Rook("rook", false, true, true, 7, 0); //bottom left rook
+  b[7][7] = new Rook("rook", false, true, true, 7, 7); //bottom right rook
+  b[7][1] = new Knight("knight", false, true, true, 7, 1); //bottom left knight
+  b[7][6] = new Knight("knight", false, true, true, 7, 6); //bottom right knight
+  b[7][2] = new Bishop("bishop", false, true, true, 7, 2); //bottom left bishop
+  b[7][5] = new Bishop("bishop", false, true, true, 7, 5); //bottom right bishop
+  b[7][3] = new Queen("queen", false, true, true, 7, 3); //bottom queen
+  b[7][4] = new King("king", false, true, true, 7, 4); //bottom king
   for(int i = 0; i < 8; i++)
-   b[i][6] = new Pawn("pawn", false, true, true, i, 6); //bottom pawn
+   b[6][i] = new Pawn("pawn", false, true, true, 6, i); //bottom pawn
  }
 
 //This returns the piece at the given coordinates

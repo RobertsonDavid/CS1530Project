@@ -12,7 +12,6 @@ public class GameState {
   public GameState() {
   }
 
-  //returns true on success
   //add support for naming files after testing
   //needs support for showing who's turn it will be
   public void save(ChessBoard gameOut) {
@@ -21,7 +20,7 @@ public class GameState {
     Writer writer = null;
 
     try {
-      writer = new BufferedWriter(new OutputStreamWriter( new FileOutputStream("filename.txt"), "utf-8"));
+      writer = new BufferedWriter(new OutputStreamWriter( new FileOutputStream("src/main/java/chess/SavedGames/filename.txt"), "utf-8"));
 
       for(int x=0; x<=7; x++) {
         for(int y=0; y<=7; y++) {

@@ -21,9 +21,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JLabel space = null;
   private BoardSquare square = null;
   private BoardSquare square2 = null;
+  private Container oldParent;
 
   private ChessPiece piece = null;
   private int oldRow, oldCol, newRow, newCol;
+  private int[] position = null;
 
 	private BoardSquare[][] squares = new BoardSquare[8][8]; //Array of BoardSquares which makes up the actual UI board
 	private ChessBoard board;  //Backing ChessBoard object
@@ -330,13 +332,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 		if (spotOnBoard instanceof JPanel) return;
 
-    Container parent = spotOnBoard.getParent();
-    square = (BoardSquare)parent;
+    oldParent = spotOnBoard.getParent();
+    square = (BoardSquare)oldParent;
+
+    System.out.println("Row: " + square.getRow() + " " + "Column: " + square.getColumn());
 
     oldRow = square.getRow();
     oldCol = square.getColumn();
 
     piece = board.getPieceAt(oldRow, oldCol);
+
 
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
@@ -366,19 +371,44 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
 		if (spotOnBoard instanceof JLabel){
-
 			Container parent = spotOnBoard.getParent();
       square2 = (BoardSquare)parent;
 
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-			parent.remove(0);
-			parent.add(space);
+      position = piece.move(board, newRow, newCol);
+
+      //If the move method returned a new position, meaning the move was valid
+      if((position[0] != oldRow) && (position[1] != oldCol)){
+        //This is where we will add the piece to the side panel.
+        parent.remove(0);
+        parent.add(space);
+      }
+      //If the move method returned the original position, meaning the move was invalid.
+      else{
+        oldParent.add(space);
+      }
 		}
 		else {
 			Container parent = (Container)spotOnBoard;
-			parent.add(space);
+      square2 = (BoardSquare)parent;
+
+      newRow = square2.getRow();
+      newCol = square2.getColumn();
+
+      position = piece.move(board, newRow, newCol);
+
+      //If the move method returned a new position, meaning the move was valid
+      if((position[0] != oldRow) && (position[1] != oldCol)){
+        //This is where we will add the piece to the side panel.
+        parent.remove(0);
+        parent.add(space);
+      }
+      //If the move method returned the original position, meaning the move was invalid.
+      else{
+        oldParent.add(space);
+      }
 		}
 
 		space.setVisible(true);

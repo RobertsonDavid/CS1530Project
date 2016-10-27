@@ -291,6 +291,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	  piece = board.getPieceAt(oldRow, oldCol);
 
+    System.out.println(piece.getType());
+
+
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
@@ -327,12 +330,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       takenPiece = board.getPieceAt(newRow, newCol);  //piece that is potentially going to be taken
 
-      position = piece.move(board, newRow, newCol);
-
       parent.remove(0);
       parent.add(space);
-
-      oldParent.add(space);
 
 		}
 		else {

@@ -5,7 +5,7 @@ import org.mockito.*;
 import org.junit.Test;
 
 public class ChessBoardTest {
-/*
+
 	//test constructor works
 	@Test
 	public void testConstructor() {
@@ -18,7 +18,7 @@ public class ChessBoardTest {
 	public void testGetPieceAt() {
 		ChessBoard b = new ChessBoard();
 		ChessPiece p = Mockito.mock(ChessPiece.class);
-		Mockito.when(p.getType()).thenReturn("rock");
+		Mockito.when(p.getType()).thenReturn("rook");
 		Mockito.when(p.getSide()).thenReturn(true);
 		assertEquals(p.getType(), b.getPieceAt(0, 0).getType());
 		assertEquals(p.getSide(), b.getPieceAt(0, 0).getSide());
@@ -48,5 +48,5 @@ public class ChessBoardTest {
 		testBoard.update(0, 1, 0, 2);
 		assertNull(testBoard.getPieceAt(0, 1));
 	}
-	*/
+	
 }

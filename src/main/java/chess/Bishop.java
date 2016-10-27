@@ -29,7 +29,7 @@ public class Bishop implements ChessPiece {
 
 
   public Bishop(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
-    this.type = type;
+	  	this.type = type;
 		this.side = side;
 		this.firstMove = firstMove;
 		this.topOfBoard = topOfBoard;
@@ -46,7 +46,7 @@ public class Bishop implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(ChessBoard board,int x, int y) {
+  public boolean checkMove(ChessBoard board, int x, int y) {
 		//change 0 to null when object entered
 		if (board.getPieceAt(x, y) == null){
 			return true;
@@ -69,7 +69,7 @@ public class Bishop implements ChessPiece {
     }
 
     int rowOffset, colOffset;
-
+    
     if(this.row < newRow){
       rowOffset = 1;
     }

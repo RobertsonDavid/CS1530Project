@@ -14,9 +14,9 @@ public class KingTest {
 	//int array contains 4, 1 is expected
 	@Test
 	public void testMoveHorizontally() {
-		Mockito.when(board.getPieceAt(4, 1)).thenReturn(null);
-		int[] expected = {4, 1};
-		assertArrayEquals(expected, k.move(board, 4, 1));	
+		Mockito.when(board.getPieceAt(5, 0)).thenReturn(null);
+		int[] expected = {5, 0};
+		assertArrayEquals(expected, k.move(board, 5, 0));	
 	}
 	
 	//test if normal move for a king is correct, vertically
@@ -24,8 +24,8 @@ public class KingTest {
 	@Test
 	public void testMoveVertically() {
 		Mockito.when(board.getPieceAt(5, 0)).thenReturn(null);
-		int[] expected = {5, 0};
-		assertArrayEquals(expected, k.move(board, 5, 0));	
+		int[] expected = {4, 1};
+		assertArrayEquals(expected, k.move(board, 4, 1));	
 	}
 	
 	//test if normal move for a king is correct, diagonally

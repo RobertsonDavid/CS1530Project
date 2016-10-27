@@ -20,11 +20,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	JToolBar timers = new JToolBar();
 
 	private JLabel space = null;
-  	private BoardSquare square = null;
-  	private BoardSquare square2 = null;
+  private BoardSquare square = null;
+  private BoardSquare square2 = null;
 
-  	private ChessPiece piece = null;
-  	private int oldRow, oldCol, newRow, newCol;
+  private ChessPiece piece = null;
+  private int oldRow, oldCol, newRow, newCol;
 
 	private BoardSquare[][] squares = new BoardSquare[8][8]; //Array of BoardSquares which makes up the actual UI board
 	private ChessBoard board;  //Backing ChessBoard object
@@ -41,38 +41,38 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		this.board = board;
 		this.setTitle("Laboon Chess");
 		getContentPane().add(layeredPane);
-	  	layeredPane.addMouseListener(this);
+	  layeredPane.addMouseListener(this);
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
-    	this.setSize(800, 700);
-    	boardPanel = resetBoard();
+    this.setSize(800, 700);
+    boardPanel = resetBoard();
 
-    	//Creating a border for the timers
-    	Border blackline = BorderFactory.createLineBorder(Color.black);
-    	//Creating a ToolBar that holds both timers
-    	JToolBar timers = new JToolBar();
+    //Creating a border for the timers
+    Border blackline = BorderFactory.createLineBorder(Color.black);
+    //Creating a ToolBar that holds both timers
+    JToolBar timers = new JToolBar();
 
     	//creating a timer for the
-    	Timer timer = new Timer(1000, new ActionListener(){
-  	    @Override
-       		public void actionPerformed(ActionEvent e) {
-          		seconds--;
-          		long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
-          		long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
-          		timerLabel.setText(minute + ":"+ second);
-          		if (seconds == 0) {
-            		System.exit(0);
-          		}
-        	}
-    	});
-	    timer.start();
+    Timer timer = new Timer(1000, new ActionListener(){
+  	  @Override
+     		public void actionPerformed(ActionEvent e) {
+        		seconds--;
+        		long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
+        		long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+        		timerLabel.setText(minute + ":"+ second);
+        		if (seconds == 0) {
+          		System.exit(0);
+        		}
+      	}
+  	});
+    timer.start();
 
-	    timerLabel.setBorder(blackline);
-	  	timers.add(timerLabel);
+    timerLabel.setBorder(blackline);
+	  timers.add(timerLabel);
 
-	    JToolBar toolbar = new JToolBar();
-	    toolbar.setFloatable(false);
-	    JButton newGame = new JButton("New Game");
+	  JToolBar toolbar = new JToolBar();
+	  toolbar.setFloatable(false);
+	  JButton newGame = new JButton("New Game");
 		toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
 		toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
 		toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
@@ -80,16 +80,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
 		gameWindow.setPreferredSize(new Dimension(600, 600));
 		gameWindow.setBounds(0, 0, 600, 600);
-	    layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+	  layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
 
 	    //if new Game is selected
-	    newGame.addActionListener(new ActionListener() { 
-	  		public void actionPerformed(ActionEvent e) {
-	  			getColor(); 
-	  		} 
-		} );
-	} 	
-	
+	  newGame.addActionListener(new ActionListener() {
+	  	public void actionPerformed(ActionEvent e) {
+	  		getColor();
+	  	}
+		});
+	}
+
 	//Method that gets the color the user chooses
 	private void getColor(){
 
@@ -107,15 +107,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		JRadioButton black = new JRadioButton("Black");
 
 		JPanel controlPanel = new JPanel();
-	    controlPanel.setLayout(new FlowLayout());
+	  controlPanel.setLayout(new FlowLayout());
 
 	    //creating the start game button and the cancel button
-	    JToolBar confirmation = new JToolBar();
-	    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
-	    JButton startGame = new JButton("Start Game");
-	    JButton cancel = new JButton("Cancel");
-	    confirmation.add(startGame);
-	    confirmation.add(cancel);
+	  JToolBar confirmation = new JToolBar();
+	  confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+	  JButton startGame = new JButton("Start Game");
+	  JButton cancel = new JButton("Cancel");
+	  confirmation.add(startGame);
+	  confirmation.add(cancel);
 
 	    //if white is selected colorChoice is white
 		white.addItemListener(new ItemListener(){
@@ -142,30 +142,30 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   				JPanel panel = resetBoard();
   				panel.setVisible(true);
   				gameWindow.add(panel);
-  			} 
-		} );
+  			}
+		});
 
 		//if cancel is chosen remove window
 		cancel.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
   			}
-		} );
+		});
 
 		//grouping the buttons together
 		ButtonGroup group = new ButtonGroup();
-	    group.add(white);
-	    group.add(black);
+	  group.add(white);
+	  group.add(black);
 
-	    controlPanel.add(white);
-	    controlPanel.add(black);
+	  controlPanel.add(white);
+	  controlPanel.add(black);
 
-	    //adding panels and displaying
-	    chooseColor.add(headerLabel);
-	    chooseColor.add(controlPanel);
-	    chooseColor.add(confirmation);
-	    chooseColor.setVisible(true);
-		}
+	  //adding panels and displaying
+	  chooseColor.add(headerLabel);
+	  chooseColor.add(controlPanel);
+	  chooseColor.add(confirmation);
+	  chooseColor.setVisible(true);
+	}
 
 	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
 		gameWindow = new JPanel();
@@ -320,10 +320,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		if (spotOnBoard instanceof JLabel){
 
 			Container parent = spotOnBoard.getParent();
-	      square2 = (BoardSquare)parent;
+	    square2 = (BoardSquare)parent;
 
-	      newRow = square2.getRow();
-	      newCol = square2.getColumn();
+	    newRow = square2.getRow();
+	    newCol = square2.getColumn();
 
 			parent.remove(0);
 			parent.add(space);

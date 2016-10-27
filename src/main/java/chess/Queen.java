@@ -2,7 +2,7 @@ package chess;
 
 public class Queen implements ChessPiece {
 
-  protected String type;
+	protected String type;
 	protected boolean side; //true if top, false if bottom
 	protected boolean firstMove;
 	protected boolean topOfBoard;

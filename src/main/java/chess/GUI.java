@@ -380,20 +380,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-      takenPiece = board.getPieceAt(newRow, newCol);
+      takenPiece = board.getPieceAt(newRow, newCol);  //piece that is potentially going to be taken
 
       position = piece.move(board, newRow, newCol);
 
-      //If the move method returned a new position, meaning the move was valid
-      if((position[0] != oldRow) && (position[1] != oldCol)){
-        //This is where we will add the piece to the side panel.
-        parent.remove(0);
-        parent.add(space);
-      }
-      //If the move method returned the original position, meaning the move was invalid.
-      else{
-        oldParent.add(space);
-      }
+      parent.remove(0);
+      parent.add(space);
+
+      oldParent.add(space);
+
 		}
 		else {
 			Container parent = (Container)spotOnBoard;
@@ -402,18 +397,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-      position = piece.move(board, newRow, newCol);
+      //This section will use a conditional which tests whether a call to move returns
+      //a new position or the old position. It will position the piece that the user
+      //is moving accordingly.
 
-      //If the move method returned a new position, meaning the move was valid
-      if((position[0] != oldRow) && (position[1] != oldCol)){
-        //This is where we will add the piece to the side panel.
-        parent.remove(0);
-        parent.add(space);
-      }
-      //If the move method returned the original position, meaning the move was invalid.
-      else{
-        oldParent.add(space);
-      }
+      parent.remove(0);
+      parent.add(space);
+
 		}
 
 		space.setVisible(true);

@@ -34,7 +34,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
 	int deltaX, deltaY;
 	//Holds the color choice
-	public String colorChoice = "White";
+	private String colorChoice = "White";
 	private static int seconds = 300;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
@@ -70,7 +70,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	   });
      timer.start();
 
-     timerLabel.setBorder(blackline);
+    timerLabel.setBorder(blackline);
 	  timers.add(timerLabel);
 
   	JToolBar toolbar = new JToolBar();
@@ -106,13 +106,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		headerLabel.setText("Please select the color you wish to be");
 
 		//displaying the radio choices black and white
-		JRadioButton white = new JRadioButton("White", true);
-		JRadioButton black = new JRadioButton("Black");
+		JRadioButton white = new JRadioButton("White", colorChoice.equals("White"));
+		JRadioButton black = new JRadioButton("Black", colorChoice.equals("Black"));
 
 		JPanel controlPanel = new JPanel();
 	  controlPanel.setLayout(new FlowLayout());
 
-	    //creating the start game button and the cancel button
+	  //creating the start game button and the cancel button
 	  JToolBar confirmation = new JToolBar();
 	  confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
 	  JButton startGame = new JButton("Start Game");
@@ -120,7 +120,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	  confirmation.add(startGame);
 	  confirmation.add(cancel);
 
-	    //if white is selected colorChoice is white
+	  //if white is selected colorChoice is white
 		white.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "White";
@@ -138,6 +138,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		startGame.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
+          chooseColor.dispose();
   				gameWindow.remove(boardPanel);
   				boardPanel = resetBoard();
   				gameWindow.add(boardPanel);
@@ -182,6 +183,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
+    System.out.println(colorChoice);
 		boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
@@ -225,35 +227,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   				if (i == 0){
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(BlackRook);
-  					}
-  					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(BlackKnight);
-  					}
-  					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(BlackBishop);
-  					}
-  					if(j == 3){
-  						pieceImage = new JLabel(BlackQueen);
-  					}
-  					if(j == 4){
-  						pieceImage = new JLabel(BlackKing);
-  					}
-  					square.add(pieceImage);
-  				}
-  				//creating black pawns
-  				else if (i == 1){
-  					pieceImage = new JLabel(BlackPawn);
-  					square.add(pieceImage);
-  				}
-  				//creating white pawns
-  				else if (i == 6){
-  					pieceImage = new JLabel(WhitePawn);
-  					square.add(pieceImage);
-  				}
-  				else if(i == 7)
-  				{
-  					if (j == 0 || j == 7){
   						pieceImage = new JLabel(WhiteRook);
   					}
   					if(j == 1 || j == 6){
@@ -267,6 +240,35 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   					}
   					if(j == 4){
   						pieceImage = new JLabel(WhiteKing);
+  					}
+  					square.add(pieceImage);
+  				}
+  				//creating black pawns
+  				else if (i == 1){
+  					pieceImage = new JLabel(WhitePawn);
+  					square.add(pieceImage);
+  				}
+  				//creating white pawns
+  				else if (i == 6){
+  					pieceImage = new JLabel(BlackPawn);
+  					square.add(pieceImage);
+  				}
+  				else if(i == 7)
+  				{
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(BlackRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(BlackKnight);
+  					}
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(BlackBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(BlackQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(BlackKing);
   					}
   					square.add(pieceImage);
   				}
@@ -274,40 +276,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         else {
           if (i == 0){
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(WhiteRook);
-  					}
-  					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(WhiteKnight);
- 					  }
-  					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(WhiteBishop);
-  					}
-  					if(j == 3){
-  						pieceImage = new JLabel(WhiteQueen);
-  					}
-  					if(j == 4){
-  						pieceImage = new JLabel(WhiteKing);
-  					}
-  					square.add(pieceImage);
-  				}
-  				//creating white pawns
-  				else if (i == 1){
-  					pieceImage = new JLabel(WhitePawn);
-  					square.add(pieceImage);
-  				}
-  				//creating black pawns
-  				else if (i == 6){
-  					pieceImage = new JLabel(BlackPawn);
-  					square.add(pieceImage);
-  				}
-  				else if(i == 7)
-  				{
-  					if (j == 0 || j == 7){
   						pieceImage = new JLabel(BlackRook);
   					}
   					if(j == 1 || j == 6){
   						pieceImage = new JLabel(BlackKnight);
-  					}
+ 					  }
   					if(j == 2 || j == 5){
   						pieceImage = new JLabel(BlackBishop);
   					}
@@ -316,6 +289,35 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   					}
   					if(j == 4){
   						pieceImage = new JLabel(BlackKing);
+  					}
+  					square.add(pieceImage);
+  				}
+  				//creating white pawns
+  				else if (i == 1){
+  					pieceImage = new JLabel(BlackPawn);
+  					square.add(pieceImage);
+  				}
+  				//creating black pawns
+  				else if (i == 6){
+  					pieceImage = new JLabel(WhitePawn);
+  					square.add(pieceImage);
+  				}
+  				else if(i == 7)
+  				{
+  					if (j == 0 || j == 7){
+  						pieceImage = new JLabel(WhiteRook);
+  					}
+  					if(j == 1 || j == 6){
+  						pieceImage = new JLabel(WhiteKnight);
+  					}
+  					if(j == 2 || j == 5){
+  						pieceImage = new JLabel(WhiteBishop);
+  					}
+  					if(j == 3){
+  						pieceImage = new JLabel(WhiteQueen);
+  					}
+  					if(j == 4){
+  						pieceImage = new JLabel(WhiteKing);
   					}
   					square.add(pieceImage);
   				}

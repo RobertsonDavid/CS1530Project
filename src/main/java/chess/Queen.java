@@ -3,7 +3,7 @@ package chess;
 public class Queen implements ChessPiece {
 
   protected String type;
-	protected boolean side; //true if white, false if black
+	protected boolean side; //true if top, false if bottom
 	protected boolean firstMove;
 	protected boolean topOfBoard;
 	protected String pieceValue;
@@ -27,7 +27,7 @@ public class Queen implements ChessPiece {
     return this.topOfBoard;
   }
 
-  public Queen(String type, boolean color, boolean firstMove, boolean topOfBoard, int row, int column) {
+  public Queen(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
 		this.side = side;
 		this.firstMove = firstMove;
@@ -45,18 +45,18 @@ public class Queen implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(int [][] board,int x, int y) {
-		//change 0 to null when object entered
-		if (board[y][x] == 0){
-			return true;
-		}
-		else
-			return false;
-	}
+  public boolean checkMove(ChessBoard board,int x, int y) {
+    //change 0 to null when object entered
+    if (board.getPieceAt(x, y) == null){
+      return true;
+    }
+    else
+      return false;
+  }
 
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
-  public int[] move(int board[][], int newRow, int newCol) {
+  public int[] move(ChessBoard board, int newRow, int newCol) {
 
     //run Rook code if board changed =1 then do not run bishop code
     if(this.row != newRow && this.column != newCol){
@@ -87,7 +87,7 @@ public class Queen implements ChessPiece {
 
       int y = this.column + colOffset;
       for(int x = this.row + rowOffset; x != newRow; x += rowOffset){
-        if(board[x][y] != 0){
+        if(board.getPieceAt(x, y) != null){
           return this.position;
         }
         y += colOffset;
@@ -110,7 +110,7 @@ public class Queen implements ChessPiece {
       for(int x = this.row + offset; x != newRow; x += offset){
         //Go from currentRow to newRow, and check every space
         //change 0 to null when object entered
-        if(board[x][this.column] != 0){
+        if(board.getPieceAt(x, this.column) != null){
           //blocked by a piece
           return this.position;
         }
@@ -132,7 +132,7 @@ public class Queen implements ChessPiece {
       for(int x = this.column + offset; x != newCol; x += offset){
         //Go from currentCol to newCol, and check every space
         //change 0 to null when object entered
-        if(board[this.column][x] != 0){
+        if(board.getPieceAt(this.column, x) != null){
           //blocked by a piece
           continue;
         }

@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.BorderFactory; 
+import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
@@ -21,6 +21,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	private JLabel space = null;
   	private BoardSquare square = null;
+  	private BoardSquare square2 = null;
+
   	private ChessPiece piece = null;
   	private int oldRow, oldCol, newRow, newCol;
 
@@ -32,7 +34,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public String colorChoice = "White";
 	private static int seconds = 300;
 	//Include a board object here
-	
+
 	//Going to want to be able to pass a board object, initialize and reset board!
 	public GUI(ChessBoard board) {
 		layeredPane = new JLayeredPane();
@@ -45,49 +47,51 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     	this.setSize(800, 700);
     	boardPanel = resetBoard();
 
-        //Creating a border for the timers
-        Border blackline = BorderFactory.createLineBorder(Color.black);
+    	//Creating a border for the timers
+    	Border blackline = BorderFactory.createLineBorder(Color.black);
+    	//Creating a ToolBar that holds both timers
+    	JToolBar timers = new JToolBar();
 
-        //creating a timer for the 
-        Timer timer = new Timer(1000, new ActionListener(){
-        	 @Override
-            public void actionPerformed(ActionEvent e) {
-                seconds--;
-                long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
-                long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
-                timerLabel.setText(minute + ":"+ second);
-                if (seconds == 0) {
-                    System.exit(0);
-                }
-            }
-        });
-        timer.start();
+    	//creating a timer for the
+    	Timer timer = new Timer(1000, new ActionListener(){
+  	    @Override
+       		public void actionPerformed(ActionEvent e) {
+          		seconds--;
+          		long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
+          		long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+          		timerLabel.setText(minute + ":"+ second);
+          		if (seconds == 0) {
+            		System.exit(0);
+          		}
+        	}
+    	});
+	    timer.start();
 
-        timerLabel.setBorder(blackline);
-  		timers.add(timerLabel);
+	    timerLabel.setBorder(blackline);
+	  	timers.add(timerLabel);
 
-        JToolBar toolbar = new JToolBar();
-        toolbar.setFloatable(false);
-        JButton newGame = new JButton("New Game");
-	    toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
-	    toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
-	    toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
+	    JToolBar toolbar = new JToolBar();
+	    toolbar.setFloatable(false);
+	    JButton newGame = new JButton("New Game");
+		toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
+		toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
+		toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
 
-	    gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
+		gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
 		gameWindow.setPreferredSize(new Dimension(600, 600));
 		gameWindow.setBounds(0, 0, 600, 600);
-    	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+	    layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
 
-        //if new Game is selected
-        newGame.addActionListener(new ActionListener() { 
-  			public void actionPerformed(ActionEvent e) {
-  				getColor(boardPanel, toolbar, timers); 
-  			} 
+	    //if new Game is selected
+	    newGame.addActionListener(new ActionListener() { 
+	  		public void actionPerformed(ActionEvent e) {
+	  			getColor(); 
+	  		} 
 		} );
 	} 	
 	
 	//Method that gets the color the user chooses
-	private void getColor(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
+	private void getColor(){
 
 		//Color window
 		chooseColor = new JFrame("Choose color");
@@ -103,17 +107,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		JRadioButton black = new JRadioButton("Black");
 
 		JPanel controlPanel = new JPanel();
-      	controlPanel.setLayout(new FlowLayout());
+	    controlPanel.setLayout(new FlowLayout());
 
-      	//creating the start game button and the cancel button
-      	JToolBar confirmation = new JToolBar();
-      	confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton startGame = new JButton("Start Game");
-        JButton cancel = new JButton("Cancel");
-        confirmation.add(startGame);
-        confirmation.add(cancel);
+	    //creating the start game button and the cancel button
+	    JToolBar confirmation = new JToolBar();
+	    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+	    JButton startGame = new JButton("Start Game");
+	    JButton cancel = new JButton("Cancel");
+	    confirmation.add(startGame);
+	    confirmation.add(cancel);
 
-        //if white is selected colorChoice is white
+	    //if white is selected colorChoice is white
 		white.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent e){
 				colorChoice = "White";
@@ -130,7 +134,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		});
 
 		//if start game is chosen remove window
-		startGame.addActionListener(new ActionListener() { 
+		startGame.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
   				space.setVisible(false);
@@ -142,26 +146,26 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		} );
 
 		//if cancel is chosen remove window
-		cancel.addActionListener(new ActionListener() { 
+		cancel.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
   				chooseColor.setVisible(false);
-  			} 
+  			}
 		} );
 
 		//grouping the buttons together
 		ButtonGroup group = new ButtonGroup();
-      	group.add(white);
-      	group.add(black);
+	    group.add(white);
+	    group.add(black);
 
-      	controlPanel.add(white);
-      	controlPanel.add(black);
+	    controlPanel.add(white);
+	    controlPanel.add(black);
 
-      	//adding panels and displaying 
-      	chooseColor.add(headerLabel);
-      	chooseColor.add(controlPanel);
-      	chooseColor.add(confirmation);
-      	chooseColor.setVisible(true);
-	}
+	    //adding panels and displaying
+	    chooseColor.add(headerLabel);
+	    chooseColor.add(controlPanel);
+	    chooseColor.add(confirmation);
+	    chooseColor.setVisible(true);
+		}
 
 	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
 		gameWindow = new JPanel();
@@ -262,14 +266,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 						}
 						square.add(pieceImage);
 					}
-
 					squares[i][j] = square;
 					boardPanel.add(square);
 				}
 			}
-	    board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
-
-			return boardPanel;
+    	board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
+		return boardPanel;
 	}
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
@@ -279,6 +281,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
 		if (spotOnBoard instanceof JPanel) return;
+
+	    Container parent = spotOnBoard.getParent();
+	    square = (BoardSquare)parent;
+
+	    oldRow = square.getRow();
+	    oldCol = square.getColumn();
+
+	    piece = board.getPieceAt(oldRow, oldCol);
 
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
@@ -310,6 +320,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		if (spotOnBoard instanceof JLabel){
 
 			Container parent = spotOnBoard.getParent();
+	      square2 = (BoardSquare)parent;
+
+	      newRow = square2.getRow();
+	      newCol = square2.getColumn();
+
 			parent.remove(0);
 			parent.add(space);
 		}
@@ -339,7 +354,3 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
  	}
 
 }
-
-
-
-

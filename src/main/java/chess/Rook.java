@@ -3,7 +3,7 @@ package chess;
 public class Rook implements ChessPiece {
 
   protected String type;
-  protected boolean side; //true if white, false if black
+  protected boolean side; //true if top, false if bottom
   protected boolean firstMove;
   protected boolean topOfBoard;
   protected String pieceValue;
@@ -27,7 +27,7 @@ public class Rook implements ChessPiece {
     return this.topOfBoard;
   }
 
-  public Rook(String type, boolean color, boolean firstMove, boolean topOfBoard, int row, int column) {
+  public Rook(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
     this.side = side;
     this.firstMove = firstMove;
@@ -45,18 +45,17 @@ public class Rook implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(int [][] board,int x, int y) {
+  public boolean checkMove(ChessBoard board,int x, int y) {
 		//change 0 to null when object entered
-		if (board[y][x] == 0){
+		if (board.getPieceAt(x, y) == null){
 			return true;
 		}
 		else
 			return false;
 	}
 
-
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
-  public int[] move(int board[][], int newRow, int newCol) {
+  public int[] move(ChessBoard board, int newRow, int newCol) {
     //rook can move up down left right
     if(this.row != newRow && this.column != newCol){
       //Did not move along one rank/file
@@ -76,7 +75,7 @@ public class Rook implements ChessPiece {
       for(int x = this.row + offset; x != newRow; x += offset){
         //Go from currentRow to newRow, and check every space
         //change 0 to null when object entered
-        if(board[x][this.column] != 0){
+        if(board.getPieceAt(x, this.column) != null){
           //blocked by a piece
           return this.position;
         }
@@ -98,7 +97,7 @@ public class Rook implements ChessPiece {
       for(int x = this.column + offset; x != newCol; x += offset){
         //Go from currentCol to newCol, and check every space
         //change 0 to null when object entered
-        if(board[this.row][x] != 0){
+        if(board.getPieceAt(this.row, x) != null){
           //blocked by a piece
           return this.position;
         }

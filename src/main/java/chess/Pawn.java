@@ -3,7 +3,7 @@ package chess;
 public class Pawn implements ChessPiece {
 
   protected String type;
-	protected boolean side; //true if white, false if black
+	protected boolean side; //true if top, false if bottom
 	protected boolean firstMove;
 	protected boolean topOfBoard;
 	protected String pieceValue;
@@ -27,7 +27,7 @@ public class Pawn implements ChessPiece {
     return this.topOfBoard;
   }
 
-  public Pawn(String type, boolean color, boolean firstMove, boolean topOfBoard, int row, int column) {
+  public Pawn(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
 		this.side = side;
 		this.firstMove = firstMove;
@@ -45,9 +45,9 @@ public class Pawn implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(int [][] board,int x, int y) {
+  public boolean checkMove(ChessBoard board,int x, int y) {
 		//change 0 to null when object entered
-		if (board[y][x] == 0){
+		if (board.getPieceAt(x, y) == null){
 			return true;
 		}
 		else
@@ -55,7 +55,7 @@ public class Pawn implements ChessPiece {
 	}
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
-  public int[] move(int board[][], int newRow, int newCol) {
+  public int[] move(ChessBoard board, int newRow, int newCol) {
     if (checkMove(board, newRow, newCol)){
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece

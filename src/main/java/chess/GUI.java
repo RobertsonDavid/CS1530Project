@@ -291,9 +291,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	  piece = board.getPieceAt(oldRow, oldCol);
 
-    System.out.println(piece.getType());
-
-
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
@@ -349,7 +346,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       //a new position or the old position. It will position the piece that the user
       //is moving accordingly.
 
-      parent.remove(0);
       parent.add(space);
 
 		}

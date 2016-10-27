@@ -104,16 +104,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       public void actionPerformed(ActionEvent e) {
         try{
           boardPanel= load();
+          gameWindow.add(boardPanel);
         }
         catch (FileNotFoundException er){
           System.out.println("File not found!");
         }
       }
     });
-    gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
-    gameWindow.setPreferredSize(new Dimension(600, 600));
-    gameWindow.setBounds(0, 0, 600, 600);
-    layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+      
     
   }
   //saves the backing chessboard array to a file
@@ -231,63 +229,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       }
     }
     return boardPanel;
-    
-    /*
-     * 
-     * 
-     if (i == 0){
-     if (j == 0 || j == 7){
-     pieceImage = new JLabel(BlackRook);
-     }
-     if(j == 1 || j == 6){
-     pieceImage = new JLabel(BlackKnight);
-     }
-     if(j == 2 || j == 5){
-     pieceImage = new JLabel(BlackBishop);
-     }
-     if(j == 3){
-     pieceImage = new JLabel(BlackQueen);
-     }
-     if(j == 4){
-     pieceImage = new JLabel(BlackKing);
-     }
-     square.add(pieceImage);
-     }
-     //creating black pawns
-     else if (i == 1){
-     pieceImage = new JLabel(BlackPawn);
-     square.add(pieceImage);
-     }
-     //creating white pawns
-     else if (i == 6){
-     pieceImage = new JLabel(WhitePawn);
-     square.add(pieceImage);
-     }
-     else if(i == 7)
-     {
-     if (j == 0 || j == 7){
-     pieceImage = new JLabel(WhiteRook);
-     }
-     if(j == 1 || j == 6){
-     pieceImage = new JLabel(WhiteKnight);
-     }
-     if(j == 2 || j == 5){
-     pieceImage = new JLabel(WhiteBishop);
-     }
-     if(j == 3){
-     pieceImage = new JLabel(WhiteQueen);
-     }
-     if(j == 4){
-     pieceImage = new JLabel(WhiteKing);
-     }
-     square.add(pieceImage);
-     }
-     
-     squares[i][j] = square;
-     boardPanel.add(square);
-     }
-     }
-     */
     
   }
   

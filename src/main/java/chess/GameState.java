@@ -58,7 +58,7 @@ public class GameState {
     ChessBoard loadGame= new ChessBoard();
     //need method of clearing pieces from 2d array
     loadGame.clearBoard();
-    Scanner scan=new Scanner(new File("filename.txt"));
+    Scanner scan=new Scanner(new File("src/main/java/chess/SavedGames/filename.txt"));
     scan.useDelimiter(",");
     String type;
     boolean color;

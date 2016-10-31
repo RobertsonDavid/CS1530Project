@@ -59,6 +59,10 @@ public class King implements ChessPiece {
 
       //moving one to the left or right
     if(Math.abs(newRow - this.row) > 1 || Math.abs(newCol - this.column) > 1) {
+      
+      if(this.firstMove){
+        return this.position;
+      }
       //Castling logic
       if(newCol - this.column == 2 && this.row == newRow){
         //Castle kingside
@@ -67,6 +71,7 @@ public class King implements ChessPiece {
           return this.position;
         }
         else{
+          this.firstMove = false;
           updateCoord(newRow, newCol);
           return this.position;
         }
@@ -78,17 +83,22 @@ public class King implements ChessPiece {
           return this.position;
         }
         else{
+          this.firstMove = false;
           updateCoord(newRow, newCol);
           return this.position;
         }
       }
-      //normal move
+
       else{
-        updateCoord(newRow, newCol);
         return this.position;
       }
     }
-    return this.position;
+    //normal move
+    else{
+      this.firstMove = false;
+      updateCoord(newRow, newCol);
+      return this.position;
+    }
   }
 
 }

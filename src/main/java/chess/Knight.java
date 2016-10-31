@@ -57,6 +57,10 @@ public class Knight implements ChessPiece {
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
 
+  	  if(checkMove(board, newRow, newCol) == false){
+      	return this.position;
+      }
+
       if(Math.abs(newRow - this.row) == 2 && Math.abs(newCol - this.column) == 1){
         updateCoord(newRow, newCol);
         return this.position;

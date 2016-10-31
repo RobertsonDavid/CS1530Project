@@ -56,6 +56,10 @@ public class Rook implements ChessPiece {
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
+
+    if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7){
+      return this.position;
+    }
     //rook can move up down left right
     if(this.row != newRow && this.column != newCol){
       //Did not move along one rank/file

@@ -55,6 +55,6 @@ public class BishopTest {
 		Bishop bishop = new Bishop("bishop", true, true, false, 0, 0);
 		Mockito.when(board.getPieceAt(-1, -1)).thenReturn(null);
 		int[] expected = {0, 0};
-		assertArrayEquals(expected, b.move(board, 0, 0));
+		assertArrayEquals(expected, bishop.move(board, -1, -1));
 	}
 }

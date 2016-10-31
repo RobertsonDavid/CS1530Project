@@ -56,6 +56,7 @@ public class Pawn implements ChessPiece {
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
+
     if (checkMove(board, newRow, newCol)){
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece

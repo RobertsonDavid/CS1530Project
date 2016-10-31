@@ -11,6 +11,19 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
+  private ImageIcon WhitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
+  private ImageIcon BlackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
+  private ImageIcon WhiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
+  private ImageIcon BlackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
+  private ImageIcon WhiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
+  private ImageIcon BlackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
+  private ImageIcon WhiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
+  private ImageIcon BlackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
+  private ImageIcon WhiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
+  private ImageIcon BlackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
+  private ImageIcon WhiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
+  private ImageIcon BlackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+
  	private static final long serialVersionUID = 1L;
 	private JPanel boardPanel;
 	private JPanel gameWindow;
@@ -74,99 +87,54 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	  timers.add(timerLabel);
 
   	JToolBar toolbar = new JToolBar();
+    JPopupMenu optionsMenu = new JPopupMenu();
+    JButton dropDown = new JButton();
+    dropDown.setText("Options");
+
+    JMenuItem menuItemChangeColor = new JMenuItem("Change Color");
+    optionsMenu.add(menuItemChangeColor);
+    JMenuItem menuItemFlipBoard = new JMenuItem("Flip Board");
+    optionsMenu.add(menuItemFlipBoard);
+
   	toolbar.setFloatable(false);
   	JButton newGame = new JButton("New Game");
   	toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
   	toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
   	toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
+    toolbar.add(dropDown);
 
-  	gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
-  	gameWindow.setPreferredSize(new Dimension(600, 600));
-  	gameWindow.setBounds(0, 0, 600, 600);
-  	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
-
-  	//if new Game is selected
+    //if new Game is selected
   	newGame.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
   			getColor();
   		}
   	});
+
+    //positions the pop up menu for the tool bar item
+    dropDown.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e) {
+        optionsMenu.show(dropDown, dropDown.getBounds().x, dropDown.getBounds().y + dropDown.getBounds().height);
+      }
+    });
+
+    menuItemChangeColor.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        changeColors();
+      }
+    });
+
+    //action for flip board menu option that allows you to flip board
+    menuItemFlipBoard.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        flipBoard();
+      }
+    });
+
+  	gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
+  	gameWindow.setPreferredSize(new Dimension(600, 600));
+  	gameWindow.setBounds(0, 0, 600, 600);
+  	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
   }
-
-	//Method that gets the color the user chooses
-	private void getColor(){
-
-		//Color window
-		chooseColor = new JFrame("Choose color");
-		chooseColor.setSize(700,300);
-		chooseColor.setLayout(new GridLayout(3,1));
-
-		//label that tells the user to choose a color
-		JLabel headerLabel = new JLabel("", JLabel.CENTER);
-		headerLabel.setText("Please select the color you wish to be");
-
-		//displaying the radio choices black and white
-		JRadioButton white = new JRadioButton("White", colorChoice.equals("White"));
-		JRadioButton black = new JRadioButton("Black", colorChoice.equals("Black"));
-
-		JPanel controlPanel = new JPanel();
-	  controlPanel.setLayout(new FlowLayout());
-
-	  //creating the start game button and the cancel button
-	  JToolBar confirmation = new JToolBar();
-	  confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
-	  JButton startGame = new JButton("Start Game");
-	  JButton cancel = new JButton("Cancel");
-	  confirmation.add(startGame);
-	  confirmation.add(cancel);
-
-	  //if white is selected colorChoice is white
-		white.addItemListener(new ItemListener(){
-			public void itemStateChanged(ItemEvent e){
-				colorChoice = "White";
-			}
-		});
-
-		//if black is selected colorChoice is black
-		black.addItemListener(new ItemListener(){
-			public void itemStateChanged(ItemEvent e){
-				colorChoice = "Black";
-			}
-		});
-
-		//if start game is chosen remove window
-		startGame.addActionListener(new ActionListener() {
-  			public void actionPerformed(ActionEvent e) {
-  				chooseColor.setVisible(false);
-          chooseColor.dispose();
-  				gameWindow.remove(boardPanel);
-  				boardPanel = resetBoard();
-  				gameWindow.add(boardPanel);
-          boardPanel.setVisible(true);
-  			}
-		});
-
-		//if cancel is chosen remove window
-		cancel.addActionListener(new ActionListener() {
-  			public void actionPerformed(ActionEvent e) {
-  				chooseColor.setVisible(false);
-  			}
-		});
-
-		//grouping the buttons together
-		ButtonGroup group = new ButtonGroup();
-	  group.add(white);
-	  group.add(black);
-
-	  controlPanel.add(white);
-	  controlPanel.add(black);
-
-	  //adding panels and displaying
-	  chooseColor.add(headerLabel);
-	  chooseColor.add(controlPanel);
-	  chooseColor.add(confirmation);
-	  chooseColor.setVisible(true);
-	}
 
   //Resets the panel that the board is on, along with the toolbar and the timer.
   //This will also reset any additional panels that we add.
@@ -183,23 +151,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
-    System.out.println(colorChoice);
 		boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
-
-	  ImageIcon WhitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
-	  ImageIcon BlackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
-	  ImageIcon WhiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
-	  ImageIcon BlackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
-	  ImageIcon WhiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
-	  ImageIcon BlackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
-	  ImageIcon WhiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
-	  ImageIcon BlackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
-	  ImageIcon WhiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
-	  ImageIcon BlackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
-	  ImageIcon WhiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
-	  ImageIcon BlackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
 
 	  for(int i = 7; i >= 0; i--) {
 	  	if(i % 2 == 0) {
@@ -329,6 +283,89 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
 		return boardPanel;
 	}
+
+  //Method that gets the color the user chooses
+  private void getColor(){
+
+    //Color window
+    chooseColor = new JFrame("Choose color");
+    chooseColor.setSize(700,300);
+    chooseColor.setLayout(new GridLayout(3,1));
+
+    //label that tells the user to choose a color
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setText("Please select the color you wish to be");
+
+    //displaying the radio choices black and white
+    JRadioButton white = new JRadioButton("White", colorChoice.equals("White"));
+    JRadioButton black = new JRadioButton("Black", colorChoice.equals("Black"));
+
+    JPanel controlPanel = new JPanel();
+    controlPanel.setLayout(new FlowLayout());
+
+    //creating the start game button and the cancel button
+    JToolBar confirmation = new JToolBar();
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton startGame = new JButton("Start Game");
+    JButton cancel = new JButton("Cancel");
+    confirmation.add(startGame);
+    confirmation.add(cancel);
+
+    //if white is selected colorChoice is white
+    white.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        colorChoice = "White";
+      }
+    });
+
+    //if black is selected colorChoice is black
+    black.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        colorChoice = "Black";
+      }
+    });
+
+    //if start game is chosen remove window
+    startGame.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          chooseColor.setVisible(false);
+          chooseColor.dispose();
+          gameWindow.remove(boardPanel);
+          boardPanel = resetBoard();
+          gameWindow.add(boardPanel);
+          boardPanel.setVisible(true);
+        }
+    });
+
+    //if cancel is chosen remove window
+    cancel.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          chooseColor.setVisible(false);
+        }
+    });
+
+    //grouping the buttons together
+    ButtonGroup group = new ButtonGroup();
+    group.add(white);
+    group.add(black);
+
+    controlPanel.add(white);
+    controlPanel.add(black);
+
+    //adding panels and displaying
+    chooseColor.add(headerLabel);
+    chooseColor.add(controlPanel);
+    chooseColor.add(confirmation);
+    chooseColor.setVisible(true);
+  }
+
+  public void flipBoard(){
+
+  }
+
+  public void changeColors(){
+
+  }
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){

@@ -25,30 +25,41 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private ImageIcon BlackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
 
  	private static final long serialVersionUID = 1L;
+
+  //Panels and Pane for main window
 	private JPanel boardPanel;
 	private JPanel gameWindow;
 	private JLayeredPane layeredPane;
+  private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
+
+  //Frame for choosing your color
 	private static JFrame chooseColor;
+  private String colorChoice = "White";
+
+  //Timer
 	private static JLabel timerLabel = new JLabel();
 	JToolBar timers = new JToolBar();
+  private static int seconds = 300;
 
+  //For clicking and dragging pieces
 	private JLabel space = null;
   private BoardSquare square = null;
   private BoardSquare square2 = null;
   private Container oldParent;
+  int deltaX, deltaY;
 
+  //For taking pieces
   private ChessPiece piece = null;
   private ChessPiece takenPiece = null;
   private int oldRow, oldCol, newRow, newCol;
   private int[] position = null;
 
+  //Board
 	private BoardSquare[][] squares = new BoardSquare[8][8]; //Array of BoardSquares which makes up the actual UI board
 	private ChessBoard board;  //Backing ChessBoard object
-	String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
-	int deltaX, deltaY;
-	//Holds the color choice
-	private String colorChoice = "White";
-	private static int seconds = 300;
+
+  //Changing colors
+  private JFrame changeColor;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -86,6 +97,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     timerLabel.setBorder(blackline);
 	  timers.add(timerLabel);
 
+    //Create toolbar
   	JToolBar toolbar = new JToolBar();
     JPopupMenu optionsMenu = new JPopupMenu();
     JButton dropDown = new JButton();
@@ -101,7 +113,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
   	toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
   	toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
-    toolbar.add(dropDown);
+    toolbar.add(dropDown);  //Options menu for things like changing the color and flipping the board
 
     //if new Game is selected
   	newGame.addActionListener(new ActionListener() {
@@ -359,11 +371,48 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     chooseColor.setVisible(true);
   }
 
+  //Flips board by simply swapping the square positions, using modular division to find the appropriate coordinates.
+  //Calls the flipBoard() method of the ChessBoard object as well to flip the backing array of ChessPieces
   public void flipBoard(){
+    BoardSquare[][] temp = new BoardSquare[8][8];
 
+    for(int i = 0; i < 8; i++) {
+      for(int j = 0; j < 8; j++) {
+        temp[7%i][7%j] = squares[i][j];
+      }
+    }
+    squares = temp;
+    board.flipBoard();
   }
 
   public void changeColors(){
+    changeColor = new JFrame("Change colors");
+    changeColor.setSize(700,300);
+    changeColor.setLayout(new GridLayout(3,1));
+
+    JPanel changeColorPanel = new JPanel();
+    changeColorPanel.setLayout(new FlowLayout());
+
+    JToolBar buttons = new JToolBar();
+    buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton confirm = new JButton("Confirm");
+    JButton cancel = new JButton("Cancel");
+    buttons.add(confirm);
+    buttons.add(cancel);
+
+    JLabel header = new JLabel("", JLabel.CENTER);
+    header.setText("Please enter the RGB values (0 to 255) for the colors of both player's pieces.");
+
+    JTextField red = new JTextField();
+    JTextField green = new JTextField();
+    JTextField blue = new JTextField();
+
+    confirm.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    });
+
 
   }
 

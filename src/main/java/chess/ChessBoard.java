@@ -81,16 +81,14 @@ public class ChessBoard {
 //Flips board by simply swapping the piece positions, using modular division to find the appropriate coordinates
  public void flipBoard() {
    ChessPiece[][] temp = new ChessPiece[8][8];
-   int newX, newY;
+   int newXPos, newYPos;
 
    for(int i = 0; i < 8; i++) {
-     if(i == 0) newX = 7;
-     else newX = i;
+     newXPos = 7-i;
      for(int j = 0; j < 8; j++) {
-       if(j == 0) newY = 7;
-       else newY = j;
+       newYPos = 7-j;
        if(b[i][j] != null) {
-         temp[7%newX][7%newY] = b[i][j];
+         temp[newXPos][newYPos] = b[i][j];
        }
      }
    }

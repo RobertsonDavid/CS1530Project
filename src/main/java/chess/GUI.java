@@ -376,7 +376,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     chooseColor.setVisible(true);
   }
 
-  //Flips board by simply swapping the square positions, using modular division to find the appropriate coordinates.
+  //Flips board by simply swapping the square positions, using subtraction to find the appropriate coordinates.
   //Calls the flipBoard() method of the ChessBoard object as well to flip the backing array of ChessPieces
   public JPanel flipBoard(){
     JPanel newBoardPanel = new JPanel();
@@ -390,16 +390,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newX = 7-i;
       for(int j = 0; j < 8; j++) {
         newY = 7-j;
+        //get the square object we want to move, update it's x and y coords, and then set it at the new position in temp array
         square = squares[i][j];
-        System.out.println("old x: " + i + " newX: " + newX + " old y: " + j + " newY: " + newY);
         square.setRow(newX);
         square.setColumn(newY);
         temp[newX][newY] = square;
         newBoardPanel.add(square);
       }
     }
+    //set squares to the temp array
     squares = temp;
-    System.out.println("flipped");
     board.flipBoard();
     return newBoardPanel;
   }

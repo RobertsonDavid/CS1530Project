@@ -8,21 +8,22 @@ import javax.swing.border.Border;
 import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicButtonUI;
+import java.awt.image.BufferedImage;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
-  private ImageIcon WhitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
-  private ImageIcon BlackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
-  private ImageIcon WhiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
-  private ImageIcon BlackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
-  private ImageIcon WhiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
-  private ImageIcon BlackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
-  private ImageIcon WhiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
-  private ImageIcon BlackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
-  private ImageIcon WhiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
-  private ImageIcon BlackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
-  private ImageIcon WhiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
-  private ImageIcon BlackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+  private ImageIcon whitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
+  private ImageIcon blackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
+  private ImageIcon whiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
+  private ImageIcon blackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
+  private ImageIcon whiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
+  private ImageIcon blackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
+  private ImageIcon whiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
+  private ImageIcon blackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
+  private ImageIcon whiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
+  private ImageIcon blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
+  private ImageIcon whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
+  private ImageIcon blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
 
  	private static final long serialVersionUID = 1L;
 
@@ -60,6 +61,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Changing colors
   private JFrame changeColor;
+  private Color playerColor;
+  private Color computerColor;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -138,7 +141,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //action for flip board menu option that allows you to flip board
     menuItemFlipBoard.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        flipBoard();
+        JPanel newBoardPanel = flipBoard();
+        gameWindow.remove(boardPanel);
+        gameWindow.add(newBoardPanel);
       }
     });
 
@@ -193,48 +198,48 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   				if (i == 0){
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(WhiteRook);
+  						pieceImage = new JLabel(whiteRook);
   					}
   					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(WhiteKnight);
+  						pieceImage = new JLabel(whiteKnight);
   					}
   					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(WhiteBishop);
+  						pieceImage = new JLabel(whiteBishop);
   					}
   					if(j == 3){
-  						pieceImage = new JLabel(WhiteQueen);
+  						pieceImage = new JLabel(whiteQueen);
   					}
   					if(j == 4){
-  						pieceImage = new JLabel(WhiteKing);
+  						pieceImage = new JLabel(whiteKing);
   					}
   					square.add(pieceImage);
   				}
   				//creating black pawns
   				else if (i == 1){
-  					pieceImage = new JLabel(WhitePawn);
+  					pieceImage = new JLabel(whitePawn);
   					square.add(pieceImage);
   				}
   				//creating white pawns
   				else if (i == 6){
-  					pieceImage = new JLabel(BlackPawn);
+  					pieceImage = new JLabel(blackPawn);
   					square.add(pieceImage);
   				}
   				else if(i == 7)
   				{
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(BlackRook);
+  						pieceImage = new JLabel(blackRook);
   					}
   					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(BlackKnight);
+  						pieceImage = new JLabel(blackKnight);
   					}
   					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(BlackBishop);
+  						pieceImage = new JLabel(blackBishop);
   					}
   					if(j == 3){
-  						pieceImage = new JLabel(BlackQueen);
+  						pieceImage = new JLabel(blackQueen);
   					}
   					if(j == 4){
-  						pieceImage = new JLabel(BlackKing);
+  						pieceImage = new JLabel(blackKing);
   					}
   					square.add(pieceImage);
   				}
@@ -242,48 +247,48 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         else {
           if (i == 0){
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(BlackRook);
+  						pieceImage = new JLabel(blackRook);
   					}
   					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(BlackKnight);
+  						pieceImage = new JLabel(blackKnight);
  					  }
   					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(BlackBishop);
+  						pieceImage = new JLabel(blackBishop);
   					}
   					if(j == 3){
-  						pieceImage = new JLabel(BlackQueen);
+  						pieceImage = new JLabel(blackQueen);
   					}
   					if(j == 4){
-  						pieceImage = new JLabel(BlackKing);
+  						pieceImage = new JLabel(blackKing);
   					}
   					square.add(pieceImage);
   				}
   				//creating white pawns
   				else if (i == 1){
-  					pieceImage = new JLabel(BlackPawn);
+  					pieceImage = new JLabel(blackPawn);
   					square.add(pieceImage);
   				}
   				//creating black pawns
   				else if (i == 6){
-  					pieceImage = new JLabel(WhitePawn);
+  					pieceImage = new JLabel(whitePawn);
   					square.add(pieceImage);
   				}
   				else if(i == 7)
   				{
   					if (j == 0 || j == 7){
-  						pieceImage = new JLabel(WhiteRook);
+  						pieceImage = new JLabel(whiteRook);
   					}
   					if(j == 1 || j == 6){
-  						pieceImage = new JLabel(WhiteKnight);
+  						pieceImage = new JLabel(whiteKnight);
   					}
   					if(j == 2 || j == 5){
-  						pieceImage = new JLabel(WhiteBishop);
+  						pieceImage = new JLabel(whiteBishop);
   					}
   					if(j == 3){
-  						pieceImage = new JLabel(WhiteQueen);
+  						pieceImage = new JLabel(whiteQueen);
   					}
   					if(j == 4){
-  						pieceImage = new JLabel(WhiteKing);
+  						pieceImage = new JLabel(whiteKing);
   					}
   					square.add(pieceImage);
   				}
@@ -373,19 +378,43 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Flips board by simply swapping the square positions, using modular division to find the appropriate coordinates.
   //Calls the flipBoard() method of the ChessBoard object as well to flip the backing array of ChessPieces
-  public void flipBoard(){
+  public JPanel flipBoard(){
+    boardPanel = new JPanel();
+    boardPanel.setLayout(new GridLayout(8, 8));
+
     BoardSquare[][] temp = new BoardSquare[8][8];
+    int newX, newY;
 
     for(int i = 0; i < 8; i++) {
+      if(i == 0) newX = 7;
+      else newX = i;
       for(int j = 0; j < 8; j++) {
-        temp[7%i][7%j] = squares[i][j];
+        if(j == 0) newY = 7;
+        else newY = j;
+        temp[7%newX][7%newY] = squares[i][j];
+        boardPanel.add(temp[7%newX][7%newY]);
       }
     }
     squares = temp;
+
     board.flipBoard();
+    return boardPanel;
   }
 
   public void changeColors(){
+    BufferedImage newWhitePawn = (BufferedImage) whitePawn.getImage();
+    BufferedImage newBlackPawn = (BufferedImage) blackPawn.getImage();
+    BufferedImage newWhiteRook = (BufferedImage) whiteRook.getImage();
+    BufferedImage newBlackRook = (BufferedImage) blackRook.getImage();
+    BufferedImage newWhiteKnight = (BufferedImage) whiteKnight.getImage();
+    BufferedImage newBlackKnight = (BufferedImage) blackKnight.getImage();
+    BufferedImage newWhiteBishop = (BufferedImage) whiteBishop.getImage();
+    BufferedImage newBlackBishop = (BufferedImage) blackBishop.getImage();
+    BufferedImage newWhiteQueen = (BufferedImage) whiteQueen.getImage();
+    BufferedImage newBlackQueen = (BufferedImage) whiteQueen.getImage();
+    BufferedImage newWhiteKing = (BufferedImage) whiteKing.getImage();
+    BufferedImage newBlackKing = (BufferedImage) blackKing.getImage();
+
     changeColor = new JFrame("Change colors");
     changeColor.setSize(700,300);
     changeColor.setLayout(new GridLayout(3,1));
@@ -403,13 +432,24 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel header = new JLabel("", JLabel.CENTER);
     header.setText("Please enter the RGB values (0 to 255) for the colors of both player's pieces.");
 
-    JTextField red = new JTextField();
-    JTextField green = new JTextField();
-    JTextField blue = new JTextField();
+    JLabel whitePieces = new JLabel("");
+    whitePieces.setText("White piece color: ");
+
+    JTextField redWhite = new JTextField();
+    JTextField greenWhite = new JTextField();
+    JTextField blueWhite = new JTextField();
+
+    JLabel blackPieces = new JLabel("");
+    blackPieces.setText("Black piece color: ");
+
+    JTextField redBlack = new JTextField();
+    JTextField greenBlack = new JTextField();
+    JTextField blueBlack = new JTextField();
 
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-
+        playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
+        computerColor = new Color(Integer.parseInt(redBlack.getText()), Integer.parseInt(greenBlack.getText()), Integer.parseInt(blueBlack.getText()));
       }
     });
 

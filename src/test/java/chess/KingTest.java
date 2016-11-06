@@ -7,43 +7,77 @@ import org.mockito.Mockito;
 
 public class KingTest {
 
-	King k = new King("king", true, true, false, 4, 0);
-	ChessBoard board = Mockito.mock(ChessBoard.class);
+	private King k = new King("king", true, true, false, 0, 4);
+	//mocked objects for test purpose
+	private ChessBoard board = Mockito.mock(ChessBoard.class);
+	private Pawn p = Mockito.mock(Pawn.class);
 	
 	//test if normal move for a king is correct, horizontally
-	//int array contains 4, 1 is expected
+	//int array contains 0, 5 is expected
 	@Test
 	public void testMoveHorizontally() {
-		Mockito.when(board.getPieceAt(5, 0)).thenReturn(null);
-		int[] expected = {5, 0};
-		assertArrayEquals(expected, k.move(board, 5, 0));	
+		Mockito.when(board.getPieceAt(0, 5)).thenReturn(null);
+		int[] expected = {0, 5};
+		assertArrayEquals(expected, k.move(board, 0, 5));	
 	}
 	
 	//test if normal move for a king is correct, vertically
 	//int array contains 5, 0 is expected
 	@Test
 	public void testMoveVertically() {
-		Mockito.when(board.getPieceAt(5, 0)).thenReturn(null);
-		int[] expected = {4, 1};
-		assertArrayEquals(expected, k.move(board, 4, 1));	
+		Mockito.when(board.getPieceAt(1, 4)).thenReturn(null);
+		int[] expected = {1, 4};
+		assertArrayEquals(expected, k.move(board, 1, 4));
 	}
 	
 	//test if normal move for a king is correct, diagonally
-	//int array contains 5, 1 is expected
+	//int array contains 1, 5 is expected
 	@Test
 	public void testMoveDiagonally() {
-		Mockito.when(board.getPieceAt(5, 1)).thenReturn(null);
-		int[] expected = {5, 1};
-		assertArrayEquals(expected, k.move(board, 5, 1));	
+		Mockito.when(board.getPieceAt(1, 5)).thenReturn(null);
+		int[] expected = {1, 5};
+		assertArrayEquals(expected, k.move(board, 1, 5));	
 	}
 	
 	//test if illegal move is not taken, the destination is 2 squares away horizontally
 	//int array contains 4, 0 is expected
 	@Test
 	public void testIllegalMove() {
-		Mockito.when(board.getPieceAt(4, 2)).thenReturn(null);
-		int[] expected = {4, 0};
-		assertArrayEquals(expected, k.move(board, 4, 2));	
+		Mockito.when(board.getPieceAt(2, 4)).thenReturn(null);
+		int[] expected = {2, 4};
+		assertArrayEquals(expected, k.move(board, 2, 4));	
 	}
 	
+	//test if king can move out of bounds when the move is legal (one square vertically)
+	//int array contains 4, 0 (origin) is expected
+	@Test
+	public void testMoveOutOfBounds() {
+		Mockito.when(board.getPieceAt(-1, 4)).thenReturn(null);
+		int[] expected = {0, 4};
+		assertArrayEquals(expected, k.move(board, -1, 4));
+	}
+	
+	//test if move() blocks move of the king when destination is occupied by a friendly pawn
+	//getSide() of pawn returns true (the same as king created above), and destination is legal
+	//int array contains 0, 4 (origin) is expected
+	@Test
+	public void testMoveOccupiedByFriendly() {
+		Mockito.when(p.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(1, 4)).thenReturn(p);
+		int[] expected = {0, 4};
+		assertArrayEquals(expected, k.move(board, 1, 4));
+	}
+		
+	//test if move() can move the king when destination is occupied by an enemy pawn
+	//getSide() of pawn returns false (the opposite as king created above), and destination is legal
+	//int array contains 1, 4 is expected
+	@Test
+	public void testMoveOccupiedByEnemy() {
+		Mockito.when(p.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(1, 4)).thenReturn(p);
+		int[] expected = {1, 4};
+		assertArrayEquals(expected, k.move(board, 1, 4));
+	}
+	
+	//add future tests for castling
 }

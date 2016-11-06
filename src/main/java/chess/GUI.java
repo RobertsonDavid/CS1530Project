@@ -407,18 +407,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   }
 
   public JPanel changeColors(){
-    BufferedImage newWhitePawn = (BufferedImage) whitePawn.getImage();
-    BufferedImage newBlackPawn = (BufferedImage) blackPawn.getImage();
-    BufferedImage newWhiteRook = (BufferedImage) whiteRook.getImage();
-    BufferedImage newBlackRook = (BufferedImage) blackRook.getImage();
-    BufferedImage newWhiteKnight = (BufferedImage) whiteKnight.getImage();
-    BufferedImage newBlackKnight = (BufferedImage) blackKnight.getImage();
-    BufferedImage newWhiteBishop = (BufferedImage) whiteBishop.getImage();
-    BufferedImage newBlackBishop = (BufferedImage) blackBishop.getImage();
-    BufferedImage newWhiteQueen = (BufferedImage) whiteQueen.getImage();
-    BufferedImage newBlackQueen = (BufferedImage) whiteQueen.getImage();
-    BufferedImage newWhiteKing = (BufferedImage) whiteKing.getImage();
-    BufferedImage newBlackKing = (BufferedImage) blackKing.getImage();
+    BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
+    BufferedImage newBlackPawn = toBufferedImage(blackPawn.getImage());
+    BufferedImage newWhiteRook = toBufferedImage(whiteRook.getImage());
+    BufferedImage newBlackRook = toBufferedImage(blackRook.getImage());
+    BufferedImage newWhiteKnight = toBufferedImage(whiteKnight.getImage());
+    BufferedImage newBlackKnight = toBufferedImage(blackKnight.getImage());
+    BufferedImage newWhiteBishop = toBufferedImage(whiteBishop.getImage());
+    BufferedImage newBlackBishop = toBufferedImage(blackBishop.getImage());
+    BufferedImage newWhiteQueen = toBufferedImage(whiteQueen.getImage());
+    BufferedImage newBlackQueen = toBufferedImage(whiteQueen.getImage());
+    BufferedImage newWhiteKing = toBufferedImage(whiteKing.getImage());
+    BufferedImage newBlackKing = toBufferedImage(blackKing.getImage());
 
     JPanel newBoardPanel = new JPanel();
     newBoardPanel.setLayout(new GridLayout(8, 8));
@@ -461,7 +461,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         BoardSquare square;
         ChessPiece piece;
-        JLabel pieceImage;
+        JLabel pieceImage = null;
 
         if(colorChoice.equals("White")) {
           whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
@@ -657,6 +657,32 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 		space.setVisible(true);
 	}
+
+    /**
+   * Converts a given Image into a BufferedImage
+   *
+   * Found here: http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+   *
+   * @param img The Image to be converted
+   * @return The converted BufferedImage
+   */
+  public static BufferedImage toBufferedImage(Image img) {
+      if (img instanceof BufferedImage)
+      {
+          return (BufferedImage) img;
+      }
+
+      // Create a buffered image with transparency
+      BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+      // Draw the image on to the buffered image
+      Graphics2D bGr = bimage.createGraphics();
+      bGr.drawImage(img, 0, 0, null);
+      bGr.dispose();
+
+      // Return the buffered image
+      return bimage;
+  }
 
   //Not used but needed interface implementation
  	public void mouseClicked(MouseEvent e) {

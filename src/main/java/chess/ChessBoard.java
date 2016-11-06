@@ -14,7 +14,7 @@ public class ChessBoard {
   b[0][1] = new Knight("knight", true, true, false, 0, 1); //top left knight
   b[0][6] = new Knight("knight", true, true, false, 0, 6); //top right knight
   b[0][2] = new Bishop("bishop", true, true, false, 0, 2); //top left bishop
-  b[0][5] = new Bishop("bishop", true, true, false, 0, 5); //top rght bishop
+  b[0][5] = new Bishop("bishop", true, true, false, 0, 5); //top right bishop
   b[0][3] = new Queen("queen", true, true, false, 0, 3); //top queen
   b[0][4] = new King("king", true, true, false, 0, 4); //top king
   for(int i = 0; i < 8; i++)

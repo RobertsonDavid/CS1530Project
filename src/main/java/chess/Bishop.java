@@ -55,7 +55,6 @@ public class Bishop implements ChessPiece {
 			return false;
 	}
 
-
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
 

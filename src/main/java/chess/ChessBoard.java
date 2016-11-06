@@ -50,16 +50,14 @@ public class ChessBoard {
  }
 
  //clear pieces by resetting the array
- public void clearBoard()
- {
+ public void clearBoard() {
    ChessPiece[][] clearedArray= new ChessPiece[8][8];
    b= clearedArray;
  }
 
  //add a piece to the chessPiece array
  //needed for loads
- public void addPiece(int x, int y, String type, boolean side, boolean firstMove, boolean topOfBoard)
- {
+ public void addPiece(int x, int y, String type, boolean side, boolean firstMove, boolean topOfBoard) {
    if(type.equals("rook")){
      b[x][y]= new Rook(type, side, firstMove, topOfBoard, x, y);
    }
@@ -78,6 +76,23 @@ public class ChessBoard {
    else if(type.equals("pawn")){
      b[x][y]= new Pawn(type, side, firstMove, topOfBoard, x, y);
    }
-
  }
+
+//Flips board by simply swapping the piece positions, using subtraction to find the new positions
+ public void flipBoard() {
+   ChessPiece[][] temp = new ChessPiece[8][8];
+   int newX, newY;
+
+   for(int i = 0; i < 8; i++) {
+     newX = 7-i;
+     for(int j = 0; j < 8; j++) {
+       newY = 7-j;
+       if(b[i][j] != null) {
+         temp[newX][newY] = b[i][j];
+       }
+     }
+   }
+   b = temp;
+ }
+
 }

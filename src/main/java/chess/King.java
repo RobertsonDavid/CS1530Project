@@ -57,32 +57,45 @@ public class King implements ChessPiece {
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
 
-      //moving one to the left or right
+    //moving past one move to the left or right
     if(Math.abs(newRow - this.row) > 1 || Math.abs(newCol - this.column) > 1) {
-      
-      if(this.firstMove){
+      System.out.println("HEYYYYYYYY");
+      //trying to move more than one space (castling) when king has already moved
+      if(this.firstMove == false){
         return this.position;
       }
-      //Castling logic
+
+      //Castling Kingside
       if(newCol - this.column == 2 && this.row == newRow){
-        //Castle kingside
         if(board.getPieceAt(newRow, (this.column + 1)) != null || board.getPieceAt(newRow, (this.column + 2)) != null){
-          //cant castle pieces in the way
+          //can't castle pieces in the way
           return this.position;
         }
         else{
+          //move rook and then move king
+          Rook r = new Rook("rook", this.side, true, this.topOfBoard, this.row, this.column+3);
+          r.move(board, newRow, newCol-2);
+
           this.firstMove = false;
           updateCoord(newRow, newCol);
           return this.position;
         }
       }
-      else if(this.column - newCol == 3 && this.column == newRow){
-        //castling queenside
-        if(board.getPieceAt(newRow, (this.column - 1)) != null || board.getPieceAt(newRow, (this.column - 2)) != null || board.getPieceAt(newRow, (this.column -3)) != null){
+      //Castling Queenside
+      else if(this.column - newCol == 2 && this.row == newRow){
+        System.out.println("IM IN HERE");
+        if(board.getPieceAt(newRow, (this.column - 1)) != null || board.getPieceAt(newRow, (this.column - 2)) != null || 
+              board.getPieceAt(newRow, (this.column - 3)) != null){
           //cant castle pieces in the way
+          System.out.println("1");
           return this.position;
         }
         else{
+          System.out.println("2");
+          //move rook and then move king
+          Rook r = new Rook("rook", this.side, true, this.topOfBoard, this.row, this.column-4);
+          r.move(board, newRow, newCol-2);
+
           this.firstMove = false;
           updateCoord(newRow, newCol);
           return this.position;
@@ -90,6 +103,7 @@ public class King implements ChessPiece {
       }
 
       else{
+        System.out.println("3");
         return this.position;
       }
     }

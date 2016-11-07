@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.*;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
@@ -413,6 +415,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //Allows the user to change the colors of the pieces.
   //They must enter the RGB values for the colors.
   public void changeColors(){
+
+    //First, convert all the images to BufferedImages so we can work with their properties
     BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
     BufferedImage newBlackPawn = toBufferedImage(blackPawn.getImage());
     BufferedImage newWhiteRook = toBufferedImage(whiteRook.getImage());
@@ -426,28 +430,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     BufferedImage newWhiteKing = toBufferedImage(whiteKing.getImage());
     BufferedImage newBlackKing = toBufferedImage(blackKing.getImage());
 
+    //The new panel we'll replace the original with
     newBoardPanel = new JPanel();
     newBoardPanel.setLayout(new GridLayout(8, 8));
 
+    //The frame we'll use for the inputs
     changeColor = new JFrame("Change colors");
     changeColor.setSize(700,300);
     changeColor.setLayout(new GridLayout(4,1));
 
+    //Panel with text fields for the RGB values of white pieces
     JPanel whitePanel = new JPanel();
     whitePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
-    JPanel blackPanel = new JPanel();
-    blackPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
-    JToolBar buttons = new JToolBar();
-    buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
-    JButton confirm = new JButton("Confirm");
-    JButton cancel = new JButton("Cancel");
-    buttons.add(confirm);
-    buttons.add(cancel);
-
-    JLabel header = new JLabel("", JLabel.CENTER);
-    header.setText("Please enter the RGB values (0 to 255) for the colors of both player's pieces.");
 
     JLabel whitePieces = new JLabel("");
     whitePieces.setText("White piece color: ");
@@ -461,6 +455,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     whitePanel.add(greenWhite);
     whitePanel.add(blueWhite);
 
+    //Panel with text fields for the RGB values of black pieces
+    JPanel blackPanel = new JPanel();
+    blackPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
     JLabel blackPieces = new JLabel("");
     blackPieces.setText("Black piece color: ");
 
@@ -473,6 +471,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     blackPanel.add(greenBlack);
     blackPanel.add(blueBlack);
 
+    //toolbar that holds the 2 buttons, confirm and cancel
+    JToolBar buttons = new JToolBar();
+    buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton confirm = new JButton("Confirm");
+    JButton cancel = new JButton("Cancel");
+    buttons.add(confirm);
+    buttons.add(cancel);
+
+    JLabel header = new JLabel("", JLabel.CENTER);
+    header.setText("Please enter the RGB values (0 to 255) for the colors of both player's pieces.");
+
     changeColor.add(header);
     changeColor.add(whitePanel);
     changeColor.add(blackPanel);
@@ -481,6 +490,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        //Make sure the user actually fills out the RGB values
         if(redWhite.getText().equals(null) || greenWhite.getText().equals(null) || blueWhite.getText().equals(null) || redBlack.getText().equals(null) || greenBlack.getText().equals(null) || blueBlack.getText().equals(null)) {
           //Do nothing yet -- should make label appear
         }
@@ -492,6 +502,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           ChessPiece piece;
           JLabel pieceImage = null;
 
+          //If the player is playing as white, we need to change the pieces accordingly
           if(colorChoice.equals("White")) {
             whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
             blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
@@ -506,11 +517,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             whiteKing = new ImageIcon(changeColor(newWhiteKing, playerColor));
             blackKing = new ImageIcon(changeColor(newBlackKing, computerColor));
 
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
             for(int i = 0; i < 8; i++) {
               for(int j = 0; j < 8; j++) {
                 square = squares[i][j];
                 piece = board.getPieceAt(i, j);
-                square.removeAll();
+                square.removeAll(); //remove old image
                 if(piece != null) {
                   //opponent piece
                   if(piece.getSide() == true) {
@@ -547,6 +560,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
               }
             }
           }
+          //If the player is playing as black, we need to change the pieces accordingly
           else {
             whitePawn = new ImageIcon(changeColor(newWhitePawn, computerColor));
             blackPawn = new ImageIcon(changeColor(newBlackPawn, playerColor));
@@ -561,11 +575,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             whiteKing = new ImageIcon(changeColor(newWhiteKing, computerColor));
             blackKing = new ImageIcon(changeColor(newBlackKing, playerColor));
 
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
             for(int i = 0; i < 8; i++) {
               for(int j = 0; j < 8; j++) {
                 square = squares[i][j];
                 piece = board.getPieceAt(i, j);
-                square.removeAll();
+                square.removeAll(); //remove old image
 
                 if(piece != null) {
                   //opponent piece
@@ -618,6 +634,32 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       }
       return image;
   }
+
+  /*
+  * Converts a given Image into a BufferedImage
+  *
+  * Found here: http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+  *
+  * @param img The Image to be converted
+  * @return The converted BufferedImage
+  */
+ public static BufferedImage toBufferedImage(Image img) {
+     if (img instanceof BufferedImage) {
+         return (BufferedImage) img;
+     }
+
+     // Create a buffered image with transparency
+     BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+     // Draw the image on to the buffered image
+     Graphics2D bGr = bimage.createGraphics();
+     bGr.drawImage(img, 0, 0, null);
+     bGr.dispose();
+
+     // Return the buffered image
+     return bimage;
+ }
+
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
@@ -691,32 +733,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 		space.setVisible(true);
 	}
-
-    /**
-   * Converts a given Image into a BufferedImage
-   *
-   * Found here: http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
-   *
-   * @param img The Image to be converted
-   * @return The converted BufferedImage
-   */
-  public static BufferedImage toBufferedImage(Image img) {
-      if (img instanceof BufferedImage)
-      {
-          return (BufferedImage) img;
-      }
-
-      // Create a buffered image with transparency
-      BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-      // Draw the image on to the buffered image
-      Graphics2D bGr = bimage.createGraphics();
-      bGr.drawImage(img, 0, 0, null);
-      bGr.dispose();
-
-      // Return the buffered image
-      return bimage;
-  }
 
   //Not used but needed interface implementation
  	public void mouseClicked(MouseEvent e) {

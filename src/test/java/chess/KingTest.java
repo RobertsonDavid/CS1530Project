@@ -7,16 +7,12 @@ import org.mockito.Mockito;
 
 public class KingTest {
 
-<<<<<<< HEAD
-	King k = new King("king", true, true, true, 4, 0);
-	ChessBoard board = Mockito.mock(ChessBoard.class);
-	Rook r = Mockito.mock(Rook.class);
-=======
+
 	private King k = new King("king", true, true, false, 0, 4);
 	//mocked objects for test purpose
 	private ChessBoard board = Mockito.mock(ChessBoard.class);
 	private Pawn p = Mockito.mock(Pawn.class);
->>>>>>> master
+	Rook r = Mockito.mock(Rook.class);
 	
 	//test if normal move for a king is correct, horizontally
 	//int array contains 0, 5 is expected
@@ -49,7 +45,6 @@ public class KingTest {
 	//int array contains 4, 0 is expected
 	@Test
 	public void testIllegalMove() {
-<<<<<<< HEAD
 		Mockito.when(board.getPieceAt(4, 2)).thenReturn(null);
 		int[] expected = {4, 0};
 		assertArrayEquals(expected, k.move(board, 4, 3));	
@@ -117,11 +112,6 @@ public class KingTest {
 		Mockito.when(board.getPieceAt(0, 5)).thenReturn(r);
 		int[] expected = {0, 4};
 		assertArrayEquals(expected, king.move(board,0,6));
-=======
-		Mockito.when(board.getPieceAt(2, 4)).thenReturn(null);
-		int[] expected = {2, 4};
-		assertArrayEquals(expected, k.move(board, 2, 4));	
->>>>>>> master
 	}
 	
 	//test if king can move out of bounds when the move is legal (one square vertically)

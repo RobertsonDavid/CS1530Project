@@ -59,7 +59,6 @@ public class King implements ChessPiece {
 
     //moving past one move to the left or right
     if(Math.abs(newRow - this.row) > 1 || Math.abs(newCol - this.column) > 1) {
-      System.out.println("HEYYYYYYYY");
       //trying to move more than one space (castling) when king has already moved
       if(this.firstMove == false){
         return this.position;
@@ -83,15 +82,12 @@ public class King implements ChessPiece {
       }
       //Castling Queenside
       else if(this.column - newCol == 2 && this.row == newRow){
-        System.out.println("IM IN HERE");
         if(board.getPieceAt(newRow, (this.column - 1)) != null || board.getPieceAt(newRow, (this.column - 2)) != null || 
               board.getPieceAt(newRow, (this.column - 3)) != null){
           //cant castle pieces in the way
-          System.out.println("1");
           return this.position;
         }
         else{
-          System.out.println("2");
           //move rook and then move king
           Rook r = new Rook("rook", this.side, true, this.topOfBoard, this.row, this.column-4);
           r.move(board, newRow, newCol-2);
@@ -103,7 +99,6 @@ public class King implements ChessPiece {
       }
 
       else{
-        System.out.println("3");
         return this.position;
       }
     }

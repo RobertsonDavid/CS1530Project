@@ -22,11 +22,19 @@ public class BoardSquare extends JPanel {
     }
 
     public int getRow() {
-        return row;
+      return row;
     }
 
     public int getColumn() {
-        return column;
+      return column;
     }
+
+		public void setRow(int newRow) {
+			this.row = newRow;
+		}
+
+		public void setColumn(int newColumn) {
+			this.column = newColumn;
+		}
 
 }

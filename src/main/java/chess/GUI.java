@@ -431,10 +431,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     changeColor = new JFrame("Change colors");
     changeColor.setSize(700,300);
-    changeColor.setLayout(new GridLayout(3,1));
-
-    JPanel changeColorPanel = new JPanel();
-    changeColorPanel.setLayout(new FlowLayout());
+    changeColor.setLayout(new GridLayout(4,1));
 
     JPanel whitePanel = new JPanel();
     whitePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -455,9 +452,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel whitePieces = new JLabel("");
     whitePieces.setText("White piece color: ");
 
-    JTextField redWhite = new JTextField();
-    JTextField greenWhite = new JTextField();
-    JTextField blueWhite = new JTextField();
+    JTextField redWhite = new JTextField(5);
+    JTextField greenWhite = new JTextField(5);
+    JTextField blueWhite = new JTextField(5);
 
     whitePanel.add(whitePieces);
     whitePanel.add(redWhite);
@@ -467,143 +464,152 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel blackPieces = new JLabel("");
     blackPieces.setText("Black piece color: ");
 
-    JTextField redBlack = new JTextField();
-    JTextField greenBlack = new JTextField();
-    JTextField blueBlack = new JTextField();
+    JTextField redBlack = new JTextField(5);
+    JTextField greenBlack = new JTextField(5);
+    JTextField blueBlack = new JTextField(5);
 
     blackPanel.add(blackPieces);
     blackPanel.add(redBlack);
     blackPanel.add(greenBlack);
     blackPanel.add(blueBlack);
 
-    changeColorPanel.add(header);
-    changeColorPanel.add(whitePanel);
-    changeColorPanel.add(blackPanel);
-    changeColorPanel.add(buttons);
-    changeColor.add(changeColorPanel);
+    changeColor.add(header);
+    changeColor.add(whitePanel);
+    changeColor.add(blackPanel);
+    changeColor.add(buttons);
     changeColor.setVisible(true);
 
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
-        computerColor = new Color(Integer.parseInt(redBlack.getText()), Integer.parseInt(greenBlack.getText()), Integer.parseInt(blueBlack.getText()));
-
-        BoardSquare square;
-        ChessPiece piece;
-        JLabel pieceImage = null;
-
-        if(colorChoice.equals("White")) {
-          whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
-          blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
-          whiteRook = new ImageIcon(changeColor(newWhiteRook, playerColor));
-          blackRook = new ImageIcon(changeColor(newBlackRook, computerColor));
-          whiteKnight = new ImageIcon(changeColor(newWhiteKnight, playerColor));
-          blackKnight = new ImageIcon(changeColor(newBlackKnight, computerColor));
-          whiteBishop = new ImageIcon(changeColor(newWhiteBishop, playerColor));
-          blackBishop = new ImageIcon(changeColor(newBlackBishop, computerColor));
-          whiteQueen = new ImageIcon(changeColor(newWhiteQueen, playerColor));
-          blackQueen = new ImageIcon(changeColor(newBlackQueen, computerColor));
-          whiteKing = new ImageIcon(changeColor(newWhiteKing, playerColor));
-          blackKing = new ImageIcon(changeColor(newBlackKing, computerColor));
-
-          for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
-              square = squares[i][j];
-              piece = board.getPieceAt(i, j);
-              square.remove(pieceImage);
-
-              //opponent piece
-              if(piece.getSide() == true) {
-                if(piece.getType().equals("pawn"))
-                  pieceImage = new JLabel(blackPawn);
-                else if(piece.getType().equals("rook"))
-                  pieceImage = new JLabel(blackRook);
-                else if(piece.getType().equals("knight"))
-                  pieceImage = new JLabel(blackKnight);
-                else if(piece.getType().equals("bishop"))
-                  pieceImage = new JLabel(blackBishop);
-                else if(piece.getType().equals("queen"))
-                  pieceImage = new JLabel(blackQueen);
-                else if(piece.getType().equals("king"))
-                  pieceImage = new JLabel(blackKing);
-              }
-              else {
-                if(piece.getType().equals("pawn"))
-                  pieceImage = new JLabel(whitePawn);
-                else if(piece.getType().equals("rook"))
-                  pieceImage = new JLabel(whiteRook);
-                else if(piece.getType().equals("knight"))
-                  pieceImage = new JLabel(whiteKnight);
-                else if(piece.getType().equals("bishop"))
-                  pieceImage = new JLabel(whiteBishop);
-                else if(piece.getType().equals("queen"))
-                  pieceImage = new JLabel(whiteQueen);
-                else if(piece.getType().equals("king"))
-                  pieceImage = new JLabel(whiteKing);
-              }
-              square.add(pieceImage);
-              newBoardPanel.add(square);
-            }
-          }
+        if(redWhite.getText().equals(null) || greenWhite.getText().equals(null) || blueWhite.getText().equals(null) || redBlack.getText().equals(null) || greenBlack.getText().equals(null) || blueBlack.getText().equals(null)) {
+          //Do nothing yet -- should make label appear
         }
         else {
-          whitePawn = new ImageIcon(changeColor(newWhitePawn, computerColor));
-          blackPawn = new ImageIcon(changeColor(newBlackPawn, playerColor));
-          whiteRook = new ImageIcon(changeColor(newWhiteRook, computerColor));
-          blackRook = new ImageIcon(changeColor(newBlackRook, playerColor));
-          whiteKnight = new ImageIcon(changeColor(newWhiteKnight, computerColor));
-          blackKnight = new ImageIcon(changeColor(newBlackKnight, playerColor));
-          whiteBishop = new ImageIcon(changeColor(newWhiteBishop, computerColor));
-          blackBishop = new ImageIcon(changeColor(newBlackBishop, playerColor));
-          whiteQueen = new ImageIcon(changeColor(newWhiteQueen, computerColor));
-          blackQueen = new ImageIcon(changeColor(newBlackQueen, playerColor));
-          whiteKing = new ImageIcon(changeColor(newWhiteKing, computerColor));
-          blackKing = new ImageIcon(changeColor(newBlackKing, playerColor));
+          playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
+          computerColor = new Color(Integer.parseInt(redBlack.getText()), Integer.parseInt(greenBlack.getText()), Integer.parseInt(blueBlack.getText()));
 
-          for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
-              square = squares[i][j];
-              piece = board.getPieceAt(i, j);
-              square.remove(pieceImage);
+          BoardSquare square;
+          ChessPiece piece;
+          JLabel pieceImage = null;
 
-              //opponent piece
-              if(piece.getSide() == true) {
-                if(piece.getType().equals("pawn"))
-                  pieceImage = new JLabel(whitePawn);
-                else if(piece.getType().equals("rook"))
-                  pieceImage = new JLabel(whiteRook);
-                else if(piece.getType().equals("knight"))
-                  pieceImage = new JLabel(whiteKnight);
-                else if(piece.getType().equals("bishop"))
-                  pieceImage = new JLabel(whiteBishop);
-                else if(piece.getType().equals("queen"))
-                  pieceImage = new JLabel(whiteQueen);
-                else if(piece.getType().equals("king"))
-                  pieceImage = new JLabel(whiteKing);
+          if(colorChoice.equals("White")) {
+            whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
+            blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
+            whiteRook = new ImageIcon(changeColor(newWhiteRook, playerColor));
+            blackRook = new ImageIcon(changeColor(newBlackRook, computerColor));
+            whiteKnight = new ImageIcon(changeColor(newWhiteKnight, playerColor));
+            blackKnight = new ImageIcon(changeColor(newBlackKnight, computerColor));
+            whiteBishop = new ImageIcon(changeColor(newWhiteBishop, playerColor));
+            blackBishop = new ImageIcon(changeColor(newBlackBishop, computerColor));
+            whiteQueen = new ImageIcon(changeColor(newWhiteQueen, playerColor));
+            blackQueen = new ImageIcon(changeColor(newBlackQueen, computerColor));
+            whiteKing = new ImageIcon(changeColor(newWhiteKing, playerColor));
+            blackKing = new ImageIcon(changeColor(newBlackKing, computerColor));
+
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll();
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
               }
-              else {
-                if(piece.getType().equals("pawn"))
-                  pieceImage = new JLabel(blackPawn);
-                else if(piece.getType().equals("rook"))
-                  pieceImage = new JLabel(blackRook);
-                else if(piece.getType().equals("knight"))
-                  pieceImage = new JLabel(blackKnight);
-                else if(piece.getType().equals("bishop"))
-                  pieceImage = new JLabel(blackBishop);
-                else if(piece.getType().equals("queen"))
-                  pieceImage = new JLabel(blackQueen);
-                else if(piece.getType().equals("king"))
-                  pieceImage = new JLabel(blackKing);
+            }
+          }
+          else {
+            whitePawn = new ImageIcon(changeColor(newWhitePawn, computerColor));
+            blackPawn = new ImageIcon(changeColor(newBlackPawn, playerColor));
+            whiteRook = new ImageIcon(changeColor(newWhiteRook, computerColor));
+            blackRook = new ImageIcon(changeColor(newBlackRook, playerColor));
+            whiteKnight = new ImageIcon(changeColor(newWhiteKnight, computerColor));
+            blackKnight = new ImageIcon(changeColor(newBlackKnight, playerColor));
+            whiteBishop = new ImageIcon(changeColor(newWhiteBishop, computerColor));
+            blackBishop = new ImageIcon(changeColor(newBlackBishop, playerColor));
+            whiteQueen = new ImageIcon(changeColor(newWhiteQueen, computerColor));
+            blackQueen = new ImageIcon(changeColor(newBlackQueen, playerColor));
+            whiteKing = new ImageIcon(changeColor(newWhiteKing, computerColor));
+            blackKing = new ImageIcon(changeColor(newBlackKing, playerColor));
+
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll();
+
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
               }
-              square.add(pieceImage);
-              newBoardPanel.add(square);
             }
           }
         }
+        changeColor.setVisible(false);
       }
     });
   }
 
+  //Support method that changes the color of each pixel on the image
   private BufferedImage changeColor(BufferedImage image, Color color) {
     for(int y = 0; y < image.getHeight(); y++) {
         for(int x = 0; x < image.getWidth(); x++) {

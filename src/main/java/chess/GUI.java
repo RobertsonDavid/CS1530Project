@@ -629,6 +629,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private BufferedImage changeColor(BufferedImage image, Color color) {
     for(int y = 0; y < image.getHeight(); y++) {
         for(int x = 0; x < image.getWidth(); x++) {
+          if(((image.getRGB(x, y) >> 24) & 0xff) == 0) {
+            continue;
+          }
           image.setRGB(x, y, color.getRGB());
         }
       }

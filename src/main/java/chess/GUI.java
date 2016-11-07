@@ -63,6 +63,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private JFrame changeColor;
   private Color playerColor;
   private Color computerColor;
+  private JPanel newBoardPanel;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -102,10 +103,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     //Create toolbar
   	JToolBar toolbar = new JToolBar();
+
+    //Popup menu
     JPopupMenu optionsMenu = new JPopupMenu();
     JButton dropDown = new JButton();
     dropDown.setText("Options");
 
+    //menu items for dropdown inside "Options"
     JMenuItem menuItemChangeColor = new JMenuItem("Change Color");
     optionsMenu.add(menuItemChangeColor);
     JMenuItem menuItemFlipBoard = new JMenuItem("Flip Board");
@@ -134,7 +138,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     menuItemChangeColor.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        JPanel newBoardPanel = changeColors();
+        changeColors();
         gameWindow.remove(boardPanel);
         gameWindow.add(newBoardPanel);
       }
@@ -406,7 +410,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     return newBoardPanel;
   }
 
-  public JPanel changeColors(){
+  //Allows the user to change the colors of the pieces.
+  //They must enter the RGB values for the colors.
+  public void changeColors(){
     BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
     BufferedImage newBlackPawn = toBufferedImage(blackPawn.getImage());
     BufferedImage newWhiteRook = toBufferedImage(whiteRook.getImage());
@@ -420,7 +426,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     BufferedImage newWhiteKing = toBufferedImage(whiteKing.getImage());
     BufferedImage newBlackKing = toBufferedImage(blackKing.getImage());
 
-    JPanel newBoardPanel = new JPanel();
+    newBoardPanel = new JPanel();
     newBoardPanel.setLayout(new GridLayout(8, 8));
 
     changeColor = new JFrame("Change colors");
@@ -429,6 +435,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     JPanel changeColorPanel = new JPanel();
     changeColorPanel.setLayout(new FlowLayout());
+
+    JPanel whitePanel = new JPanel();
+    whitePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+    JPanel blackPanel = new JPanel();
+    blackPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
     JToolBar buttons = new JToolBar();
     buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -447,12 +459,29 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JTextField greenWhite = new JTextField();
     JTextField blueWhite = new JTextField();
 
+    whitePanel.add(whitePieces);
+    whitePanel.add(redWhite);
+    whitePanel.add(greenWhite);
+    whitePanel.add(blueWhite);
+
     JLabel blackPieces = new JLabel("");
     blackPieces.setText("Black piece color: ");
 
     JTextField redBlack = new JTextField();
     JTextField greenBlack = new JTextField();
     JTextField blueBlack = new JTextField();
+
+    blackPanel.add(blackPieces);
+    blackPanel.add(redBlack);
+    blackPanel.add(greenBlack);
+    blackPanel.add(blueBlack);
+
+    changeColorPanel.add(header);
+    changeColorPanel.add(whitePanel);
+    changeColorPanel.add(blackPanel);
+    changeColorPanel.add(buttons);
+    changeColor.add(changeColorPanel);
+    changeColor.setVisible(true);
 
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -573,7 +602,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
       }
     });
-    return newBoardPanel;
   }
 
   private BufferedImage changeColor(BufferedImage image, Color color) {

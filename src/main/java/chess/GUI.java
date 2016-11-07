@@ -414,21 +414,24 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Allows the user to change the colors of the pieces.
   //They must enter the RGB values for the colors.
+  //Easy to test with these values:
+  //Blue : 65,105,225
+  //Gold : 218,165,32
   public void changeColors(){
 
     //First, convert all the images to BufferedImages so we can work with their properties
     BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
-    BufferedImage newBlackPawn = toBufferedImage(blackPawn.getImage());
+    BufferedImage newBlackPawn = toBufferedImage(whitePawn.getImage());
     BufferedImage newWhiteRook = toBufferedImage(whiteRook.getImage());
-    BufferedImage newBlackRook = toBufferedImage(blackRook.getImage());
+    BufferedImage newBlackRook = toBufferedImage(whiteRook.getImage());
     BufferedImage newWhiteKnight = toBufferedImage(whiteKnight.getImage());
-    BufferedImage newBlackKnight = toBufferedImage(blackKnight.getImage());
+    BufferedImage newBlackKnight = toBufferedImage(whiteKnight.getImage());
     BufferedImage newWhiteBishop = toBufferedImage(whiteBishop.getImage());
-    BufferedImage newBlackBishop = toBufferedImage(blackBishop.getImage());
+    BufferedImage newBlackBishop = toBufferedImage(whiteBishop.getImage());
     BufferedImage newWhiteQueen = toBufferedImage(whiteQueen.getImage());
     BufferedImage newBlackQueen = toBufferedImage(whiteQueen.getImage());
     BufferedImage newWhiteKing = toBufferedImage(whiteKing.getImage());
-    BufferedImage newBlackKing = toBufferedImage(blackKing.getImage());
+    BufferedImage newBlackKing = toBufferedImage(whiteKing.getImage());
 
     //The new panel we'll replace the original with
     newBoardPanel = new JPanel();
@@ -630,6 +633,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     for(int y = 0; y < image.getHeight(); y++) {
         for(int x = 0; x < image.getWidth(); x++) {
           if(((image.getRGB(x, y) >> 24) & 0xff) == 0) {
+            continue;
+          }
+          else if((image.getRGB(x, y) & 0x00FFFFFF) == 0) {
             continue;
           }
           image.setRGB(x, y, color.getRGB());

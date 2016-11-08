@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.*;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
@@ -63,6 +65,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private JFrame changeColor;
   private Color playerColor;
   private Color computerColor;
+  private JPanel newBoardPanel;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -102,10 +105,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     //Create toolbar
   	JToolBar toolbar = new JToolBar();
+
+    //Popup menu
     JPopupMenu optionsMenu = new JPopupMenu();
     JButton dropDown = new JButton();
     dropDown.setText("Options");
 
+    //menu items for dropdown inside "Options"
     JMenuItem menuItemChangeColor = new JMenuItem("Change Color");
     optionsMenu.add(menuItemChangeColor);
     JMenuItem menuItemFlipBoard = new JMenuItem("Flip Board");
@@ -128,7 +134,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //positions the pop up menu for the tool bar item
     dropDown.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e) {
-        optionsMenu.show(dropDown, dropDown.getBounds().x, dropDown.getBounds().y + dropDown.getBounds().height);
+        optionsMenu.show(dropDown, 0, dropDown.getBounds().y + dropDown.getBounds().height);
       }
     });
 
@@ -404,27 +410,81 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     return newBoardPanel;
   }
 
+  //Allows the user to change the colors of the pieces.
+  //They must enter the RGB values for the colors.
+  //Easy to test with these values:
+  //Blue : 65,105,225
+  //Gold : 218,165,32
   public void changeColors(){
-    BufferedImage newWhitePawn = (BufferedImage) whitePawn.getImage();
-    BufferedImage newBlackPawn = (BufferedImage) blackPawn.getImage();
-    BufferedImage newWhiteRook = (BufferedImage) whiteRook.getImage();
-    BufferedImage newBlackRook = (BufferedImage) blackRook.getImage();
-    BufferedImage newWhiteKnight = (BufferedImage) whiteKnight.getImage();
-    BufferedImage newBlackKnight = (BufferedImage) blackKnight.getImage();
-    BufferedImage newWhiteBishop = (BufferedImage) whiteBishop.getImage();
-    BufferedImage newBlackBishop = (BufferedImage) blackBishop.getImage();
-    BufferedImage newWhiteQueen = (BufferedImage) whiteQueen.getImage();
-    BufferedImage newBlackQueen = (BufferedImage) whiteQueen.getImage();
-    BufferedImage newWhiteKing = (BufferedImage) whiteKing.getImage();
-    BufferedImage newBlackKing = (BufferedImage) blackKing.getImage();
 
+    //First, convert all the images to BufferedImages so we can work with their properties
+    BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
+    BufferedImage newBlackPawn = toBufferedImage(whitePawn.getImage());
+    BufferedImage newWhiteRook = toBufferedImage(whiteRook.getImage());
+    BufferedImage newBlackRook = toBufferedImage(whiteRook.getImage());
+    BufferedImage newWhiteKnight = toBufferedImage(whiteKnight.getImage());
+    BufferedImage newBlackKnight = toBufferedImage(whiteKnight.getImage());
+    BufferedImage newWhiteBishop = toBufferedImage(whiteBishop.getImage());
+    BufferedImage newBlackBishop = toBufferedImage(whiteBishop.getImage());
+    BufferedImage newWhiteQueen = toBufferedImage(whiteQueen.getImage());
+    BufferedImage newBlackQueen = toBufferedImage(whiteQueen.getImage());
+    BufferedImage newWhiteKing = toBufferedImage(whiteKing.getImage());
+    BufferedImage newBlackKing = toBufferedImage(whiteKing.getImage());
+
+    //The new panel we'll replace the original with
+    newBoardPanel = new JPanel();
+    newBoardPanel.setLayout(new GridLayout(8, 8));
+
+    //The frame we'll use for the inputs
     changeColor = new JFrame("Change colors");
     changeColor.setSize(700,300);
-    changeColor.setLayout(new GridLayout(3,1));
+    changeColor.setLayout(new GridLayout(4,1));
 
-    JPanel changeColorPanel = new JPanel();
-    changeColorPanel.setLayout(new FlowLayout());
+    //Panel with text fields for the RGB values of white pieces
+    JPanel whitePanel = new JPanel();
+    whitePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
+    JLabel whitePieces = new JLabel("");
+    whitePieces.setText("White piece color: ");
+
+    JLabel r = new JLabel("R");
+    JLabel g  = new JLabel("G");
+    JLabel b = new JLabel("B");
+    JTextField redWhite = new JTextField(5);
+    JTextField greenWhite = new JTextField(5);
+    JTextField blueWhite = new JTextField(5);
+
+    whitePanel.add(whitePieces);
+    whitePanel.add(r);
+    whitePanel.add(redWhite);
+    whitePanel.add(g);
+    whitePanel.add(greenWhite);
+    whitePanel.add(b);
+    whitePanel.add(blueWhite);
+
+    //Panel with text fields for the RGB values of black pieces
+    JPanel blackPanel = new JPanel();
+    blackPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+    JLabel blackPieces = new JLabel("");
+    blackPieces.setText("Black piece color: ");
+
+    JLabel r2 = new JLabel("R");
+    JLabel g2  = new JLabel("G");
+    JLabel b2 = new JLabel("B");
+    JTextField redBlack = new JTextField(5);
+    JTextField greenBlack = new JTextField(5);
+    JTextField blueBlack = new JTextField(5);
+
+    blackPanel.add(blackPieces);
+    blackPanel.add(r2);
+    blackPanel.add(redBlack);
+    blackPanel.add(g2);
+    blackPanel.add(greenBlack);
+    blackPanel.add(b2);
+    blackPanel.add(blueBlack);
+
+    //toolbar that holds the 2 buttons, confirm and cancel
     JToolBar buttons = new JToolBar();
     buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
     JButton confirm = new JButton("Confirm");
@@ -435,29 +495,201 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel header = new JLabel("", JLabel.CENTER);
     header.setText("Please enter the RGB values (0 to 255) for the colors of both player's pieces.");
 
-    JLabel whitePieces = new JLabel("");
-    whitePieces.setText("White piece color: ");
-
-    JTextField redWhite = new JTextField();
-    JTextField greenWhite = new JTextField();
-    JTextField blueWhite = new JTextField();
-
-    JLabel blackPieces = new JLabel("");
-    blackPieces.setText("Black piece color: ");
-
-    JTextField redBlack = new JTextField();
-    JTextField greenBlack = new JTextField();
-    JTextField blueBlack = new JTextField();
+    changeColor.add(header);
+    changeColor.add(whitePanel);
+    changeColor.add(blackPanel);
+    changeColor.add(buttons);
+    changeColor.setVisible(true);
 
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
-        computerColor = new Color(Integer.parseInt(redBlack.getText()), Integer.parseInt(greenBlack.getText()), Integer.parseInt(blueBlack.getText()));
+        //Make sure the user actually fills out the RGB values
+        if(redWhite.getText().equals("") || greenWhite.getText().equals("") || blueWhite.getText().equals("") || redBlack.getText().equals("") || greenBlack.getText().equals("") || blueBlack.getText().equals("")) {
+          JOptionPane.showMessageDialog(new JFrame(), "You must enter a value in each text box to change the colors.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+          playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
+          computerColor = new Color(Integer.parseInt(redBlack.getText()), Integer.parseInt(greenBlack.getText()), Integer.parseInt(blueBlack.getText()));
+
+          BoardSquare square;
+          ChessPiece piece;
+          JLabel pieceImage = null;
+
+          //If the player is playing as white, we need to change the pieces accordingly
+          if(colorChoice.equals("White")) {
+            whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
+            blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
+            whiteRook = new ImageIcon(changeColor(newWhiteRook, playerColor));
+            blackRook = new ImageIcon(changeColor(newBlackRook, computerColor));
+            whiteKnight = new ImageIcon(changeColor(newWhiteKnight, playerColor));
+            blackKnight = new ImageIcon(changeColor(newBlackKnight, computerColor));
+            whiteBishop = new ImageIcon(changeColor(newWhiteBishop, playerColor));
+            blackBishop = new ImageIcon(changeColor(newBlackBishop, computerColor));
+            whiteQueen = new ImageIcon(changeColor(newWhiteQueen, playerColor));
+            blackQueen = new ImageIcon(changeColor(newBlackQueen, computerColor));
+            whiteKing = new ImageIcon(changeColor(newWhiteKing, playerColor));
+            blackKing = new ImageIcon(changeColor(newBlackKing, computerColor));
+
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
+          //If the player is playing as black, we need to change the pieces accordingly
+          else {
+            whitePawn = new ImageIcon(changeColor(newWhitePawn, computerColor));
+            blackPawn = new ImageIcon(changeColor(newBlackPawn, playerColor));
+            whiteRook = new ImageIcon(changeColor(newWhiteRook, computerColor));
+            blackRook = new ImageIcon(changeColor(newBlackRook, playerColor));
+            whiteKnight = new ImageIcon(changeColor(newWhiteKnight, computerColor));
+            blackKnight = new ImageIcon(changeColor(newBlackKnight, playerColor));
+            whiteBishop = new ImageIcon(changeColor(newWhiteBishop, computerColor));
+            blackBishop = new ImageIcon(changeColor(newBlackBishop, playerColor));
+            whiteQueen = new ImageIcon(changeColor(newWhiteQueen, computerColor));
+            blackQueen = new ImageIcon(changeColor(newBlackQueen, playerColor));
+            whiteKing = new ImageIcon(changeColor(newWhiteKing, computerColor));
+            blackKing = new ImageIcon(changeColor(newBlackKing, playerColor));
+
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
+          changeColor.dispose();
+          gameWindow.remove(boardPanel);
+          gameWindow.add(newBoardPanel);
+        }
       }
     });
 
-
+    //If the user presses cancel, we can just get rid of the frame.
+    cancel.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        changeColor.dispose();
+      }
+    });
   }
+
+  //Support method that changes the color of each pixel on the image
+  private BufferedImage changeColor(BufferedImage image, Color color) {
+    for(int y = 0; y < image.getHeight(); y++) {
+        for(int x = 0; x < image.getWidth(); x++) {
+          //Ignore transparent pixels
+          if(((image.getRGB(x, y) >> 24) & 0xff) == 0) {
+            continue;
+          }
+          //Ignore black pixels (the border and accents)
+          else if((image.getRGB(x, y) & 0x00FFFFFF) == 0) {
+            continue;
+          }
+          image.setRGB(x, y, color.getRGB());
+        }
+      }
+      return image;
+  }
+
+  /*
+  * Converts a given Image into a BufferedImage
+  *
+  * Found here: http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+  *
+  * @param img The Image to be converted
+  * @return The converted BufferedImage
+  */
+ public static BufferedImage toBufferedImage(Image img) {
+     if (img instanceof BufferedImage) {
+         return (BufferedImage) img;
+     }
+
+     // Create a buffered image with transparency
+     BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+     // Draw the image on to the buffered image
+     Graphics2D bGr = bimage.createGraphics();
+     bGr.drawImage(img, 0, 0, null);
+     bGr.dispose();
+
+     // Return the buffered image
+     return bimage;
+ }
+
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){

@@ -134,15 +134,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //positions the pop up menu for the tool bar item
     dropDown.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e) {
-        optionsMenu.show(dropDown, dropDown.getBounds().x, dropDown.getBounds().y + dropDown.getBounds().height);
+        optionsMenu.show(dropDown, 0, dropDown.getBounds().y + dropDown.getBounds().height);
       }
     });
 
     menuItemChangeColor.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         changeColors();
-        gameWindow.remove(boardPanel);
-        gameWindow.add(newBoardPanel);
       }
     });
 
@@ -494,8 +492,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     confirm.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         //Make sure the user actually fills out the RGB values
-        if(redWhite.getText().equals(null) || greenWhite.getText().equals(null) || blueWhite.getText().equals(null) || redBlack.getText().equals(null) || greenBlack.getText().equals(null) || blueBlack.getText().equals(null)) {
-          //Do nothing yet -- should make label appear
+        if(redWhite.getText().equals("") || greenWhite.getText().equals("") || blueWhite.getText().equals("") || redBlack.getText().equals("") || greenBlack.getText().equals("") || blueBlack.getText().equals("")) {
+          JOptionPane.showMessageDialog(new JFrame(), "You must enter a value in each text box to change the colors.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
           playerColor = new Color(Integer.parseInt(redWhite.getText()), Integer.parseInt(greenWhite.getText()), Integer.parseInt(blueWhite.getText()));
@@ -622,8 +620,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
               }
             }
           }
+          changeColor.dispose();
+          gameWindow.remove(boardPanel);
+          gameWindow.add(newBoardPanel);
         }
-        changeColor.setVisible(false);
+      }
+    });
+
+    //If the user presses cancel, we can just get rid of the frame.
+    cancel.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        changeColor.dispose();
       }
     });
   }

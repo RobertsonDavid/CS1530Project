@@ -447,13 +447,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel whitePieces = new JLabel("");
     whitePieces.setText("White piece color: ");
 
+    JLabel r = new JLabel("R");
+    JLabel g  = new JLabel("G");
+    JLabel b = new JLabel("B");
     JTextField redWhite = new JTextField(5);
     JTextField greenWhite = new JTextField(5);
     JTextField blueWhite = new JTextField(5);
 
     whitePanel.add(whitePieces);
+    whitePanel.add(r);
     whitePanel.add(redWhite);
+    whitePanel.add(g);
     whitePanel.add(greenWhite);
+    whitePanel.add(b);
     whitePanel.add(blueWhite);
 
     //Panel with text fields for the RGB values of black pieces
@@ -463,13 +469,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JLabel blackPieces = new JLabel("");
     blackPieces.setText("Black piece color: ");
 
+    JLabel r2 = new JLabel("R");
+    JLabel g2  = new JLabel("G");
+    JLabel b2 = new JLabel("B");
     JTextField redBlack = new JTextField(5);
     JTextField greenBlack = new JTextField(5);
     JTextField blueBlack = new JTextField(5);
 
     blackPanel.add(blackPieces);
+    blackPanel.add(r2);
     blackPanel.add(redBlack);
+    blackPanel.add(g2);
     blackPanel.add(greenBlack);
+    blackPanel.add(b2);
     blackPanel.add(blueBlack);
 
     //toolbar that holds the 2 buttons, confirm and cancel

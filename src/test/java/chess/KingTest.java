@@ -12,7 +12,7 @@ public class KingTest {
 	//mocked objects for test purpose
 	private ChessBoard board = Mockito.mock(ChessBoard.class);
 	private Pawn p = Mockito.mock(Pawn.class);
-	Rook r = Mockito.mock(Rook.class);
+	private Rook r = Mockito.mock(Rook.class);
 	
 	//test if normal move for a king is correct, horizontally
 	//int array contains 0, 5 is expected

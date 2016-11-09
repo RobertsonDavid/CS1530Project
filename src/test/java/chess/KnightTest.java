@@ -36,9 +36,9 @@ public class KnightTest {
 	@Test
 	public void testMoveOccupiedByFriendly() {
 		Mockito.when(p.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(0, 1)).thenReturn(k);
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(p);
-		int[] expected = {2, 2};
-		assertArrayEquals(expected, k.move(board, 0, 1));
+		assertTrue(k.checkSameTeam(board,2,2,0,1));
 	}
 		
 	//test if move() can move the knight when destination is occupied by an enemy pawn

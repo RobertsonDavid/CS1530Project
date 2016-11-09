@@ -46,7 +46,7 @@ public class KingTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(4, 2)).thenReturn(null);
-		int[] expected = {4, 0};
+		int[] expected = {0, 4};
 		assertArrayEquals(expected, k.move(board, 4, 3));	
 	}
 
@@ -128,10 +128,10 @@ public class KingTest {
 	//int array contains 0, 4 (origin) is expected
 	@Test
 	public void testMoveOccupiedByFriendly() {
-		Mockito.when(p.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(0, 4)).thenReturn(k);
 		Mockito.when(board.getPieceAt(1, 4)).thenReturn(p);
-		int[] expected = {0, 4};
-		assertArrayEquals(expected, k.move(board, 1, 4));
+		Mockito.when(p.getSide()).thenReturn(true);
+		assertTrue(k.checkSameTeam(board,1,4,0,4));
 	}
 		
 	//test if move() can move the king when destination is occupied by an enemy pawn

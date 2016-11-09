@@ -45,20 +45,42 @@ public class Queen implements ChessPiece {
 		this.position[1] = newcolumn;
 	}
 
-  public boolean checkMove(ChessBoard board,int x, int y) {
-    //change 0 to null when object entered
-    if (board.getPieceAt(x, y) == null){
+  public boolean checkMove(ChessBoard board, int x, int y) {
+    //check if move is on board
+    if (x<8 && x>-1 && y>-1 && y< 8){
       return true;
     }
-    else
-      return false;
+    return false;
   }
+
+  //checks to see if the same to move is the same 
+  public boolean checkSameTeam(ChessBoard board, int newRow, int newColumn, int row, int column){
+    //the location trying to move to
+    ChessPiece spaceTryingToMove = board.getPieceAt(newRow, newColumn);
+    //the location currently at
+    ChessPiece movingPiece =  board.getPieceAt(row, column);
+    //if no one at the spot return 
+    if(spaceTryingToMove == null){
+      System.out.println("FALSE");
+      return false;
+    }
+    //if the same team return true
+    if (spaceTryingToMove.getSide()==movingPiece.getSide()){
+      return true;
+    }
+    return false;
+  }
+
 
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
 
-    if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7){
+    if(checkMove(board, newRow, newCol)==false){
+      return this.position;
+    }
+    if(checkSameTeam(board, newRow, newCol, this.row, this.column))
+    {
       return this.position;
     }
     //run Rook code if board changed =1 then do not run bishop code

@@ -56,6 +56,7 @@ public class QueenTest {
 	public void testMoveOccupiedByFriendly() {
 		Mockito.when(p.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(p);
+		Mockito.when(board.getPieceAt(0,3)).thenReturn(q);
 		int[] expected = {0, 3};
 		assertArrayEquals(expected, q.move(board, 3, 3));
 	}
@@ -67,6 +68,7 @@ public class QueenTest {
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(p);
+		Mockito.when(board.getPieceAt(0,3)).thenReturn(q);
 		int[] expected = {3, 3};
 		assertArrayEquals(expected, q.move(board, 3, 3));
 	}

@@ -86,6 +86,7 @@ public class PawnTest {
 	public void testMoveOccupiedByFriendly() {
 		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(k.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		int[] expected = {1, 0};
 		assertArrayEquals(expected, pw.move(board, 2, 0));
@@ -109,6 +110,7 @@ public class PawnTest {
 	@Test
 	public void testMovePathBlockedByFriendly() {
 		Mockito.when(k.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(k);
 		int[] expected = {1, 0};
@@ -134,6 +136,7 @@ public class PawnTest {
 	public void testMoveDiagonallyWhenCapturingEnemy() {
 		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(k.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 1)).thenReturn(k);
 		int[] expected = {2, 1};
 		assertArrayEquals(expected, pw.move(board, 2, 1));

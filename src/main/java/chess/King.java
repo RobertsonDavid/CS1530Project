@@ -61,9 +61,9 @@ public class King implements ChessPiece {
   //checks to see if the same to move is the same 
   public boolean checkSameTeam(ChessBoard board, int newRow, int newColumn, int row, int column){
     //the location trying to move to
-    ChessPiece spaceTryingToMove = board.getPieceAt(row, column);
+    ChessPiece spaceTryingToMove = board.getPieceAt(newRow, newColumn);
     //the location currently at
-    ChessPiece movingPiece =  board.getPieceAt(newRow, newColumn);
+    ChessPiece movingPiece =  board.getPieceAt(row, column);
     //if no one at the spot return 
     if(spaceTryingToMove == null){
       return false;

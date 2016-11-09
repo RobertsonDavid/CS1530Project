@@ -28,7 +28,9 @@ public class BishopTest {
 	public void testCheckMoveOccupied() {
 		ChessBoard board = Mockito.mock(ChessBoard.class);
 		Mockito.when(board.getPieceAt(1, 3)).thenReturn(p);
-		assertFalse(b.checkSameTeam(board, 1, 3, 0, 2));
+		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
+		Mockito.when(p.getSide()).thenReturn(true);
+		assertTrue(b.checkSameTeam(board, 1, 3, 0, 2));
 	}
 
 	//test if move() can move the bishop successfully when it is a legal move (diagonally) 
@@ -78,6 +80,7 @@ public class BishopTest {
 	@Test
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(p);
 		int[] expected = {2, 4};
 		assertArrayEquals(expected, b.move(board, 2, 4));

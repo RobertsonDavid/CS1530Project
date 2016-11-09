@@ -57,6 +57,7 @@ public class RookTest {
 	@Test
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(0, 7)).thenReturn(r);
 		Mockito.when(board.getPieceAt(5, 7)).thenReturn(p);
 		int[] expected = {5, 7};
 		assertArrayEquals(expected, r.move(board, 5, 7));

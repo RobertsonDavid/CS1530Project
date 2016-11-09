@@ -730,6 +730,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public void mouseReleased(MouseEvent e) {
 		if(space == null) return;
 
+    int[] newPos;
+
 		space.setVisible(false);
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
@@ -742,9 +744,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       takenPiece = board.getPieceAt(newRow, newCol);  //piece that is potentially going to be taken
 
-      parent.remove(0);
-      parent.add(space);
+      newPos = piece.move(board, newRow, newCol);
 
+      if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        parent.remove(0);
+        parent.add(space);
+        board.update(oldRow, oldCol, newRow, newCol);
+      }
+      else {
+        oldParent.add(space);
+      }
 		}
 		else {
 			Container parent = (Container)spotOnBoard;
@@ -753,11 +762,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-      //This section will use a conditional which tests whether a call to move returns
-      //a new position or the old position. It will position the piece that the user
-      //is moving accordingly.
+      newPos = piece.move(board, newRow, newCol);
 
-      parent.add(space);
+      if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        parent.add(space);
+        board.update(oldRow, oldCol, newRow, newCol);
+      }
+      else {
+        oldParent.add(space);
+      }
 
 		}
 

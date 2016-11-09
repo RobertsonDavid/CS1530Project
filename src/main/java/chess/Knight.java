@@ -9,6 +9,7 @@ public class Knight implements ChessPiece {
 	protected String pieceValue;
 	protected int row;
 	protected int column;
+	protected boolean enpassant;
 	protected int[] position = new int[2]; //this will only store the position of an individual piece in the form [row, column]
 
   public String getType() {
@@ -25,6 +26,10 @@ public class Knight implements ChessPiece {
 
   public boolean getTopOfBoard() {
     return this.topOfBoard;
+  }
+
+  public boolean getEnPassant(){
+    return this.enpassant;
   }
 
   public Knight(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {

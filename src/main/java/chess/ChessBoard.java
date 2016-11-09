@@ -18,7 +18,7 @@ public class ChessBoard {
   b[0][3] = new Queen("queen", true, true, false, 0, 3); //top queen
   b[0][4] = new King("king", true, true, false, 0, 4); //top king
   for(int i = 0; i < 8; i++)
-   b[1][i] = new Pawn("pawn", true, true, false, 1, i); //top pawn
+   b[1][i] = new Pawn("pawn", true, true, false,false, 1, i); //top pawn
 
   //black pieces
   b[7][0] = new Rook("rook", false, true, true, 7, 0); //bottom left rook
@@ -30,7 +30,7 @@ public class ChessBoard {
   b[7][3] = new Queen("queen", false, true, true, 7, 3); //bottom queen
   b[7][4] = new King("king", false, true, true, 7, 4); //bottom king
   for(int i = 0; i < 8; i++)
-   b[6][i] = new Pawn("pawn", false, true, true, 6, i); //bottom pawn
+   b[6][i] = new Pawn("pawn", false, true, true,false, 6, i); //bottom pawn
  }
 
 //This returns the piece at the given coordinates
@@ -74,7 +74,7 @@ public class ChessBoard {
      b[x][y]= new Queen(type, side, firstMove, topOfBoard, x, y);
    }
    else if(type.equals("pawn")){
-     b[x][y]= new Pawn(type, side, firstMove, topOfBoard, x, y);
+     b[x][y]= new Pawn(type, side, firstMove, topOfBoard,false, x, y);
    }
  }
 

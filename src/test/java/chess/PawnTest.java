@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 public class PawnTest {
 
-	Pawn p = new Pawn("pawn", true, true, false, 1, 0);
+	Pawn p = new Pawn("pawn", true, true, false,false, 1, 0);
 	//mocked objects for test purpose
 	private ChessBoard board = Mockito.mock(ChessBoard.class);
 	private Knight k = Mockito.mock(Knight.class);
@@ -16,7 +16,7 @@ public class PawnTest {
 	//int array contains 2, 0 is expected
 	@Test
 	public void testFirstMoveOneSquareVertically() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
 		int[] expected = {2, 0};
 		assertArrayEquals(expected, pw.move(board, 2, 0));
@@ -26,7 +26,7 @@ public class PawnTest {
 	//int array contains 3, 0 is expected
 	@Test
 	public void testFirstMoveTwoSquaresVertically() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
 		int[] expected = {3, 0};
 		assertArrayEquals(expected, pw.move(board, 3, 0));
@@ -36,7 +36,7 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMoveBack() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(0, 0)).thenReturn(null);
 		int[] expected = {1, 0};
 		assertArrayEquals(expected, pw.move(board, 0, 0));
@@ -63,7 +63,7 @@ public class PawnTest {
 	//test if getFirstMove() returns false when the pawn is moved
 	@Test
 	public void testGetFirstMove() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
 		pw.move(board, 2, 0);
 		assertFalse(pw.getFirstMove());
@@ -73,7 +73,7 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMoveTwoSquaresVerticallyNotFirst() {
-		Pawn pawn = new Pawn("pawn", true, false, false, 1, 0);
+		Pawn pawn = new Pawn("pawn", true, false, false,false, 1, 0);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
 		int[] expected = {1, 0};
 		assertArrayEquals(expected, pawn.move(board, 3, 0));
@@ -84,7 +84,7 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMoveOccupiedByFriendly() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(k.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		int[] expected = {1, 0};
@@ -96,7 +96,7 @@ public class PawnTest {
 	//int array contains 1, 0 is expected
 	@Test
 	public void testMoveOccupiedByEnemy() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		int[] expected = {1, 0};
@@ -132,7 +132,7 @@ public class PawnTest {
 	//int array contains 2, 1 (origin) is expected
 	@Test
 	public void testMoveDiagonallyWhenCapturingEnemy() {
-		Pawn pw = new Pawn("pawn", true, true, true, 1, 0);
+		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 1)).thenReturn(k);
 		int[] expected = {2, 1};
@@ -143,7 +143,7 @@ public class PawnTest {
 	//int array contains 5 (origin) is expected
 	@Test
 	public void testMoveOutOfBounds() {
-		Pawn pawn = new Pawn("pawn", true, true, false, 7, 0);
+		Pawn pawn = new Pawn("pawn", true, true, false,false, 7, 0);
 		Mockito.when(board.getPieceAt(8, 0)).thenReturn(null);
 		int[] expected = {7, 0};
 		assertArrayEquals(expected, pawn.move(board, 8, 0));
@@ -153,7 +153,7 @@ public class PawnTest {
 	//old location should be retained
 	@Test
 	public void testMoveTwoSquaresVerticallyNotFirstMove() {
-		Pawn pawn = new Pawn("pawn", true, false, true, 1, 3);
+		Pawn pawn = new Pawn("pawn", true, false, true,false, 1, 3);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(null);
 		int[] expected = {1, 3};
 		assertArrayEquals(expected, pawn.move(board, 3, 3));	

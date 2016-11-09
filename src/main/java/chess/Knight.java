@@ -58,13 +58,13 @@ public class Knight implements ChessPiece {
     return false;
   }
 
-  //checks to see if the same to move is the same 
+  //checks to see if the same to move is the same
   public boolean checkSameTeam(ChessBoard board, int newRow, int newColumn, int row, int column){
     //the location trying to move to
     ChessPiece spaceTryingToMove = board.getPieceAt(row, column);
     //the location currently at
     ChessPiece movingPiece =  board.getPieceAt(newRow, newColumn);
-    //if no one at the spot return 
+    //if no one at the spot return
     if(spaceTryingToMove == null){
       return false;
     }

@@ -141,6 +141,7 @@ public class KingTest {
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(1, 4)).thenReturn(p);
+		Mockito.when(board.getPieceAt(0, 4)).thenReturn(k);
 		int[] expected = {1, 4};
 		assertArrayEquals(expected, k.move(board, 1, 4));
 	}

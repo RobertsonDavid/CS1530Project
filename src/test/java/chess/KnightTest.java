@@ -48,6 +48,7 @@ public class KnightTest {
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(p);
+		Mockito.when(board.getPieceAt(0, 1)).thenReturn(k);
 		int[] expected = {2, 2};
 		assertArrayEquals(expected, k.move(board, 2, 2));
 	}

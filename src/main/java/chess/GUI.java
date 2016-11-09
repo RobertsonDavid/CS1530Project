@@ -765,7 +765,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newPos = piece.move(board, newRow, newCol);
 
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
-        parent.remove(0);
         parent.add(space);
         board.update(oldRow, oldCol, newRow, newCol);
       }

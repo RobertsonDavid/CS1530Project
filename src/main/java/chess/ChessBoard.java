@@ -224,11 +224,91 @@ public class ChessBoard {
    sb.append(" " + 'b');    //this will need updated based on whose turn it is
      
    sb.append(" -");  //castling currently set to false
-   sb.append(" " + enPassant); //en passant currently set to false
+   sb.append(" " + enPassant); //en passant
    sb.append(" " +halfCount); //halfmove Clock
    sb.append(" " +fullCount);
    
    return sb.toString();
  }
-
+ 
+ //see if a king of a certain color is in check
+ public boolean isChecked(Boolean side)
+ {
+   //find king
+   int row=-1;
+   int column=-1;
+   for(int r=0; r<=7; r++)
+   {
+     for(int c=0; c<=7; c++)
+     {
+       if(getPieceAt(r,c).getType().equals("king") && getPieceAt(r,c).getSide() == side)
+       {
+         row=r;
+         coulumn=c;
+         break;
+       }
+     }
+   }
+   
+   //check for pawn attacks from white pieces if black 
+   if(side==true) //true == black;  starting at [0][0]
+   {
+     ChessPiece piece;
+     if(legalSquare((row+1),(column-1)) && getPieceAt(row+1,column-1)!=null)
+     {
+       piece = getPieceAt(row+1, column-1);
+       if(piece.getSide==false && piece.getType().equals("pawn")) //if enemy pawn
+       {
+         return true;
+       }
+     }
+     
+     if(legalSquare((row+1),(column+1)) && getPieceAt(row+1,column+1)!=null)
+     {
+       piece = getPieceAt(row+1, column+1);
+       if(piece.getSide==false && piece.getType().equals("pawn")) //if enemy pawn
+       {
+         return true;
+       }
+     }
+   }
+   
+   //check for pawn attacks from black pieces if white
+   if(side==false) //false == white;  starting at [7][0]
+   {
+     ChessPiece piece;
+     if(legalSquare((row-1),(column-1)) && getPieceAt(row-1,column-1)!=null)
+     {
+       piece = getPieceAt(row-1, column-1);
+       if(piece.getSide==true && piece.getType().equals("pawn")) //if enemy pawn
+       {
+         return true;
+       }
+     }
+     
+     if(legalSquare((row-1),(column+1)) && getPieceAt(row-1,column+1)!=null)
+     {
+       piece = getPieceAt(row-1, column+1);
+       if(piece.getSide==true && piece.getType().equals("pawn")) //if enemy pawn
+       {
+         return true;
+       }
+     }
+   }
+   
+   //check for attacks by rooks
+ 
+ }
+ //return true if the passed in coordinate is a legal space on the board
+ public boolean legalSquare(int r, int c)
+ {
+   if(r>=0 && r<=7)
+   {
+     if(c>=0 && c<=7)
+     {
+       return true;
+     }
+   }
+   return false;
+ }
 }

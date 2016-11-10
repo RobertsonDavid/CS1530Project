@@ -66,7 +66,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Color playerColor;
   private Color computerColor;
   private JPanel newBoardPanel;
-  
+
   //for turn taking
   private boolean topTurn = false;
 
@@ -254,6 +254,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   				}
         }
         else {
+          topTurn = true;
           if (i == 0){
   					if (j == 0 || j == 7){
   						pieceImage = new JLabel(blackRook);
@@ -712,7 +713,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	  if(topTurn != piece.getSide())
 		  return;
-	  
+
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
@@ -748,6 +749,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	    newRow = square2.getRow();
 	    newCol = square2.getColumn();
 
+      if((newRow == oldRow) && (newCol == oldCol)) {
+        oldParent.add(space);
+        space.setVisible(true);
+        return;
+      }
+
       takenPiece = board.getPieceAt(newRow, newCol);  //piece that is potentially going to be taken
 
       newPos = piece.move(board, newRow, newCol);
@@ -772,8 +779,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
+      if((newRow == oldRow) && (newCol == oldCol)) {
+        oldParent.add(space);
+        space.setVisible(true);
+        return;
+      }
+
       newPos = piece.move(board, newRow, newCol);
-      
 
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
         parent.add(space);

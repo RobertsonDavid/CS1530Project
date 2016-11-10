@@ -1,4 +1,5 @@
 package chess;
+import java.lang.*;
 
 public class Pawn implements ChessPiece {
 
@@ -119,11 +120,19 @@ public class Pawn implements ChessPiece {
 
   }
 
+  public boolean isAttacking (int newRow, int newColumn)
+  {
+    if (Math.abs(this.column - newColumn)==1 && Math.abs(this.row - newRow) ==1){
+      return true;
+    }
+    return false;
+  }
+
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
     System.out.println(this.topOfBoard);
     //empty space
-    if (checkMove(board, newRow, newCol)){
+    if (checkMove(board, newRow, newCol) && isAttacking(newRow,newCol)==false){
       //if trying to take same team return old position
       if(checkSameTeam(board, newRow, newCol, this.row, this.column)){
         return this.position;
@@ -221,6 +230,8 @@ public class Pawn implements ChessPiece {
     //taking a piece
     else if((checkifEmpty(board, newRow, newCol) == false) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8)
     {
+      System.out.println(this.topOfBoard);
+      System.out.println(this.row + " "+ this.column + " "+ newRow + " "+ newCol);
       System.out.println("HERE I AM");
       //top piece attacking
       if(this.topOfBoard && ((this.row==newRow-1) && (this.column == newCol+1)) || ((this.row ==newRow-1) && (this.column ==newCol-1))){

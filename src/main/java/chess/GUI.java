@@ -66,6 +66,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Color playerColor;
   private Color computerColor;
   private JPanel newBoardPanel;
+  
+  //for turn taking
+  private boolean topTurn = false;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -707,6 +710,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	  piece = board.getPieceAt(oldRow, oldCol);
 
+	  if(topTurn != piece.getSide())
+		  return;
+	  
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
@@ -750,6 +756,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         parent.remove(0);
         parent.add(space);
         board.update(oldRow, oldCol, newRow, newCol);
+        if(piece.getSide())
+        	topTurn = false;
+        else
+       	 	topTurn = true;
       }
       else {
         oldParent.add(space);
@@ -763,10 +773,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newCol = square2.getColumn();
 
       newPos = piece.move(board, newRow, newCol);
+      
 
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
         parent.add(space);
         board.update(oldRow, oldCol, newRow, newCol);
+        if(piece.getSide())
+       	 	topTurn = false;
+        else
+        	topTurn = true;
       }
       else {
         oldParent.add(space);

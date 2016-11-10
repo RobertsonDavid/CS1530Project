@@ -54,4 +54,12 @@ public class ChessBoardTest {
 		assertNull(testBoard.getPieceAt(0, 1));
 	}
 	
+	//test flip board actually flip chess pieces in the array
+	@Test
+	public void testFlipBoard() {
+		ChessBoard testBoard = new ChessBoard();
+		ChessPiece p = testBoard.getPieceAt(1, 4);
+		testBoard.flipBoard();
+		assertEquals(p, testBoard.getPieceAt(7-1, 7-4));
+	}
 }

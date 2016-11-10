@@ -121,7 +121,7 @@ public class Pawn implements ChessPiece {
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
-
+    System.out.println(this.topOfBoard);
     //empty space
     if (checkMove(board, newRow, newCol)){
       //if trying to take same team return old position
@@ -138,28 +138,28 @@ public class Pawn implements ChessPiece {
       }
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece
-      if ((newRow+2 == this.row) && this.firstMove && !this.topOfBoard){
+      if ((newRow+2 == this.row) && this.firstMove && this.topOfBoard){
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = true;
         return this.position;
       }
       //if they want to move 2 spaces and first move and bottom piece
-      else if ((newRow-2 == this.row)&& this.firstMove && this.topOfBoard) {
+      else if ((newRow-2 == this.row)&& this.firstMove && !this.topOfBoard) {
         this.firstMove = false;
         this.enpassant = true;
         updateCoord(newRow, newCol);
         return this.position;
       }
       //move 1 and top
-      else if ((newRow+1 == this.row) && !this.topOfBoard) {
+      else if ((newRow+1 == this.row) && this.topOfBoard) {
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;
         return this.position;
       }
       //move 1 and bottom
-      else if ((newRow-1 == this.row) && this.topOfBoard) {
+      else if ((newRow-1 == this.row) && !this.topOfBoard) {
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;

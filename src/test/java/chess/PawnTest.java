@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 public class PawnTest {
 
-	Pawn p = new Pawn("pawn", true, true, false,false, 1, 0);
+	Pawn p = new Pawn("pawn", false, true, false, false, 1, 0);
 	//mocked objects for test purpose
 	private ChessBoard board = Mockito.mock(ChessBoard.class);
 	private Knight k = Mockito.mock(Knight.class);
@@ -16,30 +16,27 @@ public class PawnTest {
 	//int array contains 2, 0 is expected
 	@Test
 	public void testFirstMoveOneSquareVertically() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
 		int[] expected = {2, 0};
-		assertArrayEquals(expected, pw.move(board, 2, 0));
+		assertArrayEquals(expected, p.move(board, 2, 0));
 	}
 	
 	//test if normal move for a pawn is correct, the pawn has not been moved and move two square horizontally
 	//int array contains 3, 0 is expected
 	@Test
 	public void testFirstMoveTwoSquaresVertically() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
 		int[] expected = {3, 0};
-		assertArrayEquals(expected, pw.move(board, 3, 0));
+		assertArrayEquals(expected, p.move(board, 3, 0));
 	}
 	
 	//test the illegal backwards move is not taken
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMoveBack() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(0, 0)).thenReturn(null);
 		int[] expected = {1, 0};
-		assertArrayEquals(expected, pw.move(board, 0, 0));
+		assertArrayEquals(expected, p.move(board, 0, 0));
 	}
 	
 	//test the illegal diagonal move is not taken
@@ -63,10 +60,9 @@ public class PawnTest {
 	//test if getFirstMove() returns false when the pawn is moved
 	@Test
 	public void testGetFirstMove() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
-		pw.move(board, 2, 0);
-		assertFalse(pw.getFirstMove());
+		p.move(board, 2, 0);
+		assertFalse(p.getFirstMove());
 	}
 	
 	//test if move two squares vertically when first move is false is blocked
@@ -84,12 +80,11 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMoveOccupiedByFriendly() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
-		Mockito.when(k.getSide()).thenReturn(true);
+		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		int[] expected = {1, 0};
-		assertArrayEquals(expected, pw.move(board, 2, 0));
+		assertArrayEquals(expected, p.move(board, 2, 0));
 	}
 	
 	//test if move() blocks move of pawn when destination is occupied by an enemy knightw
@@ -97,11 +92,10 @@ public class PawnTest {
 	//int array contains 1, 0 is expected
 	@Test
 	public void testMoveOccupiedByEnemy() {
-		Pawn pw = new Pawn("pawn", true, true, true,false, 1, 0);
-		Mockito.when(k.getSide()).thenReturn(false);
+		Mockito.when(k.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		int[] expected = {1, 0};
-		assertArrayEquals(expected, pw.move(board, 1, 0));
+		assertArrayEquals(expected, p.move(board, 1, 0));
 	}
 	
 	//test if move() blocks the two-square move of pawn when path is blocked by a friendly knight 
@@ -109,10 +103,9 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMovePathBlockedByFriendly() {
-		Mockito.when(k.getSide()).thenReturn(true);
-		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
+		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
-		Mockito.when(board.getPieceAt(3, 0)).thenReturn(k);
+		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
 		int[] expected = {1, 0};
 		assertArrayEquals(expected, p.move(board, 3, 0));
 	}
@@ -122,7 +115,7 @@ public class PawnTest {
 	//int array contains 1, 0 (origin) is expected
 	@Test
 	public void testMovePathBlockedByEnemy() {
-		Mockito.when(k.getSide()).thenReturn(false);
+		Mockito.when(k.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
 		int[] expected = {1, 0};

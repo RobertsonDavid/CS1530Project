@@ -203,6 +203,10 @@ public class ChessBoard {
          ChessPiece pieceIter= getPieceAt(r,c);
          Boolean side= pieceIter.getSide(); //side==true for top, false for bottom 
          char type= pieceIter.getType().charAt(0);
+         if(pieceIter.getType().equals("knight")) //knights appear as 'n'
+         {
+           type='n';
+         }
          if(side=true)
          {
            Character.toLowerCase(type);
@@ -244,7 +248,7 @@ public class ChessBoard {
        if(getPieceAt(r,c).getType().equals("king") && getPieceAt(r,c).getSide() == side)
        {
          row=r;
-         coulumn=c;
+         column=c;
          break;
        }
      }
@@ -257,7 +261,7 @@ public class ChessBoard {
      if(legalSquare((row+1),(column-1)) && getPieceAt(row+1,column-1)!=null)
      {
        piece = getPieceAt(row+1, column-1);
-       if(piece.getSide==false && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.getSide()==false && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -266,7 +270,7 @@ public class ChessBoard {
      if(legalSquare((row+1),(column+1)) && getPieceAt(row+1,column+1)!=null)
      {
        piece = getPieceAt(row+1, column+1);
-       if(piece.getSide==false && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.getSide()==false && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -280,7 +284,7 @@ public class ChessBoard {
      if(legalSquare((row-1),(column-1)) && getPieceAt(row-1,column-1)!=null)
      {
        piece = getPieceAt(row-1, column-1);
-       if(piece.getSide==true && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.getSide()==true && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -289,15 +293,339 @@ public class ChessBoard {
      if(legalSquare((row-1),(column+1)) && getPieceAt(row-1,column+1)!=null)
      {
        piece = getPieceAt(row-1, column+1);
-       if(piece.getSide==true && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.getSide()==true && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
      }
    }
    
-   //check for attacks by rooks
- 
+   //check for attacks by rooks as well as straight attacks by queens
+   ChessPiece piece;
+   int rowIter=row;
+   int columnIter=column;
+   //check attacks coming from the left side
+   columnIter--;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("rook") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("rook") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter--;
+   }
+   
+   rowIter=row;
+   columnIter=column;
+   //check attacks coming from the right side
+   columnIter++;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("rook") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("rook") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter++;
+   }
+   
+   rowIter=row;
+   columnIter=column;
+   //check attacks coming from the black side
+   rowIter--;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("rook") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("rook") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     rowIter++;
+   }
+   
+   rowIter=row;
+   columnIter=column;
+   //check attacks coming from the white side
+   rowIter++;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("rook") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("rook") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     rowIter++;
+   }
+   
+   //check for diagonal attacks by the queen or rook
+   piece=null;
+   rowIter=row;
+   columnIter=column;
+   
+   //check attacks coming from top left
+   columnIter--;
+   rowIter--;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("bishop") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("bishop") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter--;
+     rowIter--;
+   }
+   
+   //check attacks coming from top right
+   columnIter++;
+   rowIter--;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("bishop") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("bishop") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter++;
+     rowIter--;
+   }
+   
+   //check attacks coming from bottom left
+   columnIter--;
+   rowIter++;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("bishop") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("bishop") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter--;
+     rowIter++;
+   }
+   
+   //check attacks coming from bottom right
+   columnIter++;
+   rowIter++;
+   while(legalSquare(rowIter, columnIter))
+   {
+     piece =getPieceAt(rowIter,columnIter);
+     //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+     if(piece!=null)
+     {
+       //break if there is either a piece found that is of the same side, or if the piece found is not a queen or rook
+       if(piece.getSide()==side)
+       {
+         break;
+       }
+       if(!piece.getType().equals("bishop") && !piece.getType().equals("queen"))
+       {
+         break;
+       }
+       //return true if an unobstructed (done implicitly), rook or queen of the opposite side can reach the king's square
+       if(piece.getType().equals("bishop") || piece.getType().equals("queen"))
+       {
+         return true;
+       }
+     }
+     columnIter++;
+     rowIter++;
+   }
+   
+   //check for attacks coming from knights (8 logically possible attack spaces)
+   piece=null;
+   rowIter=row;
+   columnIter=column;
+   
+   rowIter=row+2;
+   columnIter= column-1;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row+1;
+   columnIter= column-2;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row-2;
+   columnIter= column-1;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row-1;
+   columnIter= column-2;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row+2;
+   columnIter= column+1;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row+1;
+   columnIter= column+2;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row-2;
+   columnIter= column+1;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   rowIter=row-1;
+   columnIter= column+2;
+   if(legalSquare(rowIter, columnIter))
+   {
+     piece=getPieceAt(rowIter, columnIter);
+     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     {
+       return true;
+     }
+   }
+   
+   //no attacks found
+   return false;
  }
  //return true if the passed in coordinate is a legal space on the board
  public boolean legalSquare(int r, int c)

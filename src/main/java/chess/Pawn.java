@@ -50,8 +50,6 @@ public class Pawn implements ChessPiece {
     this.enpassant = enpassant;
 		this.position[0] = row;
 		this.position[1] = column;
-		this.position[2] = -1;
-		this.position[3] = -1;
   }
 
   public void updateCoord(int newrow, int newcolumn) {
@@ -140,7 +138,8 @@ public class Pawn implements ChessPiece {
 
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
-    System.out.println(this.topOfBoard);
+		this.position[2] = -1;
+		this.position[3] = -1;
     //empty space
     if (checkMove(board, newRow, newCol) && isAttacking(newRow,newCol)==false){
 			if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8) {
@@ -204,20 +203,22 @@ public class Pawn implements ChessPiece {
         //if a piece to the west act like it didnt move two spaces and attack it
         if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol+1)){
 					System.out.println("5");
-          updateCoord(newRow, newCol);
-          this.enpassant = false;
 					this.position[2] = this.row;
 					this.position[3] = this.column - 1;
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+
           return this.position;
         }
         //[enpassant left bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
         else if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard==false && (this.row==newRow+1 && this.column == newCol+1)){
 					System.out.println("6");
-          updateCoord(newRow, newCol);
-          this.enpassant = false;
 					this.position[2] = this.row;
 					this.position[3] = this.column - 1;
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+
           return this.position;
         }
         return this.position;
@@ -229,20 +230,22 @@ public class Pawn implements ChessPiece {
         //if a piece to the west act like it didnt move two spaces and attack it
         if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol-1)){
 					System.out.println("7");
-          updateCoord(newRow, newCol);
-          this.enpassant = false;
 					this.position[2] = this.row;
 					this.position[3] = this.column + 1;
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+
           return this.position;
         }
         //[enpassant right bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
         else if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard== false && (this.row==newRow+1 && this.column == newCol-1)){
 					System.out.println("8");
-          updateCoord(newRow, newCol);
-          this.enpassant = false;
 					this.position[2] = this.row;
 					this.position[3] = this.column + 1;
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+
           return this.position;
         }
         return this.position;

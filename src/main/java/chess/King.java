@@ -10,7 +10,7 @@ public class King implements ChessPiece {
 	protected int row;
 	protected int column;
   protected boolean enpassant;
-	protected int[] position = new int[2]; //this will only store the position of an individual piece in the form [row, column]
+	protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
 
   public String getType() {
 		return this.type;
@@ -49,6 +49,8 @@ public class King implements ChessPiece {
 		this.column = column;
 		this.position[0] = row;
 		this.position[1] = column;
+    this.position[2] = -1;
+    this.position[3] = -1;
   }
 
   public void updateCoord(int newrow, int newcolumn) {

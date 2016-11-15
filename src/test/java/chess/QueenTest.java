@@ -18,7 +18,7 @@ public class QueenTest {
 	@Test
 	public void testMoveHorizontally() {
 		Mockito.when(board.getPieceAt(0, 6)).thenReturn(null);
-		int[] expected = {0, 6};
+		int[] expected = {0, 6, -1, -1};
 		assertArrayEquals(expected, q.move(board, 0, 6));
 	}
 	
@@ -27,7 +27,7 @@ public class QueenTest {
 	@Test
 	public void testMoveVertically() {
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(null);
-		int[] expected = {3, 3};
+		int[] expected = {3, 3, -1, -1};
 		assertArrayEquals(expected, q.move(board, 3, 3));
 	}
 	
@@ -36,7 +36,7 @@ public class QueenTest {
 	@Test
 	public void testMoveDiagonally() {
 		Mockito.when(board.getPieceAt(3, 6)).thenReturn(null);
-		int[] expected = {3, 6};
+		int[] expected = {3, 6, -1, -1};
 		assertArrayEquals(expected, q.move(board, 3, 6));
 	}
 	
@@ -45,7 +45,7 @@ public class QueenTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(2, 6)).thenReturn(null);
-		int[] expected = {0, 3};
+		int[] expected = {0, 3, -1, -1};
 		assertArrayEquals(expected, q.move(board, 2, 6));	
 	}
 	
@@ -57,7 +57,7 @@ public class QueenTest {
 		Mockito.when(p.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(p);
 		Mockito.when(board.getPieceAt(0,3)).thenReturn(q);
-		int[] expected = {0, 3};
+		int[] expected = {0, 3, -1, -1};
 		assertArrayEquals(expected, q.move(board, 3, 3));
 	}
 		
@@ -69,7 +69,7 @@ public class QueenTest {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(p);
 		Mockito.when(board.getPieceAt(0,3)).thenReturn(q);
-		int[] expected = {3, 3};
+		int[] expected = {3, 3, -1, -1};
 		assertArrayEquals(expected, q.move(board, 3, 3));
 	}
 	
@@ -78,7 +78,7 @@ public class QueenTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-1, 3)).thenReturn(null);
-		int[] expected = {0, 3};
+		int[] expected = {0, 3, -1, -1};
 		assertArrayEquals(expected, q.move(board, -1, 3));
 	}
 	

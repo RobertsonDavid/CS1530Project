@@ -19,7 +19,7 @@ public class KingTest {
 	@Test
 	public void testMoveHorizontally() {
 		Mockito.when(board.getPieceAt(0, 5)).thenReturn(null);
-		int[] expected = {0, 5};
+		int[] expected = {0, 5, -1, -1};
 		assertArrayEquals(expected, k.move(board, 0, 5));	
 	}
 	
@@ -28,7 +28,7 @@ public class KingTest {
 	@Test
 	public void testMoveVertically() {
 		Mockito.when(board.getPieceAt(1, 4)).thenReturn(null);
-		int[] expected = {1, 4};
+		int[] expected = {1, 4, -1, -1};
 		assertArrayEquals(expected, k.move(board, 1, 4));
 	}
 	
@@ -37,7 +37,7 @@ public class KingTest {
 	@Test
 	public void testMoveDiagonally() {
 		Mockito.when(board.getPieceAt(1, 5)).thenReturn(null);
-		int[] expected = {1, 5};
+		int[] expected = {1, 5, -1, -1};
 		assertArrayEquals(expected, k.move(board, 1, 5));	
 	}
 	
@@ -46,7 +46,7 @@ public class KingTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(4, 2)).thenReturn(null);
-		int[] expected = {0, 4};
+		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, k.move(board, 4, 3));	
 	}
 
@@ -58,7 +58,7 @@ public class KingTest {
 		Mockito.when(board.getPieceAt(0, 3)).thenReturn(null);
 		Mockito.when(board.getPieceAt(0, 2)).thenReturn(null);
 		Mockito.when(board.getPieceAt(0, 1)).thenReturn(null);
-		int[] expected = {0, 2};
+		int[] expected = {0, 2, -1, -1};
 		assertArrayEquals(expected, king.move(board,0,2));
 	}
 
@@ -70,7 +70,7 @@ public class KingTest {
 		Mockito.when(board.getPieceAt(7, 3)).thenReturn(null);
 		Mockito.when(board.getPieceAt(7, 2)).thenReturn(null);
 		Mockito.when(board.getPieceAt(7, 1)).thenReturn(null);
-		int[] expected = {7, 2};
+		int[] expected = {7, 2, -1, -1};
 		assertArrayEquals(expected, king.move(board,7,2));
 	}
 
@@ -81,7 +81,7 @@ public class KingTest {
 		King king = new King("king", true, true, true, 0, 4);
 		Mockito.when(board.getPieceAt(0, 5)).thenReturn(null);
 		Mockito.when(board.getPieceAt(0, 6)).thenReturn(null);
-		int[] expected = {0, 6};
+		int[] expected = {0, 6, -1, -1};
 		assertArrayEquals(expected, king.move(board,0,6));
 	}
 
@@ -92,7 +92,7 @@ public class KingTest {
 		King king = new King("king", true, true, false, 7, 4);
 		Mockito.when(board.getPieceAt(7, 5)).thenReturn(null);
 		Mockito.when(board.getPieceAt(7, 6)).thenReturn(null);
-		int[] expected = {7, 6};
+		int[] expected = {7, 6, -1, -1};
 		assertArrayEquals(expected, king.move(board,7,6));
 	}
 
@@ -101,7 +101,7 @@ public class KingTest {
 	public void testQueenSideCastlingPieceInWay(){
 		King king = new King("king", true, true, true, 0, 4);
 		Mockito.when(board.getPieceAt(0, 3)).thenReturn(r);
-		int[] expected = {0, 4};
+		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, king.move(board,0,2));
 	}
 
@@ -110,7 +110,7 @@ public class KingTest {
 	public void testKingSideCastlingPieceInWay(){
 		King king = new King("king", true, true, true, 0, 4);
 		Mockito.when(board.getPieceAt(0, 5)).thenReturn(r);
-		int[] expected = {0, 4};
+		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, king.move(board,0,6));
 	}
 	
@@ -119,7 +119,7 @@ public class KingTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-1, 4)).thenReturn(null);
-		int[] expected = {0, 4};
+		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, k.move(board, -1, 4));
 	}
 	
@@ -142,7 +142,7 @@ public class KingTest {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(1, 4)).thenReturn(p);
 		Mockito.when(board.getPieceAt(0, 4)).thenReturn(k);
-		int[] expected = {1, 4};
+		int[] expected = {1, 4, -1, -1};
 		assertArrayEquals(expected, k.move(board, 1, 4));
 	}
 	

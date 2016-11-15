@@ -17,7 +17,7 @@ public class KnightTest {
 	@Test
 	public void testMove() {
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(null);
-		int[] expected = {2, 2};
+		int[] expected = {2, 2, -1, -1};
 		assertArrayEquals(expected, k.move(board, 2, 2));
 	}
 	
@@ -26,7 +26,7 @@ public class KnightTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(0, 2)).thenReturn(null);
-		int[] expected = {0, 1};
+		int[] expected = {0, 1, -1, -1};
 		assertArrayEquals(expected, k.move(board, 0, 1));	
 	}
 
@@ -49,7 +49,7 @@ public class KnightTest {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(p);
 		Mockito.when(board.getPieceAt(0, 1)).thenReturn(k);
-		int[] expected = {2, 2};
+		int[] expected = {2, 2, -1, -1};
 		assertArrayEquals(expected, k.move(board, 2, 2));
 	}
 	
@@ -58,7 +58,7 @@ public class KnightTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-2, 2)).thenReturn(null);
-		int[] expected = {0, 1};
+		int[] expected = {0, 1, -1, -1};
 		assertArrayEquals(expected, k.move(board, -2, 2));
 	}
 	

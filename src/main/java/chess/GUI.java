@@ -181,7 +181,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
 
-	  for(int i = 7; i >= 0; i--) {
+	  for(int i = 0; i < 8; i++) {
 	  	if(i % 2 == 0) {
 	  		white = false;
 	  	}
@@ -203,7 +203,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 					white = true;
 				}
 
-        if(colorChoice.equals("White")) {
+        if(colorChoice.equals("Black")) {
 
   				if (i == 0){
   					if (j == 0 || j == 7){
@@ -520,7 +520,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           JLabel pieceImage = null;
 
           //If the player is playing as white, we need to change the pieces accordingly. Only uses white piece images so we can preserve the border and accents
-          if(colorChoice.equals("White")) {
+          if(colorChoice.equals("Black")) {
             whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
             blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
             whiteRook = new ImageIcon(changeColor(newWhiteRook, playerColor));
@@ -712,6 +712,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //Get the coords of the square
 	  oldRow = square.getRow();
 	  oldCol = square.getColumn();
+
+    System.out.println("row: " + oldRow + "col: " + oldCol);
 
     //Find the piece that is at this location
 	  piece = board.getPieceAt(oldRow, oldCol);

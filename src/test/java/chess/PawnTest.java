@@ -136,7 +136,7 @@ public class PawnTest {
 	}
 	
 	//test if pawn can move out of bounds when the move is legal
-	//int array contains 5 (origin) is expected
+	//int array contains 7, 0 (origin) is expected
 	@Test
 	public void testMoveOutOfBounds() {
 		Pawn pawn = new Pawn("pawn", true, true, false,false, 7, 0);
@@ -155,5 +155,17 @@ public class PawnTest {
 		assertArrayEquals(expected, pawn.move(board, 3, 3));	
 	}
 
-	
+	//test if move logic can find piece to capture when enpassant occurs
+	//int array contains 
+	@Test
+	public void testEnpassant(){
+		Pawn p1 = new Pawn("pawn", false, true, true, true, 3, 0);
+		Pawn p2 = new Pawn("pawn", false, false, false, true, 3, 1);
+		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
+		Mockito.when(board.getPieceAt(3, 0)).thenReturn(p1);
+		Mockito.when(board.getPieceAt(3, 1)).thenReturn(p2);
+		int[] expected = {2, 0, 3, 0};
+
+		assertArrayEquals(expected, p2.move(board, 2, 0));
+	}
 }

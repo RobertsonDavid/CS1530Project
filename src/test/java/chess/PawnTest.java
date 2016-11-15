@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 public class PawnTest {
 
-	Pawn p = new Pawn("pawn", false, true, false, false, 1, 0);
+	Pawn p = new Pawn("pawn", false, true, true, false, 1, 0);
 	//mocked objects for test purpose
 	private ChessBoard board = Mockito.mock(ChessBoard.class);
 	private Knight k = Mockito.mock(Knight.class);
@@ -17,7 +17,7 @@ public class PawnTest {
 	@Test
 	public void testFirstMoveOneSquareVertically() {
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
-		int[] expected = {2, 0};
+		int[] expected = {2, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 2, 0));
 	}
 	
@@ -26,7 +26,7 @@ public class PawnTest {
 	@Test
 	public void testFirstMoveTwoSquaresVertically() {
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
-		int[] expected = {3, 0};
+		int[] expected = {3, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 3, 0));
 	}
 	
@@ -35,7 +35,7 @@ public class PawnTest {
 	@Test
 	public void testMoveBack() {
 		Mockito.when(board.getPieceAt(0, 0)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 0, 0));
 	}
 	
@@ -44,7 +44,7 @@ public class PawnTest {
 	@Test
 	public void testMoveDiagonally() {
 		Mockito.when(board.getPieceAt(2, 1)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 2, 1));
 	}
 	
@@ -53,7 +53,7 @@ public class PawnTest {
 	@Test
 	public void testMoveHorizontally() {
 		Mockito.when(board.getPieceAt(1, 1)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 1, 1));
 	}
 	
@@ -71,7 +71,7 @@ public class PawnTest {
 	public void testMoveTwoSquaresVerticallyNotFirst() {
 		Pawn pawn = new Pawn("pawn", true, false, false,false, 1, 0);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, pawn.move(board, 3, 0));
 	}
 	
@@ -83,7 +83,7 @@ public class PawnTest {
 		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 2, 0));
 	}
 	
@@ -94,7 +94,7 @@ public class PawnTest {
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(k.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 1, 0));
 	}
 	
@@ -106,7 +106,7 @@ public class PawnTest {
 		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 3, 0));
 	}
 	
@@ -118,7 +118,7 @@ public class PawnTest {
 		Mockito.when(k.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(2, 0)).thenReturn(k);
 		Mockito.when(board.getPieceAt(3, 0)).thenReturn(null);
-		int[] expected = {1, 0};
+		int[] expected = {1, 0, -1, -1};
 		assertArrayEquals(expected, p.move(board, 3, 0));
 	}
 	
@@ -131,17 +131,17 @@ public class PawnTest {
 		Mockito.when(k.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(1, 0)).thenReturn(p);
 		Mockito.when(board.getPieceAt(2, 1)).thenReturn(k);
-		int[] expected = {2, 1};
+		int[] expected = {2, 1, -1, -1};
 		assertArrayEquals(expected, pw.move(board, 2, 1));
 	}
 	
 	//test if pawn can move out of bounds when the move is legal
-	//int array contains 5 (origin) is expected
+	//int array contains 7, 0 (origin) is expected
 	@Test
 	public void testMoveOutOfBounds() {
 		Pawn pawn = new Pawn("pawn", true, true, false,false, 7, 0);
 		Mockito.when(board.getPieceAt(8, 0)).thenReturn(null);
-		int[] expected = {7, 0};
+		int[] expected = {7, 0, -1, -1};
 		assertArrayEquals(expected, pawn.move(board, 8, 0));
 	}
 
@@ -151,11 +151,21 @@ public class PawnTest {
 	public void testMoveTwoSquaresVerticallyNotFirstMove() {
 		Pawn pawn = new Pawn("pawn", true, false, true,false, 1, 3);
 		Mockito.when(board.getPieceAt(3, 3)).thenReturn(null);
-		int[] expected = {1, 3};
+		int[] expected = {1, 3, -1, -1};
 		assertArrayEquals(expected, pawn.move(board, 3, 3));	
 	}
 
-	
-	//add future test for en passant capture
-	//add future test for promotion
+	//test if move logic can find piece to capture when enpassant occurs
+	//int array contains 
+	@Test
+	public void testEnpassant(){
+		Pawn p1 = new Pawn("pawn", false, true, true, true, 3, 0);
+		Pawn p2 = new Pawn("pawn", false, false, false, true, 3, 1);
+		Mockito.when(board.getPieceAt(2, 0)).thenReturn(null);
+		Mockito.when(board.getPieceAt(3, 0)).thenReturn(p1);
+		Mockito.when(board.getPieceAt(3, 1)).thenReturn(p2);
+		int[] expected = {2, 0, 3, 0};
+
+		assertArrayEquals(expected, p2.move(board, 2, 0));
+	}
 }

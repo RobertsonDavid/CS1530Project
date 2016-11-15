@@ -39,7 +39,7 @@ public class BishopTest {
 	@Test
 	public void testMoveDiagnoally() {
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(null);
-		int[] expected = {2, 4};
+		int[] expected = {2, 4, -1, -1};
 		assertArrayEquals(expected, b.move(board, 2, 4));
 	}
 	
@@ -49,7 +49,7 @@ public class BishopTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(0, 3)).thenReturn(null);
-		int[] expected = {0, 2};
+		int[] expected = {0, 2, -1, -1};
 		assertArrayEquals(expected, b.move(board, 0, 3));
 	}
 
@@ -59,7 +59,7 @@ public class BishopTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-1, 1)).thenReturn(null);
-		int[] expected = {0, 2};
+		int[] expected = {0, 2, -1, -1};
 		assertArrayEquals(expected, b.move(board, 0, 2));
 	}
 	
@@ -82,7 +82,7 @@ public class BishopTest {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(p);
-		int[] expected = {2, 4};
+		int[] expected = {2, 4, -1, -1};
 		assertArrayEquals(expected, b.move(board, 2, 4));
 	}
 }

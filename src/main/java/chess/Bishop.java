@@ -32,6 +32,14 @@ public class Bishop implements ChessPiece {
     return this.enpassant;
   }
 
+  public int getRow() {
+    return this.row;
+  }
+
+	public int getColumn() {
+    return this.column;
+  }
+
   public Bishop(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
 	  this.type = type;
 		this.side = side;

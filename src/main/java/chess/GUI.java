@@ -713,8 +713,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	  oldRow = square.getRow();
 	  oldCol = square.getColumn();
 
-    System.out.println("row: " + oldRow + "col: " + oldCol);
-
     //Find the piece that is at this location
 	  piece = board.getPieceAt(oldRow, oldCol);
 
@@ -821,6 +819,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
+
+        //If the move was an en passant, we need to remove the piece appropriately
+        if(newPos[2] != -1) {
+          BoardSquare enPassant = squares[newPos[2]][newPos[3]];
+
+          takenPiece = board.getPieceAt(newPos[2], newPos[3]);
+
+          enPassant.removeAll();
+          enPassant.revalidate();
+          enPassant.repaint();
+
+          board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+        }
 
         //Update turn accordingly
         if(piece.getSide())

@@ -156,7 +156,6 @@ public class Pawn implements ChessPiece {
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece
       if ((newRow-2 == this.row) && this.firstMove && this.topOfBoard && newCol ==this.column){
-				System.out.println("1");
 				if(checkIfBlocked(board, newRow - 1, newCol, this.row, this.column)) {
 					return this.position;
 				}
@@ -167,7 +166,6 @@ public class Pawn implements ChessPiece {
       }
       //if they want to move 2 spaces and first move and bottom piece
       else if ((newRow+2 == this.row)&& this.firstMove && !this.topOfBoard && newCol ==this.column) {
-				System.out.println("2");
 				if(checkIfBlocked(board, newRow+1, newCol, this.row, this.column)) {
 					return this.position;
 				}
@@ -178,7 +176,6 @@ public class Pawn implements ChessPiece {
       }
       //move 1 and top
       else if ((newRow-1 == this.row) && this.topOfBoard && newCol ==this.column) {
-				System.out.println("3");
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;
@@ -186,7 +183,6 @@ public class Pawn implements ChessPiece {
       }
       //move 1 and bottom
       else if ((newRow+1 == this.row) && !this.topOfBoard && newCol ==this.column) {
-				System.out.println("4");
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;
@@ -195,14 +191,11 @@ public class Pawn implements ChessPiece {
     }
 		//en passant attack
 		else if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > 1 && newCol > -1 && newCol < 8) {
-			System.out.println("In en passant");
 			//if the postion to the left is not off the board
       if((this.column -1 > -1) && (newCol == this.column - 1)){
-				System.out.println("In left");
         //[enpassant left top]
         //if a piece to the west act like it didnt move two spaces and attack it
         if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol+1)){
-					System.out.println("5");
 					this.position[2] = this.row;
 					this.position[3] = this.column - 1;
           updateCoord(newRow, newCol);
@@ -213,7 +206,6 @@ public class Pawn implements ChessPiece {
         //[enpassant left bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
         else if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard==false && (this.row==newRow+1 && this.column == newCol+1)){
-					System.out.println("6");
 					this.position[2] = this.row;
 					this.position[3] = this.column - 1;
           updateCoord(newRow, newCol);
@@ -225,7 +217,6 @@ public class Pawn implements ChessPiece {
       }
       //if the postion to the right is not off the board
       if((this.column +1 < 8) && (newCol == this.column + 1)){
-				System.out.println("In right");
         //[enpassant right top]
         //if a piece to the west act like it didnt move two spaces and attack it
         if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol-1)){
@@ -240,7 +231,6 @@ public class Pawn implements ChessPiece {
         //[enpassant right bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
         else if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard== false && (this.row==newRow+1 && this.column == newCol-1)){
-					System.out.println("8");
 					this.position[2] = this.row;
 					this.position[3] = this.column + 1;
           updateCoord(newRow, newCol);
@@ -254,9 +244,6 @@ public class Pawn implements ChessPiece {
     //taking a piece
     else if((checkifEmpty(board, newRow, newCol) == false) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8)
     {
-      System.out.println(this.topOfBoard);
-      System.out.println(this.row + " "+ this.column + " "+ newRow + " "+ newCol);
-      System.out.println("HERE I AM");
       //top piece attacking
       if(this.topOfBoard && ((this.row==newRow-1) && (this.column == newCol+1)) || ((this.row ==newRow-1) && (this.column ==newCol-1))){
           updateCoord(newRow, newCol);

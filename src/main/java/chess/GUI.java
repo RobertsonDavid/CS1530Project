@@ -822,12 +822,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         //If the move was an en passant, we need to remove the piece appropriately
         if(newPos[2] != -1) {
-          System.out.println("en row: " + newPos[2] + "en col: " + newPos[3]);
-          Container enPassant = (Container) squares[newPos[2]][newPos[3]];
+          BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);
 
           enPassant.removeAll();
+          enPassant.revalidate();
+          enPassant.repaint();
 
           board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
         }

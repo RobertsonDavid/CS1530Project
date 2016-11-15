@@ -32,6 +32,14 @@ public class Knight implements ChessPiece {
     return this.enpassant;
   }
 
+  public int getRow() {
+    return this.row;
+  }
+
+	public int getColumn() {
+    return this.column;
+  }
+
   public Knight(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
 		this.side = side;

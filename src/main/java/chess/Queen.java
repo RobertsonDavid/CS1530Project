@@ -32,6 +32,14 @@ public class Queen implements ChessPiece {
     return this.enpassant;
   }
 
+	public int getRow() {
+    return this.row;
+  }
+
+	public int getColumn() {
+    return this.column;
+  }
+
   public Queen(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
 		this.side = side;
@@ -58,13 +66,13 @@ public class Queen implements ChessPiece {
     return false;
   }
 
-  //checks to see if the same to move is the same 
+  //checks to see if the same to move is the same
   public boolean checkSameTeam(ChessBoard board, int newRow, int newColumn, int row, int column){
     //the location trying to move to
     ChessPiece spaceTryingToMove = board.getPieceAt(newRow, newColumn);
     //the location currently at
     ChessPiece movingPiece =  board.getPieceAt(row, column);
-    //if no one at the spot return 
+    //if no one at the spot return
     if(spaceTryingToMove == null){
       System.out.println("FALSE");
       return false;

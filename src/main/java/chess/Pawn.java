@@ -11,7 +11,7 @@ public class Pawn implements ChessPiece {
 	protected int row;
 	protected int column;
   protected boolean enpassant;
-	protected int[] position = new int[2]; //this will only store the position of an individual piece in the form [row, column]
+	protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
 
   public String getType() {
 		return this.type;
@@ -32,6 +32,14 @@ public class Pawn implements ChessPiece {
     return this.enpassant;
   }
 
+	public int getRow() {
+    return this.row;
+  }
+
+	public int getColumn() {
+    return this.column;
+  }
+
   public Pawn(String type, boolean side, boolean firstMove, boolean topOfBoard, boolean enpassant, int row, int column) {
     this.type = type;
 		this.side = side;
@@ -42,6 +50,8 @@ public class Pawn implements ChessPiece {
     this.enpassant = enpassant;
 		this.position[0] = row;
 		this.position[1] = column;
+		this.position[2] = -1;
+		this.position[3] = -1;
   }
 
   public void updateCoord(int newrow, int newcolumn) {
@@ -133,6 +143,9 @@ public class Pawn implements ChessPiece {
     System.out.println(this.topOfBoard);
     //empty space
     if (checkMove(board, newRow, newCol) && isAttacking(newRow,newCol)==false){
+			if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8) {
+
+			}
       //if trying to take same team return old position
       if(checkSameTeam(board, newRow, newCol, this.row, this.column)){
         return this.position;
@@ -143,9 +156,9 @@ public class Pawn implements ChessPiece {
       }
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece
-      if ((newRow+2 == this.row) && this.firstMove && this.topOfBoard && newCol ==this.column){
-				System.out.print("1");
-				if(checkIfBlocked(board, newRow + 1, newCol, this.row, this.column)) {
+      if ((newRow-2 == this.row) && this.firstMove && this.topOfBoard && newCol ==this.column){
+				System.out.println("1");
+				if(checkIfBlocked(board, newRow - 1, newCol, this.row, this.column)) {
 					return this.position;
 				}
         updateCoord(newRow, newCol);
@@ -154,9 +167,9 @@ public class Pawn implements ChessPiece {
         return this.position;
       }
       //if they want to move 2 spaces and first move and bottom piece
-      else if ((newRow-2 == this.row)&& this.firstMove && !this.topOfBoard && newCol ==this.column) {
-				System.out.print("2");
-				if(checkIfBlocked(board, newRow-1, newCol, this.row, this.column)) {
+      else if ((newRow+2 == this.row)&& this.firstMove && !this.topOfBoard && newCol ==this.column) {
+				System.out.println("2");
+				if(checkIfBlocked(board, newRow+1, newCol, this.row, this.column)) {
 					return this.position;
 				}
         this.firstMove = false;
@@ -165,68 +178,76 @@ public class Pawn implements ChessPiece {
         return this.position;
       }
       //move 1 and top
-      else if ((newRow+1 == this.row) && this.topOfBoard && newCol ==this.column) {
-				System.out.print("3");
+      else if ((newRow-1 == this.row) && this.topOfBoard && newCol ==this.column) {
+				System.out.println("3");
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;
         return this.position;
       }
       //move 1 and bottom
-      else if ((newRow-1 == this.row) && !this.topOfBoard && newCol ==this.column) {
-				System.out.print("4");
+      else if ((newRow+1 == this.row) && !this.topOfBoard && newCol ==this.column) {
+				System.out.println("4");
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = false;
         return this.position;
       }
-      //if the postion to the left is not off the board
-      if(this.column -1 > -1){
-				System.out.print("5");
+    }
+		//en passant attack
+		else if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > 1 && newCol > -1 && newCol < 8) {
+			System.out.println("In en passant");
+			//if the postion to the left is not off the board
+      if((this.column -1 > -1) && (newCol == this.column - 1)){
+				System.out.println("In left");
         //[enpassant left top]
         //if a piece to the west act like it didnt move two spaces and attack it
-        if(checkEnPassant(board, this.row, this.column-1)){
-          if(this.topOfBoard && (this.row==newRow-1 && this.column == newCol+1)){
-            updateCoord(newRow, newCol);
-            this.enpassant = false;
-            return this.position;
-          }
+        if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol+1)){
+					System.out.println("5");
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+					this.position[2] = this.row;
+					this.position[3] = this.column - 1;
+          return this.position;
         }
         //[enpassant left bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
-        else if(checkEnPassant(board, this.row, this.column-1)){
-          if(this.topOfBoard==false && (this.row==newRow+1 && this.column == newCol+1)){
-            updateCoord(newRow, newCol);
-            this.enpassant = false;
-            return this.position;
-          }
+        else if(checkEnPassant(board, this.row, this.column-1) && this.topOfBoard==false && (this.row==newRow+1 && this.column == newCol+1)){
+					System.out.println("6");
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+					this.position[2] = this.row;
+					this.position[3] = this.column - 1;
+          return this.position;
         }
         return this.position;
       }
       //if the postion to the right is not off the board
-      if(this.column +1 < 8){
-				System.out.print("6");
+      if((this.column +1 < 8) && (newCol == this.column + 1)){
+				System.out.println("In right");
         //[enpassant right top]
         //if a piece to the west act like it didnt move two spaces and attack it
-        if(checkEnPassant(board, this.row, this.column+1)){
-          if(this.topOfBoard && (this.row==newRow-1 && this.column == newCol-1)){
-            updateCoord(newRow, newCol);
-            this.enpassant = false;
-            return this.position;
-          }
+        if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard && (this.row==newRow-1 && this.column == newCol-1)){
+					System.out.println("7");
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+					this.position[2] = this.row;
+					this.position[3] = this.column + 1;
+          return this.position;
         }
         //[enpassant right bottom]
         //if a piece to the west act like it didnt move two spaces and attack it
-        else if(checkEnPassant(board, this.row, this.column+1)){
-          if(this.topOfBoard== false && (this.row==newRow+1 && this.column == newCol-1)){
-            updateCoord(newRow, newCol);
-            this.enpassant = false;
-            return this.position;
-          }
+        else if(checkEnPassant(board, this.row, this.column+1) && this.topOfBoard== false && (this.row==newRow+1 && this.column == newCol-1)){
+					System.out.println("8");
+          updateCoord(newRow, newCol);
+          this.enpassant = false;
+					this.position[2] = this.row;
+					this.position[3] = this.column + 1;
+          return this.position;
         }
         return this.position;
 			}
-    }
+		}
     //taking a piece
     else if((checkifEmpty(board, newRow, newCol) == false) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8)
     {

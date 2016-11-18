@@ -17,7 +17,7 @@ public class KnightTest {
 	@Test
 	public void testMove() {
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(null);
-		int[] expected = {2, 2};
+		int[] expected = {2, 2, -1, -1};
 		assertArrayEquals(expected, k.move(board, 2, 2));
 	}
 	
@@ -26,7 +26,7 @@ public class KnightTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(0, 2)).thenReturn(null);
-		int[] expected = {0, 1};
+		int[] expected = {0, 1, -1, -1};
 		assertArrayEquals(expected, k.move(board, 0, 1));	
 	}
 
@@ -36,9 +36,9 @@ public class KnightTest {
 	@Test
 	public void testMoveOccupiedByFriendly() {
 		Mockito.when(p.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(0, 1)).thenReturn(k);
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(p);
-		int[] expected = {2, 2};
-		assertArrayEquals(expected, k.move(board, 0, 1));
+		assertTrue(k.checkSameTeam(board,2,2,0,1));
 	}
 		
 	//test if move() can move the knight when destination is occupied by an enemy pawn
@@ -48,7 +48,8 @@ public class KnightTest {
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
 		Mockito.when(board.getPieceAt(2, 2)).thenReturn(p);
-		int[] expected = {2, 2};
+		Mockito.when(board.getPieceAt(0, 1)).thenReturn(k);
+		int[] expected = {2, 2, -1, -1};
 		assertArrayEquals(expected, k.move(board, 2, 2));
 	}
 	
@@ -57,7 +58,7 @@ public class KnightTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-2, 2)).thenReturn(null);
-		int[] expected = {0, 1};
+		int[] expected = {0, 1, -1, -1};
 		assertArrayEquals(expected, k.move(board, -2, 2));
 	}
 	

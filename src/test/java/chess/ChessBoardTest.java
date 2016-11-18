@@ -13,15 +13,20 @@ public class ChessBoardTest {
 	}
 
 	//test if the array broad is correctly initialized
-	//the 0,0 index of board should be a white rock
+	//the 0,0 index of board should be a top side rock
 	@Test
 	public void testGetPieceAt() {
 		ChessBoard b = new ChessBoard();
-		ChessPiece p = Mockito.mock(ChessPiece.class);
-		Mockito.when(p.getType()).thenReturn("rook");
-		Mockito.when(p.getSide()).thenReturn(true);
-		assertEquals(p.getType(), b.getPieceAt(0, 0).getType());
-		assertEquals(p.getSide(), b.getPieceAt(0, 0).getSide());
+		ChessPiece p = b.getPieceAt(0, 0);
+		boolean pass = false;
+		
+		System.out.println(p.getSide());
+		System.out.println(p.getType());
+		
+		if(p.getSide() == false && p.getType().equals("rook"))
+			pass = true;
+		
+		assertTrue(pass);
 	}
 
 	//test if there is no piece on a empty square
@@ -49,4 +54,12 @@ public class ChessBoardTest {
 		assertNull(testBoard.getPieceAt(0, 1));
 	}
 	
+	//test flip board actually flip chess pieces in the array
+	@Test
+	public void testFlipBoard() {
+		ChessBoard testBoard = new ChessBoard();
+		ChessPiece p = testBoard.getPieceAt(1, 4);
+		testBoard.flipBoard();
+		assertEquals(p, testBoard.getPieceAt(7-1, 7-4));
+	}
 }

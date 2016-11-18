@@ -67,6 +67,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Color computerColor;
   private JPanel newBoardPanel;
 
+  //for turn taking
+  private boolean topTurn = false;
+
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
 	public GUI(ChessBoard board) {
@@ -178,14 +181,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
 
-	  for(int i = 7; i >= 0; i--) {
+	  for(int i = 0; i < 8; i++) {
 	  	if(i % 2 == 0) {
 	  		white = false;
 	  	}
 	  	else {
 	  		white = true;
 	  	}
-      //First, decides what
+      //Create the BoardSquares and initialize the chess piece images in their original spaces
 			for(int j = 0; j < 8; j++) {
 				BoardSquare square = new BoardSquare(i, j);
 				JLabel pieceImage = null;
@@ -200,7 +203,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 					white = true;
 				}
 
-        if(colorChoice.equals("White")) {
+        if(colorChoice.equals("Black")) {
 
   				if (i == 0){
   					if (j == 0 || j == 7){
@@ -251,6 +254,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   				}
         }
         else {
+          topTurn = true;
           if (i == 0){
   					if (j == 0 || j == 7){
   						pieceImage = new JLabel(blackRook);
@@ -515,8 +519,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           ChessPiece piece;
           JLabel pieceImage = null;
 
-          //If the player is playing as white, we need to change the pieces accordingly
-          if(colorChoice.equals("White")) {
+          //If the player is playing as white, we need to change the pieces accordingly. Only uses white piece images so we can preserve the border and accents
+          if(colorChoice.equals("Black")) {
             whitePawn = new ImageIcon(changeColor(newWhitePawn, playerColor));
             blackPawn = new ImageIcon(changeColor(newBlackPawn, computerColor));
             whiteRook = new ImageIcon(changeColor(newWhiteRook, playerColor));
@@ -695,31 +699,44 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public void mousePressed(MouseEvent e){
 		space = null;
     piece = null;
+    //Gets the component at the location the user clicked
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
+    //if the clicked location is an empty square, return
 		if (spotOnBoard instanceof JPanel) return;
 
+    //Otherwise, the clicked locaiton contains a piece image, so we need to get its BoardSquare
     oldParent = spotOnBoard.getParent();
     square = (BoardSquare)oldParent;
 
+    //Get the coords of the square
 	  oldRow = square.getRow();
 	  oldCol = square.getColumn();
 
+    //Find the piece that is at this location
 	  piece = board.getPieceAt(oldRow, oldCol);
 
+    //If it is not your turn, return.
+	  if(topTurn != piece.getSide())
+		  return;
+
+    //Get the location of the parent component
 		Point parentLocation = spotOnBoard.getParent().getLocation();
 		deltaX = parentLocation.x - e.getX();
 		deltaY = parentLocation.y - e.getY();
 		space = (JLabel)spotOnBoard;
 
+    //Make it look like we are "picking up" the chess piece so the user knows the click did something
 		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
 		space.setSize(space.getWidth(), space.getHeight());
+    //Put the piece in the drag layer so we drag it
 		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
 	}
 
   //Waits for the mouse to be dragged, and displays the updated location.
 	public void mouseDragged(MouseEvent e) {
 		if (space == null) return;
+    //Update the location as we drag the piece
 		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
 	}
 
@@ -730,38 +747,106 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public void mouseReleased(MouseEvent e) {
 		if(space == null) return;
 
+    int[] newPos;
+
 		space.setVisible(false);
+
+    //Find the component at the space we are moving to
 		Component spotOnBoard =  gameWindow.findComponentAt(e.getX(), e.getY());
 
+    //See if theres a piece there already
 		if (spotOnBoard instanceof JLabel){
+      //Get parent the chess piece (the BoardSquare)
 			Container parent = spotOnBoard.getParent();
 	    square2 = (BoardSquare)parent;
 
+      //Get coords of new square
 	    newRow = square2.getRow();
 	    newCol = square2.getColumn();
 
+      //If the new square is teh exact same locaiton as the old square, we haven't actually moved
+      if((newRow == oldRow) && (newCol == oldCol)) {
+        oldParent.add(space);
+        space.setVisible(true);
+        return;
+      }
+
+      //Find the piece thats located here
       takenPiece = board.getPieceAt(newRow, newCol);  //piece that is potentially going to be taken
 
-      parent.remove(0);
-      parent.add(space);
 
+      //See if this move is legal. newPos will be the location of teh new square if it was legal, or the location of the old square if not
+      newPos = piece.move(board, newRow, newCol);
+
+      //If the newPos is of the new square, the move was legal
+      if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        parent.remove(0); //Remove the piece here
+        parent.add(space);  //Add the piece we moved here
+        board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
+
+        //Update turn accordingly
+        if(piece.getSide())
+        	topTurn = false;
+        else
+       	 	topTurn = true;
+      }
+      //If the newPos is the old position, the move was not legal
+      else {
+        oldParent.add(space); //Just put the piece back at its original location
+      }
 		}
+    //Otherwise, the square is empty
 		else {
+      //Get the BoardSquare
 			Container parent = (Container)spotOnBoard;
       square2 = (BoardSquare)parent;
 
+      //Get the new coords
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-      //This section will use a conditional which tests whether a call to move returns
-      //a new position or the old position. It will position the piece that the user
-      //is moving accordingly.
+      //If the new square is teh exact same locaiton as the old square, we haven't actually moved
+      if((newRow == oldRow) && (newCol == oldCol)) {
+        oldParent.add(space);
+        space.setVisible(true);
+        return;
+      }
 
-      parent.add(space);
+      //See if this move is legal. newPos will be the location of teh new square if it was legal, or the location of the old square if not
+      newPos = piece.move(board, newRow, newCol);
+
+      //If the newPos is of the new square, the move was legal
+      if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        parent.add(space); //Put the piece at this square
+        board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
+
+        //If the move was an en passant, we need to remove the piece appropriately
+        if(newPos[2] != -1) {
+          BoardSquare enPassant = squares[newPos[2]][newPos[3]];
+
+          takenPiece = board.getPieceAt(newPos[2], newPos[3]);
+
+          enPassant.removeAll();
+          enPassant.revalidate();
+          enPassant.repaint();
+
+          board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+        }
+
+        //Update turn accordingly
+        if(piece.getSide())
+       	 	topTurn = false;
+        else
+        	topTurn = true;
+      }
+      //If the newPos is the old position, the move was not legal
+      else {
+        oldParent.add(space); //Just put the piece back at its original location
+      }
 
 		}
 
-		space.setVisible(true);
+		space.setVisible(true);//Make the piece visible
 	}
 
   //Not used but needed interface implementation

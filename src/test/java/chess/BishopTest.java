@@ -28,7 +28,9 @@ public class BishopTest {
 	public void testCheckMoveOccupied() {
 		ChessBoard board = Mockito.mock(ChessBoard.class);
 		Mockito.when(board.getPieceAt(1, 3)).thenReturn(p);
-		assertFalse(b.checkMove(board, 1, 3));
+		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
+		Mockito.when(p.getSide()).thenReturn(true);
+		assertTrue(b.checkSameTeam(board, 1, 3, 0, 2));
 	}
 
 	//test if move() can move the bishop successfully when it is a legal move (diagonally) 
@@ -37,7 +39,7 @@ public class BishopTest {
 	@Test
 	public void testMoveDiagnoally() {
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(null);
-		int[] expected = {2, 4};
+		int[] expected = {2, 4, -1, -1};
 		assertArrayEquals(expected, b.move(board, 2, 4));
 	}
 	
@@ -47,7 +49,7 @@ public class BishopTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(0, 3)).thenReturn(null);
-		int[] expected = {0, 2};
+		int[] expected = {0, 2, -1, -1};
 		assertArrayEquals(expected, b.move(board, 0, 3));
 	}
 
@@ -57,7 +59,7 @@ public class BishopTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-1, 1)).thenReturn(null);
-		int[] expected = {0, 2};
+		int[] expected = {0, 2, -1, -1};
 		assertArrayEquals(expected, b.move(board, 0, 2));
 	}
 	
@@ -67,9 +69,9 @@ public class BishopTest {
 	@Test
 	public void testMoveOccupiedByFriendly() {
 		Mockito.when(p.getSide()).thenReturn(true);
+		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(p);
-		int[] expected = {0, 2};
-		assertArrayEquals(expected, b.move(board, 2, 4));
+		assertTrue(b.checkSameTeam(board,2,4,0,2));
 	}
 	
 	//test if move() can move the bishop when destination is occupied by an enemy pawn
@@ -78,8 +80,9 @@ public class BishopTest {
 	@Test
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(0, 2)).thenReturn(b);
 		Mockito.when(board.getPieceAt(2, 4)).thenReturn(p);
-		int[] expected = {2, 4};
+		int[] expected = {2, 4, -1, -1};
 		assertArrayEquals(expected, b.move(board, 2, 4));
 	}
 }

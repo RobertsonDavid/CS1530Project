@@ -12,6 +12,12 @@ public interface ChessPiece {
 
 	public boolean getFirstMove();
 
+	public boolean getEnPassant();
+
+	public int getRow();
+
+	public int getColumn();
+
 	/*
 	*	Updates the current coordinates of the ChessPiece.
 	*/

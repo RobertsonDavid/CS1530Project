@@ -17,7 +17,7 @@ public class RookTest {
 	@Test
 	public void testMoveHorizontally() {
 		Mockito.when(board.getPieceAt(0, 4)).thenReturn(null);
-		int[] expected = {0, 4};
+		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, r.move(board, 0, 4));
 	}
 	
@@ -26,7 +26,7 @@ public class RookTest {
 	@Test
 	public void testMoveVertically() {
 		Mockito.when(board.getPieceAt(5, 7)).thenReturn(null);
-		int[] expected = {5, 7};
+		int[] expected = {5, 7, -1, -1};
 		assertArrayEquals(expected, r.move(board, 5, 7));
 	}
 	
@@ -35,7 +35,7 @@ public class RookTest {
 	@Test
 	public void testIllegalMove() {
 		Mockito.when(board.getPieceAt(1, 6)).thenReturn(null);
-		int[] expected = {0, 7};
+		int[] expected = {0, 7, -1, -1};
 		assertArrayEquals(expected, r.move(board, 1, 6));	
 	}
 	
@@ -47,7 +47,7 @@ public class RookTest {
 	public void testMoveOccupiedByFriendly() {
 		Mockito.when(p.getSide()).thenReturn(true);
 		Mockito.when(board.getPieceAt(5, 7)).thenReturn(p);
-		int[] expected = {0, 7};
+		int[] expected = {0, 7, -1, -1};
 		assertArrayEquals(expected, r.move(board, 0, 7));
 	}
 		
@@ -57,8 +57,9 @@ public class RookTest {
 	@Test
 	public void testMoveOccupiedByEnemy() {
 		Mockito.when(p.getSide()).thenReturn(false);
+		Mockito.when(board.getPieceAt(0, 7)).thenReturn(r);
 		Mockito.when(board.getPieceAt(5, 7)).thenReturn(p);
-		int[] expected = {5, 7};
+		int[] expected = {5, 7, -1, -1};
 		assertArrayEquals(expected, r.move(board, 5, 7));
 	}
 	
@@ -67,7 +68,7 @@ public class RookTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(0, 8)).thenReturn(null);
-		int[] expected = {0, 7};
+		int[] expected = {0, 7, -1, -1};
 		assertArrayEquals(expected, r.move(board, 0, 8));
 	}
 

@@ -3,22 +3,27 @@ package chess;
 public class Bishop implements ChessPiece {
 
   protected String type;
-	protected boolean side; //true if top, false if bottom
-	protected boolean firstMove;
-	protected boolean topOfBoard;
-	protected String pieceValue;
-	protected int row;
-	protected int column;
+ protected boolean side; //true if top, false if bottom
+ protected boolean oldSide; //opposite of side. bug fix 
+ protected boolean firstMove;
+ protected boolean topOfBoard;
+ protected String pieceValue;
+ protected int row;
+ protected int column;
   protected boolean enpassant;
-	protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
+ protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
 
   public String getType() {
-		return this.type;
-	}
+  return this.type;
+ }
 
-	public boolean getSide() {
-		return this.side;
-	}
+ public boolean getSide() {
+  return this.side;
+ }
+ 
+ public boolean oldGetSide() {
+   return this.oldSide;
+ } 
 
   public boolean getFirstMove() {
     return this.firstMove;
@@ -36,29 +41,33 @@ public class Bishop implements ChessPiece {
     return this.row;
   }
 
-	public int getColumn() {
+ public int getColumn() {
     return this.column;
   }
 
   public Bishop(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
-	  this.type = type;
-		this.side = side;
-		this.firstMove = firstMove;
-		this.topOfBoard = topOfBoard;
-		this.row = row;
-		this.column = column;
-		this.position[0] = row;
-		this.position[1] = column;
+    this.type = type;
+    this.side = side;
+    this.firstMove = firstMove;
+    this.topOfBoard = topOfBoard;
+    this.row = row;
+    this.column = column;
+    this.position[0] = row;
+    this.position[1] = column;
     this.position[2] = -1;
     this.position[3] = -1;
+    if(side==true)
+      oldSide=false;
+    if(side==false)
+      oldSide=true;
   }
 
   public void updateCoord(int newrow, int newcolumn) {
-		this.row = newrow;
-		this.column = newcolumn;
-		this.position[0] = newrow;
-		this.position[1] = newcolumn;
-	}
+  this.row = newrow;
+  this.column = newcolumn;
+  this.position[0] = newrow;
+  this.position[1] = newcolumn;
+ }
 
    public boolean checkMove(ChessBoard board, int x, int y) {
     //check if move is on board

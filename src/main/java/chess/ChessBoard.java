@@ -395,7 +395,7 @@ public class ChessBoard {
          return true;
        }
      }
-     rowIter++;
+     rowIter--;
    }
 
    rowIter=row;
@@ -458,7 +458,10 @@ public class ChessBoard {
      columnIter--;
      rowIter--;
    }
-
+   
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from top right
    columnIter++;
    rowIter--;
@@ -487,6 +490,9 @@ public class ChessBoard {
      rowIter--;
    }
 
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from bottom left
    columnIter--;
    rowIter++;
@@ -515,6 +521,9 @@ public class ChessBoard {
      rowIter++;
    }
 
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from bottom right
    columnIter++;
    rowIter++;

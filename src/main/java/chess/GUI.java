@@ -109,8 +109,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     //Create kibitz label
     kibitz = new JLabel();
-    kibitz.setPreferredSize(new Dimension(200, 200));
-    kibitz.setBorder(new LineBorder(Color.BLACK));
+    kibitz.setAlignmentX(Component.CENTER_ALIGNMENT);
+    kibitz.setMinimumSize(new Dimension(600, 100));
+    kibitz.setPreferredSize(new Dimension(600, 100));
+    kibitz.setMaximumSize(new Dimension(600, 100));
 
     //Creating a border for the timers
     Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -179,9 +181,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //action for flip board menu option that allows you to flip board
     menuItemFlipBoard.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        JPanel newBoardPanel = flipBoard();
-        gameWindow.remove(boardPanel);
-        gameWindow.add(newBoardPanel);
+        boardPanel = flipBoard();
+        gameWindow.remove(kibitz);
+        gameWindow.add(boardPanel);
+        gameWindow.add(kibitz);
+        revalidate();
+        repaint();
       }
     });
 
@@ -196,7 +201,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         while(true) {
           SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-              kibitz.setText(kibitzes[ThreadLocalRandom.current().nextInt(0, kibitzes.length)]);
+              kibitz.setText("<html><p>" + kibitzes[ThreadLocalRandom.current().nextInt(0, kibitzes.length)] + "</p></html>");
             }
           });
 
@@ -451,15 +456,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         newY = 7-j;
         //get the square object we want to move, update it's x and y coords, and then set it at the new position in temp array
         square = squares[i][j];
-        square.setRow(newX);
-        square.setColumn(newY);
+        //square.setRow(newX);
+        //square.setColumn(newY);
         temp[newX][newY] = square;
         newBoardPanel.add(square);
       }
     }
     //set squares to the temp array
     squares = temp;
-    board.flipBoard();
+    //board.flipBoard();
     return newBoardPanel;
   }
 
@@ -776,7 +781,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space = (JLabel)spotOnBoard;
 
     //Make it look like we are "picking up" the chess piece so the user knows the click did something
-		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		space.setLocation(e.getX() + deltaX/2, e.getY() + deltaY/2);
 		space.setSize(space.getWidth(), space.getHeight());
     //Put the piece in the drag layer so we drag it
 		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
@@ -786,7 +791,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public void mouseDragged(MouseEvent e) {
 		if (space == null) return;
     //Update the location as we drag the piece
-		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		space.setLocation(e.getX() + deltaX/2, e.getY() + deltaY/2);
 	}
 
   /*

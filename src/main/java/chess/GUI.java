@@ -11,6 +11,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.*;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.border.LineBorder;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
@@ -26,6 +28,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private ImageIcon blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
   private ImageIcon whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
   private ImageIcon blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+
+  //Array of kibitzes
+  private String[] kibitzes = new String[]{"The longest game of chess that is possible is of 5,949 moves.",
+    "The longest game lasted for 269 moves and ended in a draw.",
+    "The word “checkmate” comes from the Arabic word “shah mat” which translates to “The king is dead” in English.",
+    "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
+    "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
+    "The modern chess board as we see it today appeared first in Europe in 1090.",
+    "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
+    "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
+    "Players in their first year are called “Rookies”. This name came up from the last pieces of chess to move into action called “Rooks”.",
+    "The second book to be ever printed in English language was about Chess.",
+    "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
+    "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
+    "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
+    "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
+    "Chess is also called the “Game of Kings” since for a very long time in the past, it was just played by the Nobel and Kings.",
+    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called “Fool’s mate runs” Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
+    "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
 
  	private static final long serialVersionUID = 1L;
 
@@ -67,6 +88,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Color computerColor;
   private JPanel newBoardPanel;
 
+  //Label where random kibitzes will be displayed
+  private JLabel kibitz;
+
   //for turn taking
   private boolean topTurn = false;
 
@@ -82,6 +106,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		layeredPane.setPreferredSize(new Dimension(600, 600));
     this.setSize(800, 700);
     boardPanel = resetBoard();
+
+    //Create kibitz label
+    kibitz = new JLabel();
+    kibitz.setAlignmentX(Component.CENTER_ALIGNMENT);
+    kibitz.setMinimumSize(new Dimension(600, 100));
+    kibitz.setPreferredSize(new Dimension(600, 100));
+    kibitz.setMaximumSize(new Dimension(600, 100));
 
     //Creating a border for the timers
     Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -150,21 +181,43 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //action for flip board menu option that allows you to flip board
     menuItemFlipBoard.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        JPanel newBoardPanel = flipBoard();
-        gameWindow.remove(boardPanel);
-        gameWindow.add(newBoardPanel);
+        boardPanel = flipBoard();
+        gameWindow.remove(kibitz);
+        gameWindow.add(boardPanel);
+        gameWindow.add(kibitz);
+        revalidate();
+        repaint();
       }
     });
 
-  	gameWindow = resetWindow(boardPanel, toolbar, timers); //Pass it the chessboard panel
+  	gameWindow = resetWindow(boardPanel, toolbar, timers, kibitz); //Pass it the chessboard panel
   	gameWindow.setPreferredSize(new Dimension(600, 600));
   	gameWindow.setBounds(0, 0, 600, 600);
   	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+
+    //Threaded Kibitzer updates the kibitzer text box every 5-10 seconds with a random kibitz
+    new Thread(new Runnable() {
+      public void run() {
+        while(true) {
+          SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              kibitz.setText("<html><p>" + kibitzes[ThreadLocalRandom.current().nextInt(0, kibitzes.length)] + "</p></html>");
+            }
+          });
+
+          try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(5000, 10000)); //randomize sleep time between 5 and 10 seconds
+          } catch(Exception e) {
+            //It's all good, JVM. Relax.
+          }
+        }
+      }
+    }).start();
   }
 
   //Resets the panel that the board is on, along with the toolbar and the timer.
   //This will also reset any additional panels that we add.
-	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers){
+	private JPanel resetWindow(JPanel boardPanel, JToolBar toolbar, JToolBar timers, JLabel kibitz){
 		gameWindow = new JPanel();
 		//This is where we can initialize things like the side panel where captured pieces will go,
 		//the timer, the light, etc. and add them to the game window.
@@ -172,6 +225,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		gameWindow.add(toolbar);
 		gameWindow.add(timers);
 		gameWindow.add(boardPanel);
+    gameWindow.add(kibitz);
 		return gameWindow;
 	}
 
@@ -402,15 +456,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         newY = 7-j;
         //get the square object we want to move, update it's x and y coords, and then set it at the new position in temp array
         square = squares[i][j];
-        square.setRow(newX);
-        square.setColumn(newY);
+        //square.setRow(newX);
+        //square.setColumn(newY);
         temp[newX][newY] = square;
         newBoardPanel.add(square);
       }
     }
     //set squares to the temp array
     squares = temp;
-    board.flipBoard();
+    //board.flipBoard();
     return newBoardPanel;
   }
 
@@ -727,7 +781,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space = (JLabel)spotOnBoard;
 
     //Make it look like we are "picking up" the chess piece so the user knows the click did something
-		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		space.setLocation(e.getX() + deltaX/2, e.getY() + deltaY/2);
 		space.setSize(space.getWidth(), space.getHeight());
     //Put the piece in the drag layer so we drag it
 		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
@@ -737,7 +791,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	public void mouseDragged(MouseEvent e) {
 		if (space == null) return;
     //Update the location as we drag the piece
-		space.setLocation(e.getX() + deltaX, e.getY() + deltaY);
+		space.setLocation(e.getX() + deltaX/2, e.getY() + deltaY/2);
 	}
 
   /*

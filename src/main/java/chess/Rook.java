@@ -4,6 +4,7 @@ public class Rook implements ChessPiece {
 
   protected String type;
   protected boolean side; //true if top, false if bottom
+  protected boolean oldSide; //opposite of side. bug fix
   protected boolean firstMove;
   protected boolean topOfBoard;
   protected String pieceValue;
@@ -18,6 +19,10 @@ public class Rook implements ChessPiece {
 
   public boolean getSide() {
     return this.side;
+  }
+  
+  public boolean oldGetSide() {
+    return this.oldSide;
   }
 
   public boolean getFirstMove() {
@@ -36,7 +41,7 @@ public class Rook implements ChessPiece {
     return this.row;
   }
 
-	public int getColumn() {
+ public int getColumn() {
     return this.column;
   }
 
@@ -51,14 +56,18 @@ public class Rook implements ChessPiece {
     this.position[1] = column;
     this.position[2] = -1;
     this.position[3] = -1;
+    if(side==true)
+      oldSide=false;
+    if(side==false)
+      oldSide=true;
   }
 
   public void updateCoord(int newrow, int newcolumn) {
-		this.row = newrow;
-		this.column = newcolumn;
-		this.position[0] = newrow;
-		this.position[1] = newcolumn;
-	}
+  this.row = newrow;
+  this.column = newcolumn;
+  this.position[0] = newrow;
+  this.position[1] = newcolumn;
+ }
 
   public boolean checkMove(ChessBoard board, int x, int y) {
     //check if move is on board

@@ -60,7 +60,7 @@ public class ChessBoard {
      {
        if( (rDest-rOrigin)==2 || (rOrigin-rDest)==2 )
        {
-         if(b[rDest][cDest].getSide()==true)
+         if(b[rDest][cDest].getSide()==false)
          {
            if(cDest==0)
              enPassant= "a6";
@@ -109,7 +109,7 @@ public class ChessBoard {
      }
 
      //if the black piece moves, increment the fullCount
-     if(b[rDest][cDest].getSide()==true)
+     if(b[rDest][cDest].getSide()==false)
      {
        fullCount++;
      }
@@ -206,7 +206,7 @@ public class ChessBoard {
          }
          sumNumbers=0;
          ChessPiece pieceIter= getPieceAt(r,c);
-         Boolean side= pieceIter.getSide(); //side==true for top, false for bottom
+         Boolean side= pieceIter.oldGetSide(); //oldside==true for top, false for bottom
          char type= pieceIter.getType().charAt(0);
          if(pieceIter.getType().equals("knight")) //knights appear as 'n'
          {
@@ -241,6 +241,7 @@ public class ChessBoard {
  }
 
  //see if a king of a certain color is in check
+ //pass in the side value. true for player, false for opponent
  public boolean isChecked(Boolean side)
  {
    //find king
@@ -250,7 +251,7 @@ public class ChessBoard {
    {
      for(int c=0; c<=7; c++)
      {
-       if(getPieceAt(r,c).getType().equals("king") && getPieceAt(r,c).getSide() == side)
+       if(getPieceAt(r,c)!=null && getPieceAt(r,c).getType().equals("king") && getPieceAt(r,c).getSide() == side)
        {
          row=r;
          column=c;
@@ -260,13 +261,19 @@ public class ChessBoard {
    }
 
    //check for pawn attacks from white pieces if black
-   if(side==true) //true == black;  starting at [0][0]
+   boolean oldSide;
+   if(side==true)
+     oldSide=false;
+   else
+     oldSide=true;
+   
+   if(oldSide==true) //true == black;  starting at [0][0]
    {
      ChessPiece piece;
      if(legalSquare((row+1),(column-1)) && getPieceAt(row+1,column-1)!=null)
      {
        piece = getPieceAt(row+1, column-1);
-       if(piece.getSide()==false && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.oldGetSide()==false && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -275,7 +282,7 @@ public class ChessBoard {
      if(legalSquare((row+1),(column+1)) && getPieceAt(row+1,column+1)!=null)
      {
        piece = getPieceAt(row+1, column+1);
-       if(piece.getSide()==false && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.oldGetSide()==false && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -283,13 +290,13 @@ public class ChessBoard {
    }
 
    //check for pawn attacks from black pieces if white
-   if(side==false) //false == white;  starting at [7][0]
+   if(oldSide==false) //false == white;  starting at [7][0]
    {
      ChessPiece piece;
      if(legalSquare((row-1),(column-1)) && getPieceAt(row-1,column-1)!=null)
      {
        piece = getPieceAt(row-1, column-1);
-       if(piece.getSide()==true && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.oldGetSide()==true && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -298,7 +305,7 @@ public class ChessBoard {
      if(legalSquare((row-1),(column+1)) && getPieceAt(row-1,column+1)!=null)
      {
        piece = getPieceAt(row-1, column+1);
-       if(piece.getSide()==true && piece.getType().equals("pawn")) //if enemy pawn
+       if(piece.oldGetSide()==true && piece.getType().equals("pawn")) //if enemy pawn
        {
          return true;
        }
@@ -388,7 +395,7 @@ public class ChessBoard {
          return true;
        }
      }
-     rowIter++;
+     rowIter--;
    }
 
    rowIter=row;
@@ -451,7 +458,10 @@ public class ChessBoard {
      columnIter--;
      rowIter--;
    }
-
+   
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from top right
    columnIter++;
    rowIter--;
@@ -480,6 +490,9 @@ public class ChessBoard {
      rowIter--;
    }
 
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from bottom left
    columnIter--;
    rowIter++;
@@ -508,6 +521,9 @@ public class ChessBoard {
      rowIter++;
    }
 
+   piece=null;
+   rowIter=row;
+   columnIter=column;
    //check attacks coming from bottom right
    columnIter++;
    rowIter++;
@@ -546,7 +562,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!=null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -557,7 +573,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!=null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -568,7 +584,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!=null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -579,7 +595,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!=null &&piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -590,7 +606,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!= null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -601,7 +617,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!= null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -612,7 +628,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!= null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }
@@ -623,7 +639,7 @@ public class ChessBoard {
    if(legalSquare(rowIter, columnIter))
    {
      piece=getPieceAt(rowIter, columnIter);
-     if(piece.getType().equals("knight") && piece.getSide()!=side)
+     if(piece!=null && piece.getType().equals("knight") && piece.getSide()!=side)
      {
        return true;
      }

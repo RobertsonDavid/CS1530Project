@@ -4,28 +4,30 @@ public interface ChessPiece {
 
 
 
-	public String getType();
+ public String getType();
 
-	public boolean getSide();
+ public boolean getSide();
+ 
+ public boolean oldGetSide(); //bug fix. will always be opposite of getSide
 
-	public boolean getTopOfBoard();
+ public boolean getTopOfBoard();
 
-	public boolean getFirstMove();
+ public boolean getFirstMove();
 
-	public boolean getEnPassant();
+ public boolean getEnPassant();
 
-	public int getRow();
+ public int getRow();
 
-	public int getColumn();
+ public int getColumn();
 
-	/*
-	*	Updates the current coordinates of the ChessPiece.
-	*/
-	public void updateCoord(int newrow, int newcolumn);
+ /*
+ * Updates the current coordinates of the ChessPiece.
+ */
+ public void updateCoord(int newrow, int newcolumn);
 
-	//checks to see if space is open
-	public boolean checkMove(ChessBoard board,int x, int y);
+ //checks to see if space is open
+ public boolean checkMove(ChessBoard board,int x, int y);
 
-	public int[] move(ChessBoard board, int newRow, int newCol);
+ public int[] move(ChessBoard board, int newRow, int newCol);
 
 }

@@ -62,4 +62,15 @@ public class ChessBoardTest {
   testBoard.flipBoard();
   assertEquals(p, testBoard.getPieceAt(7-1, 7-4));
  }
+ 
+ //test the FEN for the start of the game
+ @Test
+ public void testStartFEN() {
+   ChessBoard testBoard = new ChessBoard();
+   String correctFEN= "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+   String generated= testBoard.generateFEN(true);
+   System.out.println("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+   System.out.println(generated);
+   assertEquals(generated, correctFEN);
+ }
 }

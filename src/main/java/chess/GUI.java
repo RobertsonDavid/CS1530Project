@@ -61,9 +61,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private String colorChoice = "White";
 
   //Timer
-	private static JLabel timerLabel = new JLabel();
-	JToolBar timers = new JToolBar();
+	private JLabel timerLabel = new JLabel();
+	JToolBar timers;
   private static int seconds = 300;
+  Timer timer;
+  ActionListener displayTime;
 
   //For clicking and dragging pieces
 	private JLabel space = null;
@@ -126,11 +128,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //Creating a border for the timers
     Border blackline = BorderFactory.createLineBorder(Color.black);
     //Creating a ToolBar that holds both timers
-    JToolBar timers = new JToolBar();
+    timers = new JToolBar();
 
-    	//creating a timer for the
-    Timer timer = new Timer(1000, new ActionListener(){
-  	  @Override
+    displayTime = new ActionListener() {
+      @Override
      	public void actionPerformed(ActionEvent e) {
       		seconds--;
       		long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
@@ -140,8 +141,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         		System.exit(0);
       		}
     	}
-	   });
-     timer.start();
+    };
+
+    //creating a timer for the
+    timer = new Timer(1000, displayTime);
+    timer.start();
 
     timerLabel.setBorder(blackline);
 	  timers.add(timerLabel);
@@ -163,8 +167,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	toolbar.setFloatable(false);
   	JButton newGame = new JButton("New Game");
   	toolbar.add(newGame);					//When they click this, bring up the same window that appears normally (choose color)
-  	toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
-  	toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
+  	//toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
+  	//toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
     toolbar.add(dropDown);  //Options menu for things like changing the color and flipping the board
 
     //if new Game is selected
@@ -190,12 +194,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //action for flip board menu option that allows you to flip board
     menuItemFlipBoard.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        gameWindow.remove(boardPanel);
         boardPanel = flipBoard();
         gameWindow.remove(kibitz);
         gameWindow.add(boardPanel);
         gameWindow.add(kibitz);
-        revalidate();
-        repaint();
+        gameWindow.revalidate();
+        gameWindow.repaint();
       }
     });
 
@@ -210,6 +215,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         while(true) {
           SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+              //Formatted with html so that there are line breaks when it reaches the end of the label
               kibitz.setText("<html><p>" + kibitzes[ThreadLocalRandom.current().nextInt(0, kibitzes.length)] + "</p></html>");
             }
           });
@@ -267,7 +273,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				}
 
         if(colorChoice.equals("Black")) {
-
+          topTurn = false;
   				if (i == 0){
   					if (j == 0 || j == 7){
   						pieceImage = new JLabel(whiteRook);
@@ -405,6 +411,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     white.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
         colorChoice = "White";
+        topTurn = false;
       }
     });
 
@@ -412,6 +419,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     black.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
         colorChoice = "Black";
+        topTurn = true;
       }
     });
 
@@ -421,8 +429,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           chooseColor.setVisible(false);
           chooseColor.dispose();
           gameWindow.remove(boardPanel);
+          gameWindow.remove(kibitz);
           boardPanel = resetBoard();
           gameWindow.add(boardPanel);
+          gameWindow.add(kibitz);
           boardPanel.setVisible(true);
         }
     });
@@ -457,17 +467,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     BoardSquare[][] temp = new BoardSquare[8][8];
     BoardSquare square;
-    int newX, newY;
+    int oldX, oldY;
 
     for(int i = 0; i < 8; i++) {
-      newX = 7-i;
+      oldX = 7-i;
       for(int j = 0; j < 8; j++) {
-        newY = 7-j;
+        oldY = 7-j;
         //get the square object we want to move, update it's x and y coords, and then set it at the new position in temp array
-        square = squares[i][j];
+        square = squares[oldX][oldY];
         //square.setRow(newX);
         //square.setColumn(newY);
-        temp[newX][newY] = square;
+        temp[i][j] = square;
         newBoardPanel.add(square);
       }
     }
@@ -757,6 +767,27 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
      return bimage;
  }
 
+  public void resetTimer() {
+    timer.removeActionListener(displayTime);
+
+    displayTime = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+          seconds--;
+          long minute = TimeUnit.SECONDS.toMinutes(seconds)- (TimeUnit.SECONDS.toHours(seconds) * 60);
+           long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+          timerLabel.setText(minute + ":"+ second);
+          if (seconds == 0) {
+            System.exit(0);
+          }
+      }
+    };
+
+    timer.addActionListener(displayTime);
+    timer.start();
+    revalidate();
+    repaint();
+  }
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
@@ -854,6 +885,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         	topTurn = false;
         else
        	 	topTurn = true;
+
+        resetTimer();
       }
       //If the newPos is the old position, the move was not legal
       else {
@@ -905,6 +938,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
        	 	topTurn = false;
         else
         	topTurn = true;
+
+          resetTimer();
       }
       //If the newPos is the old position, the move was not legal
       else {

@@ -1,6 +1,8 @@
 package chess;
 
-public class Rook implements ChessPiece {
+import java.io.Serializable;
+
+public class Rook implements ChessPiece, Serializable {
 
   protected String type;
   protected boolean side; //true if top, false if bottom
@@ -12,6 +14,7 @@ public class Rook implements ChessPiece {
   protected int column;
   protected boolean enpassant;
   protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
+   private static final long serialVersionUID = 2L;
 
   public String getType() {
     return this.type;
@@ -20,7 +23,7 @@ public class Rook implements ChessPiece {
   public boolean getSide() {
     return this.side;
   }
-  
+
   public boolean oldGetSide() {
     return this.oldSide;
   }
@@ -94,8 +97,31 @@ public class Rook implements ChessPiece {
     return false;
   }
 
+  //Use this method if a player is in check
+  //It will make the board as if the move was made, so that we can see if
+  //the player is still in check afterward.
+  //Returns true if the player will STILL be in check.
+  public boolean testMove(ChessBoard board, int rowOrigin, int columnOrigin, int rowDest, int columnDest) {
+    ChessBoard newBoard = (ChessBoard)board.deepClone();
+    newBoard.update(rowOrigin, columnOrigin, rowDest, columnDest);
+    if(newBoard.isChecked(side)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
+
+    if(board.isChecked(side)) {
+      System.out.println("They were in check....");
+      if(testMove(board, row, column, newRow, newCol)) {
+        System.out.println("...and they're still in check!");
+        return this.position;
+      }
+    }
+
 
     if(checkMove(board, newRow, newCol)==false){
       return this.position;

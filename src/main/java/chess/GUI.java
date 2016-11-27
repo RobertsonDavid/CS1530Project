@@ -94,6 +94,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //for turn taking
   private boolean topTurn = false;
 
+  private Stockfish stockfish;
+
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
 	public GUI(ChessBoard board) {
@@ -106,6 +108,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		layeredPane.setPreferredSize(new Dimension(600, 600));
     this.setSize(800, 700);
     boardPanel = resetBoard();
+
+    stockfish = new Stockfish();
+    if(stockfish.startEngine() == false) {
+      System.out.println("Error. Unable to start Stockfish engine.");
+    } else {
+      System.out.println("Stockfish is running!");
+    }
 
     //Create kibitz label
     kibitz = new JLabel();
@@ -770,6 +779,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //Find the piece that is at this location
 	  piece = board.getPieceAt(oldRow, oldCol);
 
+    System.out.println(piece.getType() + " " + piece.getRow() + " " + piece.getColumn());
+
     //If it is not your turn, return.
 	  if(topTurn != piece.getSide())
 		  return;
@@ -858,6 +869,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       //Get the new coords
       newRow = square2.getRow();
       newCol = square2.getColumn();
+
+      System.out.println("Nothing there..." + newRow + " " + newCol);
 
       //If the new square is teh exact same locaiton as the old square, we haven't actually moved
       if((newRow == oldRow) && (newCol == oldCol)) {

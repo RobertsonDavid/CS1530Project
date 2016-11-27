@@ -1,7 +1,8 @@
 package chess;
 import java.lang.*;
+import java.io.Serializable;
 
-public class Pawn implements ChessPiece {
+public class Pawn implements ChessPiece, Serializable {
 
  protected String type;
  protected boolean side; //true if top, false if bottom
@@ -13,6 +14,7 @@ public class Pawn implements ChessPiece {
  protected int column;
   protected boolean enpassant;
  protected int[] position = new int[4]; //this will only store the position of an individual piece in the form [row, column]
+  private static final long serialVersionUID = 6L;
 
   public String getType() {
   return this.type;
@@ -21,7 +23,7 @@ public class Pawn implements ChessPiece {
  public boolean getSide() {
   return this.side;
  }
- 
+
  public boolean oldGetSide() {
    return this.oldSide;
  }
@@ -145,15 +147,38 @@ public class Pawn implements ChessPiece {
     return false;
   }
 
+  //Use this method if a player is in check
+  //It will make the board as if the move was made, so that we can see if
+  //the player is still in check afterward.
+  //Returns true if the player will STILL be in check.
+  public boolean testMove(ChessBoard board, int rowOrigin, int columnOrigin, int rowDest, int columnDest) {
+    ChessBoard newBoard = (ChessBoard)board.deepClone();
+    newBoard.update(rowOrigin, columnOrigin, rowDest, columnDest);
+    if(newBoard.isChecked(side)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
-  this.position[2] = -1;
-  this.position[3] = -1;
+
+    if(board.isChecked(side)) {
+      System.out.println("They were in check....");
+      if(testMove(board, row, column, newRow, newCol)) {
+        System.out.println("...and they're still in check!");
+        return this.position;
+      }
+    }
+
+    this.position[2] = -1;
+    this.position[3] = -1;
     //empty space
     if (checkMove(board, newRow, newCol) && isAttacking(newRow,newCol)==false){
-   if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8) {
+      if((checkifEmpty(board, newRow, newCol) == true) && newRow < 8 && newRow > -1 && newCol > -1 && newCol < 8) {
 
-   }
+      }
       //if trying to take same team return old position
       if(checkSameTeam(board, newRow, newCol, this.row, this.column)){
         return this.position;
@@ -165,9 +190,9 @@ public class Pawn implements ChessPiece {
       //moving Pawn by rows [a][b]... a=row b=column
       // if they want to move 2 spaces and first move and top piece
       if ((newRow-2 == this.row) && this.firstMove && this.topOfBoard && newCol ==this.column){
-    if(checkIfBlocked(board, newRow - 1, newCol, this.row, this.column)) {
-     return this.position;
-    }
+        if(checkIfBlocked(board, newRow - 1, newCol, this.row, this.column)) {
+          return this.position;
+        }
         updateCoord(newRow, newCol);
         this.firstMove = false;
         this.enpassant = true;

@@ -182,5 +182,9 @@ public class Rook implements ChessPiece, Serializable {
     }
     return this.position;
   }
+  
+   public void setFirstMove(boolean fMove) {
+    this.firstMove=fMove;
+  }
 
 }

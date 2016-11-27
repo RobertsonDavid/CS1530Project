@@ -55,6 +55,8 @@ public class ChessBoard implements Serializable{
    if(b[rOrigin][cOrigin]!=null) {
      b[rDest][cDest] = b[rOrigin][cOrigin];
      b[rOrigin][cOrigin] = null;
+     
+     b[rDest][cDest].setFirstMove(false);
 
      enPassant="-";
      //check for en passant
@@ -186,17 +188,23 @@ public class ChessBoard implements Serializable{
  //generate the Fen String Notation for use with StockFish
  //the representation of White pieces for purposes of notation will always be the bottom side of the board
  //this means that a rook starting on the bottom would be designated 'R', and starting on top would be 'r'
- //currently always assumes that if it is called, it is the turn of the opponent at the top of the board
- public String generateFEN()
+ //pass in the side for which you want to generate a move
+ public String generateFEN(Boolean sideToMove)
  {
    StringBuilder sb = new StringBuilder();
    int sumNumbers = 0;
+   String turn;
+   String castling=getCastling();
+   if(sideToMove==true)
+     turn= "w";
+   else
+     turn ="b";
 
    for(int r=0; r<=7; r++)
    {
      for(int c=0; c<=7; c++)
      {
-       if(getPieceAt(r,c)!=null)
+       if(getPieceAt(r,c)==null)
        {
          sumNumbers++;
        }
@@ -214,13 +222,13 @@ public class ChessBoard implements Serializable{
          {
            type='n';
          }
-         if(side=true)
+         if(side==true)
          {
-           Character.toLowerCase(type);
+           type=Character.toLowerCase(type);
          }
          else
          {
-           Character.toUpperCase(type);
+           type=Character.toUpperCase(type);
          }
          sb.append(type);
        }
@@ -232,9 +240,10 @@ public class ChessBoard implements Serializable{
      }
      sb.append("/");
    }
-   sb.append(" " + 'b');    //this will need updated based on whose turn it is
+   sb.deleteCharAt((sb.length()-1));
+   sb.append(" " + turn);
 
-   sb.append(" -");  //castling currently set to false
+   sb.append(" " + castling);  //castling currently set to false
    sb.append(" " + enPassant); //en passant
    sb.append(" " +halfCount); //halfmove Clock
    sb.append(" " +fullCount);
@@ -662,6 +671,60 @@ public class ChessBoard implements Serializable{
      }
    }
    return false;
+ }
+ 
+ //get the string for castling
+ public String getCastling()
+ {
+   StringBuilder sb= new StringBuilder();
+   String castling= "-";
+   Boolean flag=false;
+   
+   //if white king hasn't moved yet
+   ChessPiece piece= b[7][4];
+   if(piece!=null && piece.getType().equals("king") && piece.getSide()==true && piece.getFirstMove()==true)
+   {
+     //check if kingside rook has moved yet
+     piece=b[7][7];
+     if(piece!=null && piece.getType().equals("rook") && piece.getSide()==true && piece.getFirstMove()==true)
+     {
+       flag=true;
+       sb.append("K");
+     }
+     
+     //check if queenside rook has moved yet
+     piece=b[7][0];
+     if(piece!=null && piece.getType().equals("rook") && piece.getSide()==true && piece.getFirstMove()==true)
+     {
+       flag=true;
+       sb.append("Q");
+     }
+   }
+   
+   //if black king hasn't moved yet
+   piece= b[0][4];
+   if(piece!=null && piece.getType().equals("king") && piece.getSide()==false && piece.getFirstMove()==true)
+   {
+     //check if kingside rook has moved yet
+     piece=b[0][7];
+     if(piece!=null && piece.getType().equals("rook") && piece.getSide()==false && piece.getFirstMove()==true)
+     {
+       flag=true;
+       sb.append("k");
+     }
+     
+     //check if queenside rook has moved yet
+     piece=b[0][0];
+     if(piece!=null && piece.getType().equals("rook") && piece.getSide()==false && piece.getFirstMove()==true)
+     {
+       flag=true;
+       sb.append("q");
+     }
+   }
+   if(flag!=false)
+     return sb.toString();
+   else
+     return "-";
  }
 
  /**

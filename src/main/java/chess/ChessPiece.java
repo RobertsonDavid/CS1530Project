@@ -29,5 +29,7 @@ public interface ChessPiece {
  public boolean checkMove(ChessBoard board,int x, int y);
 
  public int[] move(ChessBoard board, int newRow, int newCol);
+ 
+ public void setFirstMove(boolean fMove);
 
 }

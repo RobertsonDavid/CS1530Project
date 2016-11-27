@@ -1,7 +1,9 @@
 package chess;
 
-public class ChessBoard {
+import java.io.*;
 
+public class ChessBoard implements Serializable{
+ private static final long serialVersionUID = 1L;
  private ChessPiece[][] b;
  private int fullCount=1;
  private int halfCount=0;
@@ -242,7 +244,7 @@ public class ChessBoard {
 
  //see if a king of a certain color is in check
  //pass in the side value. true for player, false for opponent
- public boolean isChecked(Boolean side)
+ public boolean isChecked(boolean side)
  {
    //find king
    int row=-1;
@@ -266,7 +268,7 @@ public class ChessBoard {
      oldSide=false;
    else
      oldSide=true;
-   
+
    if(oldSide==true) //true == black;  starting at [0][0]
    {
      ChessPiece piece;
@@ -458,7 +460,7 @@ public class ChessBoard {
      columnIter--;
      rowIter--;
    }
-   
+
    piece=null;
    rowIter=row;
    columnIter=column;
@@ -648,6 +650,7 @@ public class ChessBoard {
    //no attacks found
    return false;
  }
+
  //return true if the passed in coordinate is a legal space on the board
  public boolean legalSquare(int r, int c)
  {
@@ -660,4 +663,24 @@ public class ChessBoard {
    }
    return false;
  }
+
+ /**
+ * This method makes a deep clone
+ * Adapted from: http://alvinalexander.com/java/java-deep-clone-example-source-code
+ */
+ public Object deepClone() {
+   try {
+     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+     ObjectOutputStream oos = new ObjectOutputStream(baos);
+     oos.writeObject(this);
+     ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+     ObjectInputStream ois = new ObjectInputStream(bais);
+     return ois.readObject();
+   }
+   catch (Exception e) {
+     e.printStackTrace();
+     return null;
+   }
+ }
+
 }

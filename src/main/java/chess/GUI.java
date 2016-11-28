@@ -74,6 +74,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private Container oldParent;
   int deltaX, deltaY;
 
+  //piece the computer will move
+  private JLabel compSpace = null;
+
   //For taking pieces
   private ChessPiece piece = null;
   private ChessPiece takenPiece = null;
@@ -94,7 +97,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private JLabel kibitz;
 
   //for turn taking
-  private boolean topTurn = false;
+  private boolean bottomTurn = false;
 
   private Stockfish stockfish;
 
@@ -228,6 +231,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
       }
     }).start();
+
+    if(colorChoice.equals("black")) {
+      computerMove();
+      bottomTurn = true;
+    }
   }
 
   //Resets the panel that the board is on, along with the toolbar and the timer.
@@ -273,7 +281,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				}
 
         if(colorChoice.equals("Black")) {
-          topTurn = false;
+          bottomTurn = false;
   				if (i == 0){
   					if (j == 0 || j == 7){
   						pieceImage = new JLabel(whiteRook);
@@ -323,7 +331,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   				}
         }
         else {
-          topTurn = true;
+          bottomTurn = true;
           if (i == 0){
   					if (j == 0 || j == 7){
   						pieceImage = new JLabel(blackRook);
@@ -411,7 +419,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     white.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
         colorChoice = "White";
-        topTurn = false;
+        bottomTurn = false;
       }
     });
 
@@ -419,7 +427,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     black.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
         colorChoice = "Black";
-        topTurn = true;
+        bottomTurn = true;
       }
     });
 
@@ -813,7 +821,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     System.out.println(piece.getType() + " " + piece.getRow() + " " + piece.getColumn());
 
     //If it is not your turn, return.
-	  if(topTurn != piece.getSide())
+	  if(bottomTurn != piece.getSide())
 		  return;
 
     //Get the location of the parent component
@@ -881,11 +889,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
         //Update turn accordingly
-        if(piece.getSide())
-        	topTurn = false;
-        else
-       	 	topTurn = true;
-
+        if(piece.getSide()) {
+          bottomTurn = false;
+        }
+        else {
+        	bottomTurn = true;
+        }
         resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -934,11 +943,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         //Update turn accordingly
-        if(piece.getSide())
-       	 	topTurn = false;
-        else
-        	topTurn = true;
-
+        if(piece.getSide()) {
+          bottomTurn = false;
+        }
+        else {
+        	bottomTurn = true;
+        }
           resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -949,7 +959,59 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		space.setVisible(true);//Make the piece visible
+
+    if(bottomTurn == false) {
+      computerMove();
+      bottomTurn = true;
+      resetTimer();
+    }
 	}
+
+  public void computerMove() {
+    String fen = board.generateFEN(true);
+    String move = stockfish.getBestMove(fen, 100);
+    System.out.println(move);
+    int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
+    int compOrigRow = Character.getNumericValue(move.charAt(1)) - 1;
+    int compNewCol = (int)move.charAt(2) - (int)'a';
+    int compNewRow = Character.getNumericValue(move.charAt(3)) - 1;
+    BoardSquare oldCompSquare = squares[compOrigRow][compOrigCol];
+    BoardSquare compSquare = squares[compNewRow][compNewCol];
+    JLabel pieceToMove = null;
+
+    for (Component jc : oldCompSquare.getComponents()) {
+      if ( jc instanceof JLabel ) {
+          compSpace = (JLabel)jc;
+          break;
+      }
+    }
+
+    //COMING BACK TO THIS TOMORROW
+    //Try to see if for some reason spotOnBoard2 is not geting the label. If not, find the label first, and get those coordinates
+
+    Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
+
+    if(compSpace == null) {
+      System.out.println("it was null :(");
+      System.exit(0);
+    }
+
+    compSpace.setVisible(false);
+
+    if(spotOnBoard2 instanceof JLabel) {
+        Container parent = spotOnBoard2.getParent();
+        parent.remove(0);
+        parent.add(compSpace);
+        board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
+    }
+    else {
+      Container parent = (Container)spotOnBoard2;
+      parent.add(compSpace);
+      board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
+    }
+
+    compSpace.setVisible(true);
+  }
 
   //Not used but needed interface implementation
  	public void mouseClicked(MouseEvent e) {

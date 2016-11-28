@@ -55,7 +55,7 @@ public class ChessBoard implements Serializable{
    if(b[rOrigin][cOrigin]!=null) {
      b[rDest][cDest] = b[rOrigin][cOrigin];
      b[rOrigin][cOrigin] = null;
-     
+
      b[rDest][cDest].setFirstMove(false);
 
      enPassant="-";
@@ -672,14 +672,14 @@ public class ChessBoard implements Serializable{
    }
    return false;
  }
- 
+
  //get the string for castling
  public String getCastling()
  {
    StringBuilder sb= new StringBuilder();
    String castling= "-";
    Boolean flag=false;
-   
+
    //if white king hasn't moved yet
    ChessPiece piece= b[7][4];
    if(piece!=null && piece.getType().equals("king") && piece.getSide()==true && piece.getFirstMove()==true)
@@ -691,7 +691,7 @@ public class ChessBoard implements Serializable{
        flag=true;
        sb.append("K");
      }
-     
+
      //check if queenside rook has moved yet
      piece=b[7][0];
      if(piece!=null && piece.getType().equals("rook") && piece.getSide()==true && piece.getFirstMove()==true)
@@ -700,7 +700,7 @@ public class ChessBoard implements Serializable{
        sb.append("Q");
      }
    }
-   
+
    //if black king hasn't moved yet
    piece= b[0][4];
    if(piece!=null && piece.getType().equals("king") && piece.getSide()==false && piece.getFirstMove()==true)
@@ -712,7 +712,7 @@ public class ChessBoard implements Serializable{
        flag=true;
        sb.append("k");
      }
-     
+
      //check if queenside rook has moved yet
      piece=b[0][0];
      if(piece!=null && piece.getType().equals("rook") && piece.getSide()==false && piece.getFirstMove()==true)
@@ -727,9 +727,8 @@ public class ChessBoard implements Serializable{
      return "-";
  }
 
- /**
+ /*
  * This method makes a deep clone
- * Adapted from: http://alvinalexander.com/java/java-deep-clone-example-source-code
  */
  public Object deepClone() {
    try {

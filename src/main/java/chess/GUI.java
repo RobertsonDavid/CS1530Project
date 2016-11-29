@@ -905,8 +905,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       newRow = square2.getRow();
       newCol = square2.getColumn();
 
-      System.out.println("Nothing there..." + newRow + " " + newCol);
-
       //If the new square is teh exact same locaiton as the old square, we haven't actually moved
       if((newRow == oldRow) && (newCol == oldCol)) {
         oldParent.add(space);
@@ -952,11 +950,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       computerMove();
       bottomTurn = true;
       resetTimer();
+      board.printBoard();
     }
 	}
 
   public void computerMove() {
     String fen = board.generateFEN(true);
+    System.out.println(fen);
     String move = stockfish.getBestMove(fen, 100);
     System.out.println(move);
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
@@ -984,25 +984,20 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     //Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
 
-    if(compSpace == null) {
-      System.out.println("it was null :(");
-      System.exit(0);
-    }
-
     compSpace.setVisible(false);
 
+    System.out.println(compOrigRow + " " + compOrigCol + " " + compNewRow + " " + compNewCol);
+
     if(hasLabel) {
-        Container parent = compSquare.getParent();
-        parent.remove(0);
-        parent.add(compSpace);
-        board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
+      System.out.println("there was a piece there");
+      Container parent = compSquare.getParent();
+      parent.remove(0);
+      parent.add(compSpace);
+      board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
+      System.out.println("it was empty");
       Container parent = (Container)compSquare;
-      if(!(parent instanceof BoardSquare)) {
-        System.out.println("wasn't the square...");
-        System.exit(0);
-      }
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }

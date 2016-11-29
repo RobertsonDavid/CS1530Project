@@ -745,4 +745,23 @@ public class ChessBoard implements Serializable{
    }
  }
 
+ public void printBoard() {
+   for(int i = 0; i < b[0].length; i++) {
+     StringBuilder line = new StringBuilder();
+     for(int j = 0; j < b.length; j++) {
+       if(b[i][j] == null) {
+         line.append(" ");
+         continue;
+       }
+       if(b[i][j].getType().equals("rook")) line.append("r");
+       if(b[i][j].getType().equals("knight")) line.append("k");
+       if(b[i][j].getType().equals("bishop")) line.append("b");
+       if(b[i][j].getType().equals("king")) line.append("k");
+       if(b[i][j].getType().equals("queen")) line.append("q");
+       if(b[i][j].getType().equals("pawn")) line.append("p");
+     }
+     System.out.println(line.toString());
+   }
+ }
+
 }

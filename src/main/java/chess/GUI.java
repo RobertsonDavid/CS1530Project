@@ -32,20 +32,20 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //Array of kibitzes
   private String[] kibitzes = new String[]{"The longest game of chess that is possible is of 5,949 moves.",
     "The longest game lasted for 269 moves and ended in a draw.",
-    "The word “checkmate” comes from the Arabic word “shah mat” which translates to “The king is dead” in English.",
+    "The word 鈥渃heckmate鈥� comes from the Arabic word 鈥渟hah mat鈥� which translates to 鈥淭he king is dead鈥� in English.",
     "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
     "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
     "The modern chess board as we see it today appeared first in Europe in 1090.",
     "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
     "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
-    "Players in their first year are called “Rookies”. This name came up from the last pieces of chess to move into action called “Rooks”.",
+    "Players in their first year are called 鈥淩ookies鈥�. This name came up from the last pieces of chess to move into action called 鈥淩ooks鈥�.",
     "The second book to be ever printed in English language was about Chess.",
     "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
     "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
     "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
     "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
-    "Chess is also called the “Game of Kings” since for a very long time in the past, it was just played by the Nobel and Kings.",
-    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called “Fool’s mate runs” Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
+    "Chess is also called the 鈥淕ame of Kings鈥� since for a very long time in the past, it was just played by the Nobel and Kings.",
+    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called 鈥淔ool鈥檚 mate runs鈥� Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
     "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
 
  	private static final long serialVersionUID = 1L;
@@ -54,8 +54,20 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel boardPanel;
 	private JPanel gameWindow;
 	private JLayeredPane layeredPane;
-  private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
-
+	private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	private JPanel capArea;
+	private JPanel container;
+	
+	//captured area components
+	private JLabel capTitle;
+	private JList topCap;
+	private JList botCap;
+	private JScrollPane topScroller;
+	private JScrollPane botScroller;
+	private DefaultListModel topListModel;
+	private DefaultListModel botListModel;
+  
+  
   //Frame for choosing your color
 	private static JFrame chooseColor;
   private String colorChoice = "White";
@@ -106,13 +118,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //that the board is on.
 	public GUI(ChessBoard board) {
 		layeredPane = new JLayeredPane();
+		container = new JPanel();
+		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 		this.board = board;
 		this.setTitle("Laboon Chess");
-		getContentPane().add(layeredPane);
-	  layeredPane.addMouseListener(this);
+		setContentPane(container);
+		//getContentPane().add(layeredPane);
+		layeredPane.addMouseListener(this);
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
-    this.setSize(800, 700);
+		container.setPreferredSize(new Dimension(1000, 700));
+		//this.setSize(800, 700);
     boardPanel = resetBoard();
 
     stockfish = new Stockfish();
@@ -212,6 +228,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	gameWindow.setPreferredSize(new Dimension(600, 600));
   	gameWindow.setBounds(0, 0, 600, 600);
   	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+  	
+  	capArea = resetCapArea();
+  	capArea.setPreferredSize(new Dimension(200, 500));
+  	capArea.setBounds(700, 100, 200, 500);
+  	
+  	container.add(layeredPane);
+  	container.add(capArea);
 
     //Threaded Kibitzer updates the kibitzer text box every 5-10 seconds with a random kibitz
     new Thread(new Runnable() {
@@ -249,8 +272,33 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		gameWindow.add(toolbar);
 		gameWindow.add(timers);
 		gameWindow.add(boardPanel);
-    gameWindow.add(kibitz);
+		gameWindow.add(kibitz);
 		return gameWindow;
+	}
+	
+	private JPanel resetCapArea(){
+		capArea = new JPanel();
+		capArea.setLayout(new BoxLayout(capArea, BoxLayout.Y_AXIS));
+		JLabel title = new JLabel("Captured Pieces");
+		title.setAlignmentY(Component.TOP_ALIGNMENT);
+		
+		topListModel = new DefaultListModel();
+		topCap = new JList(topListModel);
+		topScroller = new JScrollPane(topCap); 
+		topScroller.setPreferredSize(new Dimension(100, 200)); 
+		//topScroller.setAlignmentY(Component.TOP_ALIGNMENT); 
+		
+		botListModel = new DefaultListModel();
+		botCap = new JList(botListModel);
+		botScroller = new JScrollPane(botCap); 
+		botScroller.setPreferredSize(new Dimension(100, 200)); 
+		//botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
+		
+		capArea.add(title);
+		capArea.add(topScroller);
+		capArea.add(botScroller);
+		
+		return capArea;
 	}
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
@@ -889,6 +937,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         //Update turn accordingly
         bottomTurn = false;
+
+        //capture the piece when move is legal
+        capture(takenPiece);
+        
         resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -926,14 +978,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);
-
           enPassant.removeAll();
           enPassant.revalidate();
           enPassant.repaint();
 
           board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+          capture(takenPiece);
         }
 
+        
+        
         //Update turn accordingly
         bottomTurn = false;
         resetTimer();
@@ -954,6 +1008,39 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       board.printBoard();
     }
 	}
+	
+	//capture piece logic
+	//todo: style it
+	private void capture(ChessPiece p) {
+		System.out.println(p.getType() + " is captured");
+		
+		if(p.getSide()) 
+			topListModel.addElement(p.getType());
+		else
+			botListModel.addElement(p.getType());
+		
+	}
+	
+	//todo: custom list renderer to show icon
+	 	/*
+	 	private class IconListRenderer extends DefaultListCellRenderer {
+	 	    
+	 		public Component getListCellRendererComponent(
+	 	            JList list, Object value, int index,
+	 	            boolean isSelected, boolean cellHasFocus) {
+	 	        JLabel label = (JLabel) super.getListCellRendererComponent(
+	 	                list, value, index, isSelected, cellHasFocus);
+	 	        Icon icon = this.getIcon(list, value, index, isSelected, cellHasFocus);
+	 	        label.setIcon(icon);
+	 	        return label;
+	 	    }
+	 		
+	 	    protected Icon getIcon(
+	 	            JList list, Object value, int index,
+	 	            boolean isSelected, boolean cellHasFocus) {
+	 	        // how do I get icon?
+	 	    }
+	 	}	*/
 
   public void computerMove() {
     String fen = board.generateFEN(false);
@@ -1022,5 +1109,4 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
  	public void mouseExited(MouseEvent e) {
 
  	}
-
 }

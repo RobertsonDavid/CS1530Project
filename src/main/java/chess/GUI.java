@@ -818,8 +818,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //Find the piece that is at this location
 	  piece = board.getPieceAt(oldRow, oldCol);
 
-    System.out.println(piece.getType() + " " + piece.getRow() + " " + piece.getColumn());
-
     //If it is not your turn, return.
 	  if(bottomTurn != piece.getSide())
 		  return;
@@ -889,12 +887,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
         //Update turn accordingly
-        if(piece.getSide()) {
-          bottomTurn = false;
-        }
-        else {
-        	bottomTurn = true;
-        }
+        bottomTurn = false;
         resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -943,13 +936,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         //Update turn accordingly
-        if(piece.getSide()) {
-          bottomTurn = false;
-        }
-        else {
-        	bottomTurn = true;
-        }
-          resetTimer();
+        bottomTurn = false;
+        resetTimer();
       }
       //If the newPos is the old position, the move was not legal
       else {
@@ -978,18 +966,23 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     BoardSquare oldCompSquare = squares[compOrigRow][compOrigCol];
     BoardSquare compSquare = squares[compNewRow][compNewCol];
     JLabel pieceToMove = null;
+    boolean hasLabel = false;
 
     for (Component jc : oldCompSquare.getComponents()) {
-      if ( jc instanceof JLabel ) {
+      if(jc instanceof JLabel) {
           compSpace = (JLabel)jc;
           break;
       }
     }
 
-    //COMING BACK TO THIS TOMORROW
-    //Try to see if for some reason spotOnBoard2 is not geting the label. If not, find the label first, and get those coordinates
+    for (Component jc : compSquare.getComponents()) {
+      if(jc instanceof JLabel) {
+        hasLabel = true;
+        break;
+      }
+    }
 
-    Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
+    //Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
 
     if(compSpace == null) {
       System.out.println("it was null :(");
@@ -998,14 +991,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     compSpace.setVisible(false);
 
-    if(spotOnBoard2 instanceof JLabel) {
-        Container parent = spotOnBoard2.getParent();
+    if(hasLabel) {
+        Container parent = compSquare.getParent();
         parent.remove(0);
         parent.add(compSpace);
         board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
-      Container parent = (Container)spotOnBoard2;
+      Container parent = (Container)compSquare;
+      if(!(parent instanceof BoardSquare)) {
+        System.out.println("wasn't the square...");
+        System.exit(0);
+      }
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }

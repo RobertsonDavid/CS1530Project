@@ -958,9 +958,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   public void computerMove() {
     String fen = board.generateFEN(false);
 
-    System.out.println(fen);
     String move = stockfish.getBestMove(fen, 100);
-    System.out.println(move);
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
     int compOrigRow = 8 - (Character.getNumericValue(move.charAt(1)) - 1) - 1;
     int compNewCol = (int)move.charAt(2) - (int)'a';
@@ -989,19 +987,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     //Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
 
     compSpace.setVisible(false);
+    Container parent = (Container)compSquare;
 
     System.out.println(compOrigRow + " " + compOrigCol + " " + compNewRow + " " + compNewCol);
 
     if(hasLabel) {
       System.out.println("there was a piece there");
-      Container parent = compSquare.getParent();
       parent.remove(0);
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
       System.out.println("it was empty");
-      Container parent = (Container)compSquare;
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }

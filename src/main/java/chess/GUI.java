@@ -100,6 +100,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   private boolean bottomTurn = false;
 
   private Stockfish stockfish;
+  boolean first = true;
 
   //This method constructs the entire GUI. It will reset the board, and the panel
   //that the board is on.
@@ -955,18 +956,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
   public void computerMove() {
-    String fen = board.generateFEN(true);
+    String fen = board.generateFEN(false);
+
     System.out.println(fen);
     String move = stockfish.getBestMove(fen, 100);
     System.out.println(move);
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
-    int compOrigRow = Character.getNumericValue(move.charAt(1)) - 1;
+    int compOrigRow = 8 - (Character.getNumericValue(move.charAt(1)) - 1) - 1;
     int compNewCol = (int)move.charAt(2) - (int)'a';
-    int compNewRow = Character.getNumericValue(move.charAt(3)) - 1;
+    int compNewRow = 8 - (Character.getNumericValue(move.charAt(3)) - 1) - 1;
     BoardSquare oldCompSquare = squares[compOrigRow][compOrigCol];
     BoardSquare compSquare = squares[compNewRow][compNewCol];
     JLabel pieceToMove = null;
     boolean hasLabel = false;
+
+    System.out.println(compOrigRow + " " + compNewRow);
 
     for (Component jc : oldCompSquare.getComponents()) {
       if(jc instanceof JLabel) {

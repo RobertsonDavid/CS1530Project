@@ -50,6 +50,7 @@ public class ChessBoard implements Serializable{
 
  //return updated board to refresh GUI and test purpose
  public ChessPiece[][] update(int rOrigin, int cOrigin, int rDest, int cDest) {
+   System.out.println("update");
    int captureHelp= piecesLeft();
 
    if(b[rOrigin][cOrigin]!=null) {
@@ -60,7 +61,7 @@ public class ChessBoard implements Serializable{
 
      enPassant="-";
      //check for en passant
-     if(b[rDest][cDest].getType().equals("pawn"))
+     /*if(b[rDest][cDest].getType().equals("pawn"))
      {
        if( (rDest-rOrigin)==2 || (rOrigin-rDest)==2 )
        {
@@ -103,7 +104,7 @@ public class ChessBoard implements Serializable{
              enPassant= "h3";
          }
        }
-     }
+     }*/
 
      //update the halfmove clock
      halfCount++;
@@ -196,9 +197,9 @@ public class ChessBoard implements Serializable{
    String turn;
    String castling=getCastling();
    if(sideToMove==true)
-     turn= "w";
+     turn = "w";
    else
-     turn ="b";
+     turn = "b";
 
    for(int r=0; r<=7; r++)
    {

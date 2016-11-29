@@ -64,8 +64,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JList botCap;
 	private JScrollPane topScroller;
 	private JScrollPane botScroller;
-	private DefaultListModel topListModel;
-	private DefaultListModel botListModel;
+	private DefaultListModel<ImageIcon> topListModel;
+	private DefaultListModel<ImageIcon> botListModel;
+	private Map<String, ImageIcon> imageMap;
   
   
   //Frame for choosing your color
@@ -221,6 +222,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         gameWindow.add(kibitz);
         gameWindow.revalidate();
         gameWindow.repaint();
+        //flipCapArea();
       }
     });
 
@@ -231,7 +233,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	
   	capArea = resetCapArea();
   	capArea.setPreferredSize(new Dimension(200, 500));
-  	capArea.setBounds(700, 100, 200, 500);
+  	capArea.setBounds(700, 100, 200, 600);
   	
   	container.add(layeredPane);
   	container.add(capArea);
@@ -282,17 +284,23 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		JLabel title = new JLabel("Captured Pieces");
 		title.setAlignmentY(Component.TOP_ALIGNMENT);
 		
-		topListModel = new DefaultListModel();
-		topCap = new JList(topListModel);
-		topScroller = new JScrollPane(topCap); 
-		topScroller.setPreferredSize(new Dimension(100, 200)); 
-		//topScroller.setAlignmentY(Component.TOP_ALIGNMENT); 
 		
-		botListModel = new DefaultListModel();
+		topListModel = new DefaultListModel<ImageIcon>();
+		
+		topCap = new JList(topListModel);
+		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		topCap.setVisibleRowCount(-1);
+		topScroller = new JScrollPane(topCap);
+		topScroller.setPreferredSize(new Dimension(200, 50));
+		
+		botListModel = new DefaultListModel<ImageIcon>();
+		
 		botCap = new JList(botListModel);
-		botScroller = new JScrollPane(botCap); 
-		botScroller.setPreferredSize(new Dimension(100, 200)); 
-		//botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
+		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		botCap.setVisibleRowCount(-1);
+		botScroller = new JScrollPane(botCap);
+		botScroller.setPreferredSize(new Dimension(200, 50)); 
+		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
 		
 		capArea.add(title);
 		capArea.add(topScroller);
@@ -303,7 +311,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
-		boardPanel = new JPanel();
+	boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
 
@@ -491,6 +499,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+          capArea = resetCapArea();
         }
     });
 
@@ -848,6 +857,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
+	
+	try{
+		
 		space = null;
     piece = null;
     //Gets the component at the location the user clicked
@@ -882,6 +894,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space.setSize(space.getWidth(), space.getHeight());
     //Put the piece in the drag layer so we drag it
 		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
+	}
+	catch(NullPointerException npe) {
+		System.out.println("Wrong place to click!");
+	}
+	
 	}
 
   //Waits for the mouse to be dragged, and displays the updated location.
@@ -1009,39 +1026,56 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
 	}
 	
+	private void flipCapArea() {
+		DefaultListModel tempList = new DefaultListModel();
+		tempList = topListModel;
+		topListModel = botListModel;
+		botListModel = tempList;
+		
+	}
+	
 	//capture piece logic
 	//todo: style it
 	private void capture(ChessPiece p) {
 		System.out.println(p.getType() + " is captured");
 		
-		if(p.getSide()) 
-			topListModel.addElement(p.getType());
-		else
-			botListModel.addElement(p.getType());
+		switch (p.getType()) {
+			case "pawn":
+				if(p.getSide()) topListModel.addElement(resize(whitePawn));
+				else botListModel.addElement(resize(blackPawn));
+				break;
+			case "rook":
+				if(p.getSide()) topListModel.addElement(resize(whiteRook));
+				else botListModel.addElement(resize(blackRook));
+				break;
+			case "knight":
+				if(p.getSide()) topListModel.addElement(resize(whiteKnight));
+				else botListModel.addElement(resize(blackKnight));
+				break;
+			case "bishop":
+				if(p.getSide()) topListModel.addElement(resize(whiteBishop));
+				else botListModel.addElement(resize(blackBishop));
+				break;
+			case "queen":
+				if(p.getSide()) topListModel.addElement(resize(whiteQueen));
+				else botListModel.addElement(resize(blackQueen));
+				break;
+			case "king":
+				if(p.getSide()) topListModel.addElement(resize(whiteKing));
+				else botListModel.addElement(resize(blackKing));
+				break;
+		}
 		
 	}
 	
-	//todo: custom list renderer to show icon
-	 	/*
-	 	private class IconListRenderer extends DefaultListCellRenderer {
-	 	    
-	 		public Component getListCellRendererComponent(
-	 	            JList list, Object value, int index,
-	 	            boolean isSelected, boolean cellHasFocus) {
-	 	        JLabel label = (JLabel) super.getListCellRendererComponent(
-	 	                list, value, index, isSelected, cellHasFocus);
-	 	        Icon icon = this.getIcon(list, value, index, isSelected, cellHasFocus);
-	 	        label.setIcon(icon);
-	 	        return label;
-	 	    }
-	 		
-	 	    protected Icon getIcon(
-	 	            JList list, Object value, int index,
-	 	            boolean isSelected, boolean cellHasFocus) {
-	 	        // how do I get icon?
-	 	    }
-	 	}	*/
-
+	//helper method resize image to fit capture area
+	//the only reason to implement the process as a method is to reduce unnecessary code repeat
+	private ImageIcon resize(ImageIcon icon) {
+		Image img = icon.getImage();
+		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		return new ImageIcon(img);
+	}
+	
   public void computerMove() {
     String fen = board.generateFEN(false);
 

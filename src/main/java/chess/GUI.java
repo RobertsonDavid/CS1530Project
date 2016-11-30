@@ -55,11 +55,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel gameWindow;
 	private JLayeredPane layeredPane;
 	private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
-	
+
 	//panel for captured area
 	private JPanel capArea;
-	
-	//panel holds everything
 	private JPanel container;
 	
 	//captured area components
@@ -71,6 +69,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private DefaultListModel<ImageIcon> topListModel;
 	private DefaultListModel<ImageIcon> botListModel;
 	private boolean flipCapAreaFlag = true;
+
   
   
   //Frame for choosing your color
@@ -227,6 +226,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         gameWindow.revalidate();
         gameWindow.repaint();
         flipCapArea();
+
       }
     });
 
@@ -503,10 +503,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
-          //reset capArea
+
           capArea.remove(capTitle);
           capArea.remove(topScroller);
           capArea.remove(botScroller);
+
           capArea = resetCapArea();
         }
     });
@@ -1047,6 +1048,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		
 		flipCapAreaFlag = !flipCapAreaFlag;
 	}
+	
 	
 	//capture piece logic
 	//todo: style it

@@ -720,7 +720,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           }
           changeColor.dispose();
           gameWindow.remove(boardPanel);
+          gameWindow.remove(kibitz);
           gameWindow.add(newBoardPanel);
+          gameWindow.add(kibitz);
+          gameWindow.revalidate();
+          gameWindow.repaint();
+
         }
       }
     });
@@ -948,17 +953,33 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space.setVisible(true);//Make the piece visible
 
     if(bottomTurn == false) {
+      if(isCheckMate(false)) {
+        //computer is check mated
+      }
       computerMove();
+      if(isCheckMate(true)) {
+        //player is check mated
+      }
       bottomTurn = true;
       resetTimer();
       board.printBoard();
     }
 	}
 
+  public boolean isCheckMate(boolean bottom) {
+    String fen = board.generateFEN(bottom);
+    String move = stockfish.getBestMove(fen, 1000);
+
+    if(move.length() == 0) {
+      return true;
+    }
+    return false;
+  }
+
   public void computerMove() {
     String fen = board.generateFEN(false);
 
-    String move = stockfish.getBestMove(fen, 100);
+    String move = stockfish.getBestMove(fen, 50);
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
     int compOrigRow = 8 - (Character.getNumericValue(move.charAt(1)) - 1) - 1;
     int compNewCol = (int)move.charAt(2) - (int)'a';

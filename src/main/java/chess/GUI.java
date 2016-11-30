@@ -818,21 +818,26 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     repaint();
   }
 
-  public void pawnPromotion() {
+  //Pops up a frame for the user to choose a piece to promote their pawn to,
+  //and performs the promotion
+  public void pawnPromotion(int row, int col) {
     //Color window
     pawnPromotion = new JFrame("Pawn promotion");
     pawnPromotion.setSize(700,300);
     pawnPromotion.setLayout(new GridLayout(3,1));
+
+    newBoardPanel = new JPanel();
+    newBoardPanel.setLayout(new GridLayout(8, 8));
 
     //label that tells the user to choose a color
     JLabel headerLabel = new JLabel("", JLabel.CENTER);
     headerLabel.setText("Please select the piece you'd like to promote your pawn to.");
 
     //displaying the radio choices black and white
-    JRadioButton queen = new JRadioButton("Queen", promotionChoice.equals("Queen"));
-    JRadioButton knight = new JRadioButton("Knight", promotionChoice.equals("Knight"));
-    JRadioButton bishop = new JRadioButton("Bishop", promotionChoice.equals("Bishop"));
-    JRadioButton rook = new JRadioButton("Rook", promotionChoice.equals("Rook"));
+    JRadioButton queen = new JRadioButton("Queen", promotionChoice.equals("queen"));
+    JRadioButton knight = new JRadioButton("Knight", promotionChoice.equals("knight"));
+    JRadioButton bishop = new JRadioButton("Bishop", promotionChoice.equals("bishop"));
+    JRadioButton rook = new JRadioButton("Rook", promotionChoice.equals("rook"));
 
     JPanel controlPanel = new JPanel();
     controlPanel.setLayout(new FlowLayout());
@@ -845,25 +850,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     queen.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
-        promotionChoice = "Queen";
+        promotionChoice = "queen";
       }
     });
 
     knight.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
-        promotionChoice = "Knight";
+        promotionChoice = "knight";
       }
     });
 
     bishop.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
-        promotionChoice = "Bishop";
+        promotionChoice = "bishop";
       }
     });
 
     rook.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e){
-        promotionChoice = "Rook";
+        promotionChoice = "rook";
       }
     });
 
@@ -872,26 +877,110 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         public void actionPerformed(ActionEvent e) {
           pawnPromotion.setVisible(false);
           pawnPromotion.dispose();
+
+          ChessPiece piece = board.getPieceAt(row, col);
+          piece.setType(promotionChoice);
+
+          JLabel pieceImage = null;
+          BoardSquare square = squares[row][col];
+
+          //If the player is playing as white, we need to change the pieces accordingly. Only uses white piece images so we can preserve the border and accents
+          if(colorChoice.equals("Black")) {
+
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
+          //If the player is playing as black, we need to change the pieces accordingly
+          else {
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
           gameWindow.remove(boardPanel);
           gameWindow.remove(kibitz);
-
-          //set promotion in board panel
-
-          gameWindow.add(boardPanel);
+          gameWindow.add(newBoardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
-          if(bottomTurn == false) {
-            if(isCheckMate(false)) {
-              System.out.println("you win");
-            }
-            computerMove();
-            if(isCheckMate(true)) {
-              System.out.println("you lose");
-            }
-            bottomTurn = true;
-            resetTimer();
-            board.printBoard();
-          }
         }
     });
 

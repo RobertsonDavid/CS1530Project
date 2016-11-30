@@ -47,6 +47,10 @@ public class Knight implements ChessPiece, Serializable {
     return this.column;
   }
 
+  public void setType(String newType) {
+    this.type = newType;
+  }
+
   public Knight(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {
     this.type = type;
   this.side = side;

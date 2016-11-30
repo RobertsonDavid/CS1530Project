@@ -62,9 +62,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Timer
 	private JLabel timerLabel = new JLabel();
-	JToolBar timers;
+	JToolBar timers = new JToolBar();
   private static int seconds = 300;
-  Timer timer;
+  private Timer timer;
   ActionListener displayTime;
 
   //For clicking and dragging pieces
@@ -794,7 +794,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   public void resetTimer() {
     timer.removeActionListener(displayTime);
-
+    seconds = 300;
     displayTime = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -807,9 +807,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           }
       }
     };
-
+    Border blackline = BorderFactory.createLineBorder(Color.black);
     timer.addActionListener(displayTime);
     timer.start();
+    timerLabel.setBorder(blackline);
+    timers.add(timerLabel);
     revalidate();
     repaint();
   }

@@ -1188,6 +1188,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     BoardSquare compSquare = squares[compNewRow][compNewCol];
     JLabel pieceToMove = null;
     boolean hasLabel = false;
+    ChessPiece piece = board.getPieceAt(compOrigRow, compOrigCol);
 
     System.out.println(compOrigRow + " " + compNewRow);
 
@@ -1220,6 +1221,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
     else {
       System.out.println("it was empty");
+
+      //need to check for en passant
+      if(piece.getType().equals("pawn")) {
+        //must be an en passant
+        if(compOrigCol != compNewCol) {
+          BoardSquare toClear = squares[compNewRow - 1][compNewCol];
+          Container clearMe = (Container)toClear;
+          toClear.remove(0);
+          board.removePiece(compNewRow - 1, compNewCol);
+        }
+      }
+
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }

@@ -443,6 +443,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+          if(bottomTurn == false) {
+            if(isCheckMate(false)) {
+              System.out.println("you win");
+            }
+            computerMove();
+            if(isCheckMate(true)) {
+              System.out.println("you lose");
+            }
+            bottomTurn = true;
+            resetTimer();
+            board.printBoard();
+          }
         }
     });
 

@@ -31,22 +31,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Array of kibitzes
   private String[] kibitzes = new String[]{"The longest game of chess that is possible is of 5,949 moves.",
-    "The longest game lasted for 269 moves and ended in a draw.",
-    "The word 鈥渃heckmate鈥� comes from the Arabic word 鈥渟hah mat鈥� which translates to 鈥淭he king is dead鈥� in English.",
-    "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
-    "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
-    "The modern chess board as we see it today appeared first in Europe in 1090.",
-    "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
-    "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
-    "Players in their first year are called 鈥淩ookies鈥�. This name came up from the last pieces of chess to move into action called 鈥淩ooks鈥�.",
-    "The second book to be ever printed in English language was about Chess.",
-    "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
-    "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
-    "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
-    "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
-    "Chess is also called the 鈥淕ame of Kings鈥� since for a very long time in the past, it was just played by the Nobel and Kings.",
-    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called 鈥淔ool鈥檚 mate runs鈥� Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
-    "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
+		  "The longest game lasted for 269 moves and ended in a draw.",
+		    "The word “checkmate” comes from the Arabic word “shah mat” which translates to “The king is dead” in English.",
+		    "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
+		    "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
+		    "The modern chess board as we see it today appeared first in Europe in 1090.",
+		    "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
+		    "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
+		    "Players in their first year are called “Rookies”. This name came up from the last pieces of chess to move into action called “Rooks”.",
+		    "The second book to be ever printed in English language was about Chess.",
+		    "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
+		    "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
+		    "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
+		    "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
+		    "Chess is also called the “Game of Kings” since for a very long time in the past, it was just played by the Nobel and Kings.",
+		    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called “Fool’s mate runs” Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
+		    "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
 
  	private static final long serialVersionUID = 1L;
 

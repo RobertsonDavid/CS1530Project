@@ -976,6 +976,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
               }
             }
           }
+
           gameWindow.remove(boardPanel);
           gameWindow.remove(kibitz);
           gameWindow.add(newBoardPanel);
@@ -1125,6 +1126,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
+
+        //pawn promotion time
+        if(piece.getType().equals("pawn") && ((newRow == 0) || (newRow == 7))) {
+          pawnPromotion(newRow, newCol);
+        }
 
         //If the move was an en passant, we need to remove the piece appropriately
         if(newPos[2] != -1) {

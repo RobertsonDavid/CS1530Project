@@ -170,6 +170,7 @@ public class ChessBoard implements Serializable{
  }
 
 //Flips board by simply swapping the piece positions, using subtraction to find the new positions
+//Not actually needed but kept just in case
  public void flipBoard() {
    ChessPiece[][] temp = new ChessPiece[8][8];
    int newX, newY;

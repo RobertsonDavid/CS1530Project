@@ -98,7 +98,11 @@ public class Stockfish {
 	public String getBestMove(String fen, int waitTime) {
 		sendCommand("position fen " + fen);
 		sendCommand("go movetime " + waitTime);
-		return getOutput(waitTime + 20).split("bestmove ")[1].split(" ")[0];
+		String[] output = getOutput(waitTime + 20).split("bestmove ")[1].split(" ");
+		if(output.length > 0){
+			return output[0];
+		}
+		return null;
 	}
 
 	/**
@@ -124,6 +128,12 @@ public class Stockfish {
 		sendCommand("position fen " + fen);
 		sendCommand("d");
 		return getOutput(0).split("Legal moves: ")[1];
+	}
+
+	public String getMate(String fen) {
+		sendCommand("position fen " + fen);
+		sendCommand("go mate 0");
+		return getOutput(0).split("mate ")[0];
 	}
 
 	/**

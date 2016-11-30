@@ -510,6 +510,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           botCapTypeTable = new ArrayList<String>();
           topCapTypeTable = new ArrayList<String>();
 
+          if(bottomTurn == false) {
+            if(isCheckMate(false)) {
+              System.out.println("you win");
+            }
+            computerMove();
+            if(isCheckMate(true)) {
+              System.out.println("you lose");
+            }
+            bottomTurn = true;
+            resetTimer();
+            board.printBoard();
+          }
         }
     });
 
@@ -560,7 +572,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
     //set squares to the temp array
     squares = temp;
-    //board.flipBoard();
     return newBoardPanel;
   }
 
@@ -886,7 +897,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           }
           changeColor.dispose();
           gameWindow.remove(boardPanel);
+          gameWindow.remove(kibitz);
           gameWindow.add(newBoardPanel);
+          gameWindow.add(kibitz);
+          gameWindow.revalidate();
+          gameWindow.repaint();
+
         }
       }
     });
@@ -1128,7 +1144,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space.setVisible(true);//Make the piece visible
 
     if(bottomTurn == false) {
+      if(isCheckMate(false)) {
+        System.out.println("you win");
+      }
       computerMove();
+      if(isCheckMate(true)) {
+        System.out.println("you lose");
+      }
       bottomTurn = true;
       resetTimer();
       board.printBoard();
@@ -1177,6 +1199,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				break;
 		}
 
+
 		if(p.getSide())
 			topCapTypeTable.add(p.getType());
 		else
@@ -1192,10 +1215,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		return new ImageIcon(img);
 	}
 	
+
+  public boolean isCheckMate(boolean bottom) {
+    String fen = board.generateFEN(bottom);
+    String move = stockfish.getBestMove(fen, 100);
+
+    if(move.contains("none")) {
+      return true;
+    }
+    return false;
+  }
+
+
   public void computerMove() {
     String fen = board.generateFEN(false);
 
-    String move = stockfish.getBestMove(fen, 100);
+    String move = stockfish.getBestMove(fen, 50);
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
     int compOrigRow = 8 - (Character.getNumericValue(move.charAt(1)) - 1) - 1;
     int compNewCol = (int)move.charAt(2) - (int)'a';

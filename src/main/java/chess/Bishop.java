@@ -166,7 +166,7 @@ public class Bishop implements ChessPiece, Serializable {
     updateCoord(newRow, newCol);
     return this.position;
   }
-  
+
   public void setFirstMove(boolean fMove) {
     this.firstMove=fMove;
   }

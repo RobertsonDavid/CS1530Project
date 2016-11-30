@@ -31,22 +31,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Array of kibitzes
   private String[] kibitzes = new String[]{"The longest game of chess that is possible is of 5,949 moves.",
-    "The longest game lasted for 269 moves and ended in a draw.",
-    "The word “checkmate” comes from the Arabic word “shah mat” which translates to “The king is dead” in English.",
-    "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
-    "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
-    "The modern chess board as we see it today appeared first in Europe in 1090.",
-    "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
-    "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
-    "Players in their first year are called “Rookies”. This name came up from the last pieces of chess to move into action called “Rooks”.",
-    "The second book to be ever printed in English language was about Chess.",
-    "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
-    "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
-    "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
-    "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
-    "Chess is also called the “Game of Kings” since for a very long time in the past, it was just played by the Nobel and Kings.",
-    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called “Fool’s mate runs” Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
-    "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
+		  "The longest game lasted for 269 moves and ended in a draw.",
+		    "The word “checkmate” comes from the Arabic word “shah mat” which translates to “The king is dead” in English.",
+		    "The new move where the pawn could move two steps instead of one was introduced in Spain in 1280.",
+		    "A German named Dr. Emanuel Lasker retained the Champion title for the most time: 26 years and 337 days!",
+		    "The modern chess board as we see it today appeared first in Europe in 1090.",
+		    "The first mechanical clock to be used instead of sand glass was invented by Thomas Wilson in 1883. The modern push button clock was introduced by Veenhoff in 1900.",
+		    "The folding Chess board was invented in 1125 by a Chess-playing priest. Since the Church forbids priests to play Chess, he hid his Chess board by making it to look like two books lying together.",
+		    "Players in their first year are called “Rookies”. This name came up from the last pieces of chess to move into action called “Rooks”.",
+		    "The second book to be ever printed in English language was about Chess.",
+		    "Alan Turing developed the first computer program for playing chess was developed in 1951. However, no computer was powerful enough to process it, so Turing tested it by doing the calculations himself and playing according to the results, taking several minutes per move.",
+		    "The first chess game between space and earth was in June, 1970 by the Soyez-9 crew. Though the game ended in draw, it sure did make headlines.",
+		    "A computer called Deep Thought became the first of its kind to beat an international maestro in November 1988, Long Beach, California.",
+		    "Are you aware of the fact that the number of possible ways of playing the first four moves for both sides in a game of chess is 318,979,564,000?",
+		    "Chess is also called the “Game of Kings” since for a very long time in the past, it was just played by the Nobel and Kings.",
+		    "The shortest number of moves to achieve checkmate is just two moves! One sequence is called “Fool’s mate runs” Thus, 1. g4 e5 and 2. f4 Qh4 checkmate.",
+		    "The chess master to have won the World Championship in all three formats (knockout, tournament and match) is Vishwanathan Anand from India."};
 
  	private static final long serialVersionUID = 1L;
 
@@ -54,8 +54,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel boardPanel;
 	private JPanel gameWindow;
 	private JLayeredPane layeredPane;
-  private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
 
+	//panel for captured area
+	private JPanel capArea;
+	private JPanel container;
+	
+	//captured area components
+	private JList topCap;
+	private JList botCap;
+	private JScrollPane topScroller;
+	private JScrollPane botScroller;
+	private DefaultListModel<ImageIcon> topListModel;
+	private DefaultListModel<ImageIcon> botListModel;
+	private boolean colorChangeFlag = false;
+
+	//to quickly find piece type in captured area
+	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
+	private ArrayList<String> botCapTypeTable = new ArrayList<String>();
+	
   //Frame for choosing your color
 	private static JFrame chooseColor;
   private String colorChoice = "White";
@@ -106,14 +123,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //that the board is on.
 	public GUI(ChessBoard board) {
 		layeredPane = new JLayeredPane();
+		container = new JPanel();
+		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 		this.board = board;
 		this.setTitle("Laboon Chess");
-		getContentPane().add(layeredPane);
-	  layeredPane.addMouseListener(this);
+		setContentPane(container);
+		//getContentPane().add(layeredPane);
+		layeredPane.addMouseListener(this);
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
-    this.setSize(800, 700);
-    boardPanel = resetBoard();
+		container.setPreferredSize(new Dimension(1000, 700));
+		//this.setSize(800, 700);
+		boardPanel = resetBoard();
 
     stockfish = new Stockfish();
     if(stockfish.startEngine() == false) {
@@ -205,6 +226,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         gameWindow.add(kibitz);
         gameWindow.revalidate();
         gameWindow.repaint();
+        flipCapArea();
       }
     });
 
@@ -212,6 +234,15 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	gameWindow.setPreferredSize(new Dimension(600, 600));
   	gameWindow.setBounds(0, 0, 600, 600);
   	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
+  	
+  	capArea = resetCapArea();
+  	capArea.setPreferredSize(new Dimension(200, 500));
+  	capArea.setBounds(600, 100, 150, 400);
+  	
+  	container.add(Box.createRigidArea(new Dimension(50, 0)));
+  	container.add(layeredPane);
+  	container.add(capArea);
+  	container.add(Box.createRigidArea(new Dimension(50, 0)));
 
     //Threaded Kibitzer updates the kibitzer text box every 5-10 seconds with a random kibitz
     new Thread(new Runnable() {
@@ -249,13 +280,43 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		gameWindow.add(toolbar);
 		gameWindow.add(timers);
 		gameWindow.add(boardPanel);
-    gameWindow.add(kibitz);
+		gameWindow.add(kibitz);
 		return gameWindow;
+	}
+	
+	private JPanel resetCapArea(){
+		capArea = new JPanel();
+		capArea.setLayout(new BoxLayout(capArea, BoxLayout.Y_AXIS));
+		
+		topListModel = new DefaultListModel<ImageIcon>();
+		
+		topCap = new JList(topListModel);
+		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		topCap.setVisibleRowCount(-1);
+		topScroller = new JScrollPane(topCap);
+		topScroller.setPreferredSize(new Dimension(80, 50));
+		
+		botListModel = new DefaultListModel<ImageIcon>();
+		
+		botCap = new JList(botListModel);
+		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		botCap.setVisibleRowCount(-1);
+		botScroller = new JScrollPane(botCap);
+		botScroller.setPreferredSize(new Dimension(80, 50)); 
+		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
+		
+		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
+		capArea.add(topScroller);
+		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
+		capArea.add(botScroller);
+		capArea.add(Box.createRigidArea(new Dimension(0, 150)));
+		
+		return capArea;
 	}
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
-		boardPanel = new JPanel();
+	boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
 
@@ -443,6 +504,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+
+          topListModel.clear();
+          botListModel.clear();
+          botCapTypeTable = new ArrayList<String>();
+          topCapTypeTable = new ArrayList<String>();
+
           if(bottomTurn == false) {
             if(isCheckMate(false)) {
               System.out.println("you win");
@@ -462,6 +529,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     cancel.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           chooseColor.setVisible(false);
+          
         }
     });
 
@@ -669,6 +737,55 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 newBoardPanel.add(square);
               }
             }
+            
+            //loop through images in captured area
+            for(int i = 0; i < botListModel.size(); i++) {
+            	String type = botCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			botListModel.setElementAt(resize(whitePawn), i);
+            			break;
+            		case "rook": 
+            			botListModel.setElementAt(resize(whiteRook), i);
+            			break;
+            		case "knight": 
+            			botListModel.setElementAt(resize(whiteKnight), i);
+            			break;
+            		case "bishop": 
+            			botListModel.setElementAt(resize(whiteBishop), i);
+            			break;
+            		case "queen": 
+            			botListModel.setElementAt(resize(whiteQueen), i);
+            			break;
+            		case "king": 
+            			botListModel.setElementAt(resize(whiteKing), i);
+            			break;
+            	}
+            }
+
+            for(int i = 0; i < topListModel.size(); i++) {
+            	String type = topCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			topListModel.setElementAt(resize(blackPawn), i);
+            			break;
+            		case "rook": 
+            			topListModel.setElementAt(resize(blackRook), i);
+            			break;
+            		case "knight": 
+            			topListModel.setElementAt(resize(blackKnight), i);
+            			break;
+            		case "bishop": 
+            			topListModel.setElementAt(resize(blackBishop), i);
+            			break;
+            		case "queen": 
+            			topListModel.setElementAt(resize(blackQueen), i);
+            			break;
+            		case "king": 
+            			topListModel.setElementAt(resize(blackKing), i);
+            			break;
+            	}
+            }
           }
           //If the player is playing as black, we need to change the pieces accordingly
           else {
@@ -697,20 +814,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                   //opponent piece
                   if(piece.getSide() == true) {
                     if(piece.getType().equals("pawn"))
-                      pieceImage = new JLabel(whitePawn);
-                    else if(piece.getType().equals("rook"))
-                      pieceImage = new JLabel(whiteRook);
-                    else if(piece.getType().equals("knight"))
-                      pieceImage = new JLabel(whiteKnight);
-                    else if(piece.getType().equals("bishop"))
-                      pieceImage = new JLabel(whiteBishop);
-                    else if(piece.getType().equals("queen"))
-                      pieceImage = new JLabel(whiteQueen);
-                    else if(piece.getType().equals("king"))
-                      pieceImage = new JLabel(whiteKing);
-                  }
-                  else {
-                    if(piece.getType().equals("pawn"))
                       pieceImage = new JLabel(blackPawn);
                     else if(piece.getType().equals("rook"))
                       pieceImage = new JLabel(blackRook);
@@ -723,10 +826,73 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                     else if(piece.getType().equals("king"))
                       pieceImage = new JLabel(blackKing);
                   }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
                   square.add(pieceImage);
                 }
                 newBoardPanel.add(square);
               }
+            }
+            
+          //loop through images in captured area
+            for(int i = 0; i < botListModel.size(); i++) {
+            	String type = botCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			botListModel.setElementAt(resize(whitePawn), i);
+            			break;
+            		case "rook": 
+            			botListModel.setElementAt(resize(whiteRook), i);
+            			break;
+            		case "knight": 
+            			botListModel.setElementAt(resize(whiteKnight), i);
+            			break;
+            		case "bishop": 
+            			botListModel.setElementAt(resize(whiteBishop), i);
+            			break;
+            		case "queen": 
+            			botListModel.setElementAt(resize(whiteQueen), i);
+            			break;
+            		case "king": 
+            			botListModel.setElementAt(resize(whiteKing), i);
+            			break;
+            	}
+            }
+
+            for(int i = 0; i < topListModel.size(); i++) {
+            	String type = topCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			topListModel.setElementAt(resize(blackPawn), i);
+            			break;
+            		case "rook": 
+            			topListModel.setElementAt(resize(blackRook), i);
+            			break;
+            		case "knight": 
+            			topListModel.setElementAt(resize(blackKnight), i);
+            			break;
+            		case "bishop": 
+            			topListModel.setElementAt(resize(blackBishop), i);
+            			break;
+            		case "queen": 
+            			topListModel.setElementAt(resize(blackQueen), i);
+            			break;
+            		case "king": 
+            			topListModel.setElementAt(resize(blackKing), i);
+            			break;
+            	}
             }
           }
           changeColor.dispose();
@@ -736,7 +902,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(kibitz);
           gameWindow.revalidate();
           gameWindow.repaint();
-
+          colorChangeFlag = !colorChangeFlag;
         }
       }
     });
@@ -816,6 +982,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
+	
+	try{
+		
 		space = null;
     piece = null;
     //Gets the component at the location the user clicked
@@ -850,6 +1019,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		space.setSize(space.getWidth(), space.getHeight());
     //Put the piece in the drag layer so we drag it
 		layeredPane.add(space, JLayeredPane.DRAG_LAYER);
+	}
+	catch(NullPointerException npe) {
+		System.out.println("Wrong place to click!");
+	}
+	
 	}
 
   //Waits for the mouse to be dragged, and displays the updated location.
@@ -905,6 +1079,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         //Update turn accordingly
         bottomTurn = false;
+
+        //capture the piece when move is legal
+        capture(takenPiece);
+        
         resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -942,14 +1120,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);
-
           enPassant.removeAll();
           enPassant.revalidate();
           enPassant.repaint();
 
           board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+          capture(takenPiece);
         }
 
+        
+        
         //Update turn accordingly
         bottomTurn = false;
         resetTimer();
@@ -976,6 +1156,99 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       board.printBoard();
     }
 	}
+	
+	
+	private void flipCapArea() {
+		
+		ListModel tempLM = topCap.getModel();
+		topCap.setModel(botCap.getModel());
+		botCap.setModel(tempLM);
+		
+		ArrayList<String> tempAL = topCapTypeTable;
+		topCapTypeTable = botCapTypeTable;
+		botCapTypeTable = tempAL;
+	}
+	
+	
+	//capture piece logic
+	//todo: style it
+	private void capture(ChessPiece p) {
+		System.out.println(p.getType() + " is captured");
+		
+		if(!colorChangeFlag) {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(whitePawn));
+					else botListModel.addElement(resize(blackPawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(whiteRook));
+					else botListModel.addElement(resize(blackRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(whiteKnight));
+					else botListModel.addElement(resize(blackKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(whiteBishop));
+					else botListModel.addElement(resize(blackBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(whiteQueen));
+					else botListModel.addElement(resize(blackQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(whiteKing));
+					else botListModel.addElement(resize(blackKing));
+					break;
+			}
+		}
+		
+		else {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(blackPawn));
+					else botListModel.addElement(resize(whitePawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(blackRook));
+					else botListModel.addElement(resize(whiteRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(blackKnight));
+					else botListModel.addElement(resize(whiteKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(blackBishop));
+					else botListModel.addElement(resize(whiteBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(blackQueen));
+					else botListModel.addElement(resize(whiteQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(blackKing));
+					else botListModel.addElement(resize(whiteKing));
+					break;
+			}
+		}
+
+
+		if(p.getSide())
+			topCapTypeTable.add(p.getType());
+		else
+			botCapTypeTable.add(p.getType());
+		
+	}
+	
+	//helper method resize image to fit capture area
+	//the only reason to implement the process as a method is to reduce unnecessary code repeat
+	private ImageIcon resize(ImageIcon icon) {
+		Image img = icon.getImage();
+		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		return new ImageIcon(img);
+	}
+	
 
   public boolean isCheckMate(boolean bottom) {
     String fen = board.generateFEN(bottom);
@@ -986,6 +1259,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
     return false;
   }
+
 
   public void computerMove() {
     String fen = board.generateFEN(false);
@@ -1012,6 +1286,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     for (Component jc : compSquare.getComponents()) {
       if(jc instanceof JLabel) {
         hasLabel = true;
+        //potentially taken piece
+        takenPiece = board.getPieceAt(compNewRow, compNewCol);
         break;
       }
     }
@@ -1027,6 +1303,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       System.out.println("there was a piece there");
       parent.remove(0);
       parent.add(compSpace);
+      //capture the piece taken by computer
+      capture(takenPiece);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
@@ -1054,5 +1332,4 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
  	public void mouseExited(MouseEvent e) {
 
  	}
-
 }

@@ -55,7 +55,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel gameWindow;
 	private JLayeredPane layeredPane;
 	private String[] columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	
+	//panel for captured area
 	private JPanel capArea;
+	
+	//panel holds everything
 	private JPanel container;
 	
 	//captured area components
@@ -66,7 +70,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JScrollPane botScroller;
 	private DefaultListModel<ImageIcon> topListModel;
 	private DefaultListModel<ImageIcon> botListModel;
-	private Map<String, ImageIcon> imageMap;
+	private boolean flipCapAreaFlag = true;
   
   
   //Frame for choosing your color
@@ -222,7 +226,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         gameWindow.add(kibitz);
         gameWindow.revalidate();
         gameWindow.repaint();
-        //flipCapArea();
+        flipCapArea();
       }
     });
 
@@ -499,6 +503,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+          //reset capArea
+          capArea.remove(capTitle);
+          capArea.remove(topScroller);
+          capArea.remove(botScroller);
           capArea = resetCapArea();
         }
     });
@@ -1026,12 +1034,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
 	}
 	
+	
 	private void flipCapArea() {
-		DefaultListModel tempList = new DefaultListModel();
-		tempList = topListModel;
-		topListModel = botListModel;
-		botListModel = tempList;
+		if(flipCapAreaFlag) {
+			topCap.setModel(botListModel);
+			botCap.setModel(topListModel);
+		}
+		else {
+			topCap.setModel(topListModel);
+			botCap.setModel(botListModel);
+		}
 		
+		flipCapAreaFlag = !flipCapAreaFlag;
 	}
 	
 	//capture piece logic

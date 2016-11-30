@@ -492,7 +492,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     }
     //set squares to the temp array
     squares = temp;
-    //board.flipBoard();
     return newBoardPanel;
   }
 
@@ -970,7 +969,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     String fen = board.generateFEN(bottom);
     String move = stockfish.getBestMove(fen, 100);
 
-    if(move.contains("mate")) {
+    if(move.contains("none")) {
       return true;
     }
     return false;

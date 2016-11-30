@@ -97,7 +97,7 @@ public class Stockfish {
 		if(output.length > 0){
 			return output[0];
 		}
-		return "mate";
+		return null;
 	}
 
 	/**

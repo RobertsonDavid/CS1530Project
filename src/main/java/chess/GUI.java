@@ -60,6 +60,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private static JFrame chooseColor;
   private String colorChoice = "White";
 
+  //Frame for pawn pawnPromotion
+  private static JFrame pawnPromotion;
+  private String promotionChoice = null;
+
   //Timer
 	private JLabel timerLabel = new JLabel();
 	JToolBar timers;
@@ -812,6 +816,102 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     timer.start();
     revalidate();
     repaint();
+  }
+
+  public void pawnPromotion() {
+    //Color window
+    pawnPromotion = new JFrame("Pawn promotion");
+    pawnPromotion.setSize(700,300);
+    pawnPromotion.setLayout(new GridLayout(3,1));
+
+    //label that tells the user to choose a color
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setText("Please select the piece you'd like to promote your pawn to.");
+
+    //displaying the radio choices black and white
+    JRadioButton queen = new JRadioButton("Queen", promotionChoice.equals("Queen"));
+    JRadioButton knight = new JRadioButton("Knight", promotionChoice.equals("Knight"));
+    JRadioButton bishop = new JRadioButton("Bishop", promotionChoice.equals("Bishop"));
+    JRadioButton rook = new JRadioButton("Rook", promotionChoice.equals("Rook"));
+
+    JPanel controlPanel = new JPanel();
+    controlPanel.setLayout(new FlowLayout());
+
+    //creating the start game button and the cancel button
+    JToolBar confirmation = new JToolBar();
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton setPromotion = new JButton("Set Promotion");
+    confirmation.add(setPromotion);
+
+    queen.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "Queen";
+      }
+    });
+
+    knight.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "Knight";
+      }
+    });
+
+    bishop.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "Bishop";
+      }
+    });
+
+    rook.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "Rook";
+      }
+    });
+
+    //if start game is chosen remove window
+    setPromotion.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          pawnPromotion.setVisible(false);
+          pawnPromotion.dispose();
+          gameWindow.remove(boardPanel);
+          gameWindow.remove(kibitz);
+
+          //set promotion in board panel
+
+          gameWindow.add(boardPanel);
+          gameWindow.add(kibitz);
+          boardPanel.setVisible(true);
+          if(bottomTurn == false) {
+            if(isCheckMate(false)) {
+              System.out.println("you win");
+            }
+            computerMove();
+            if(isCheckMate(true)) {
+              System.out.println("you lose");
+            }
+            bottomTurn = true;
+            resetTimer();
+            board.printBoard();
+          }
+        }
+    });
+
+    //grouping the buttons together
+    ButtonGroup group = new ButtonGroup();
+    group.add(queen);
+    group.add(knight);
+    group.add(bishop);
+    group.add(rook);
+
+    controlPanel.add(queen);
+    controlPanel.add(knight);
+    controlPanel.add(bishop);
+    controlPanel.add(rook);
+
+    //adding panels and displaying
+    pawnPromotion.add(headerLabel);
+    pawnPromotion.add(controlPanel);
+    pawnPromotion.add(confirmation);
+    pawnPromotion.setVisible(true);
   }
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.

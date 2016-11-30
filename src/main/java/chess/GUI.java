@@ -984,11 +984,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       //If the newPos is of the new square, the move was legal
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        System.out.println("new row is "+ newRow + " " + newCol);
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
         //If the move was an en passant, we need to remove the piece appropriately
+        System.out.println("new pos"+newPos[2]);
         if(newPos[2] != -1) {
+          System.out.println("AA" + newPos[2] + newPos[3]);
           BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);

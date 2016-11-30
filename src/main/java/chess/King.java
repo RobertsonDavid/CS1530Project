@@ -114,6 +114,11 @@ public class King implements ChessPiece, Serializable {
   //Move methods return the new position of the piece on this board. The update of the board array will be handled by the caller.
   public int[] move(ChessBoard board, int newRow, int newCol) {
 
+    //This would put king in check
+    if(testMove(board, row, column, newRow, newCol)) {
+      return this.position;
+    }
+
     if(board.isChecked(side)) {
       System.out.println("They were in check....");
       if(testMove(board, row, column, newRow, newCol)) {
@@ -183,7 +188,7 @@ public class King implements ChessPiece, Serializable {
       return this.position;
     }
   }
-  
+
   public void setFirstMove(boolean fMove) {
     this.firstMove=fMove;
   }

@@ -954,11 +954,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     if(bottomTurn == false) {
       if(isCheckMate(false)) {
-        //computer is check mated
+        System.out.println("you win");
       }
       computerMove();
       if(isCheckMate(true)) {
-        //player is check mated
+        System.out.println("you lose");
       }
       bottomTurn = true;
       resetTimer();
@@ -968,9 +968,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   public boolean isCheckMate(boolean bottom) {
     String fen = board.generateFEN(bottom);
-    String move = stockfish.getBestMove(fen, 1000);
+    String move = stockfish.getBestMove(fen, 100);
 
-    if(move.length() == 0) {
+    if(move.contains("mate")) {
       return true;
     }
     return false;

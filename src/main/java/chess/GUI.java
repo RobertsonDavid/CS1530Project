@@ -61,7 +61,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel container;
 	
 	//captured area components
-	private JLabel capTitle;
 	private JList topCap;
 	private JList botCap;
 	private JScrollPane topScroller;
@@ -70,6 +69,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private DefaultListModel<ImageIcon> botListModel;
 	private boolean flipCapAreaFlag = true;
 
+	//to quickly find piece type in captured area
+	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
+	private ArrayList<String> botCapTypeTable = new ArrayList<String>();
+	
   //Frame for choosing your color
 	private static JFrame chooseColor;
   private String colorChoice = "White";
@@ -236,8 +239,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	capArea.setPreferredSize(new Dimension(200, 500));
   	capArea.setBounds(600, 100, 150, 400);
   	
+  	container.add(Box.createRigidArea(new Dimension(50, 0)));
   	container.add(layeredPane);
   	container.add(capArea);
+  	container.add(Box.createRigidArea(new Dimension(50, 0)));
 
     //Threaded Kibitzer updates the kibitzer text box every 5-10 seconds with a random kibitz
     new Thread(new Runnable() {
@@ -282,9 +287,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel resetCapArea(){
 		capArea = new JPanel();
 		capArea.setLayout(new BoxLayout(capArea, BoxLayout.Y_AXIS));
-		JLabel title = new JLabel("Captured Pieces");
-		title.setAlignmentY(Component.TOP_ALIGNMENT);
-		
 		
 		topListModel = new DefaultListModel<ImageIcon>();
 		
@@ -292,7 +294,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		topCap.setVisibleRowCount(-1);
 		topScroller = new JScrollPane(topCap);
-		topScroller.setPreferredSize(new Dimension(200, 50));
+		topScroller.setPreferredSize(new Dimension(80, 50));
 		
 		botListModel = new DefaultListModel<ImageIcon>();
 		
@@ -300,12 +302,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		botCap.setVisibleRowCount(-1);
 		botScroller = new JScrollPane(botCap);
-		botScroller.setPreferredSize(new Dimension(200, 50)); 
+		botScroller.setPreferredSize(new Dimension(80, 50)); 
 		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
 		
-		capArea.add(title);
+		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
 		capArea.add(topScroller);
+		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
 		capArea.add(botScroller);
+		capArea.add(Box.createRigidArea(new Dimension(0, 150)));
 		
 		return capArea;
 	}
@@ -503,6 +507,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
           topListModel.clear();
           botListModel.clear();
+          botCapTypeTable = new ArrayList<String>();
+          topCapTypeTable = new ArrayList<String>();
 
         }
     });
@@ -720,6 +726,55 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 newBoardPanel.add(square);
               }
             }
+            
+            //loop through images in captured area
+            for(int i = 0; i < botListModel.size(); i++) {
+            	String type = botCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			botListModel.setElementAt(whitePawn, i);
+            			break;
+            		case "rook": 
+            			botListModel.setElementAt(whiteRook, i);
+            			break;
+            		case "knight": 
+            			botListModel.setElementAt(whiteKnight, i);
+            			break;
+            		case "bishop": 
+            			botListModel.setElementAt(whiteBishop, i);
+            			break;
+            		case "queen": 
+            			botListModel.setElementAt(whiteQueen, i);
+            			break;
+            		case "king": 
+            			botListModel.setElementAt(whiteKing, i);
+            			break;
+            	}
+            }
+
+            for(int i = 0; i < topListModel.size(); i++) {
+            	String type = topCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			topListModel.setElementAt(blackPawn, i);
+            			break;
+            		case "rook": 
+            			topListModel.setElementAt(blackRook, i);
+            			break;
+            		case "knight": 
+            			topListModel.setElementAt(blackKnight, i);
+            			break;
+            		case "bishop": 
+            			topListModel.setElementAt(blackBishop, i);
+            			break;
+            		case "queen": 
+            			topListModel.setElementAt(blackQueen, i);
+            			break;
+            		case "king": 
+            			topListModel.setElementAt(blackKing, i);
+            			break;
+            	}
+            }
           }
           //If the player is playing as black, we need to change the pieces accordingly
           else {
@@ -748,20 +803,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                   //opponent piece
                   if(piece.getSide() == true) {
                     if(piece.getType().equals("pawn"))
-                      pieceImage = new JLabel(whitePawn);
-                    else if(piece.getType().equals("rook"))
-                      pieceImage = new JLabel(whiteRook);
-                    else if(piece.getType().equals("knight"))
-                      pieceImage = new JLabel(whiteKnight);
-                    else if(piece.getType().equals("bishop"))
-                      pieceImage = new JLabel(whiteBishop);
-                    else if(piece.getType().equals("queen"))
-                      pieceImage = new JLabel(whiteQueen);
-                    else if(piece.getType().equals("king"))
-                      pieceImage = new JLabel(whiteKing);
-                  }
-                  else {
-                    if(piece.getType().equals("pawn"))
                       pieceImage = new JLabel(blackPawn);
                     else if(piece.getType().equals("rook"))
                       pieceImage = new JLabel(blackRook);
@@ -774,10 +815,73 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                     else if(piece.getType().equals("king"))
                       pieceImage = new JLabel(blackKing);
                   }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
                   square.add(pieceImage);
                 }
                 newBoardPanel.add(square);
               }
+            }
+            
+          //loop through images in captured area
+            for(int i = 0; i < botListModel.size(); i++) {
+            	String type = botCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			botListModel.setElementAt(whitePawn, i);
+            			break;
+            		case "rook": 
+            			botListModel.setElementAt(whiteRook, i);
+            			break;
+            		case "knight": 
+            			botListModel.setElementAt(whiteKnight, i);
+            			break;
+            		case "bishop": 
+            			botListModel.setElementAt(whiteBishop, i);
+            			break;
+            		case "queen": 
+            			botListModel.setElementAt(whiteQueen, i);
+            			break;
+            		case "king": 
+            			botListModel.setElementAt(whiteKing, i);
+            			break;
+            	}
+            }
+
+            for(int i = 0; i < topListModel.size(); i++) {
+            	String type = topCapTypeTable.get(i);
+            	switch(type) {
+            		case "pawn": 
+            			topListModel.setElementAt(blackPawn, i);
+            			break;
+            		case "rook": 
+            			topListModel.setElementAt(blackRook, i);
+            			break;
+            		case "knight": 
+            			topListModel.setElementAt(blackKnight, i);
+            			break;
+            		case "bishop": 
+            			topListModel.setElementAt(blackBishop, i);
+            			break;
+            		case "queen": 
+            			topListModel.setElementAt(blackQueen, i);
+            			break;
+            		case "king": 
+            			topListModel.setElementAt(blackKing, i);
+            			break;
+            	}
             }
           }
           changeColor.dispose();
@@ -1045,7 +1149,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	//todo: style it
 	private void capture(ChessPiece p) {
 		System.out.println(p.getType() + " is captured");
-		
+
 		switch (p.getType()) {
 			case "pawn":
 				if(p.getSide()) topListModel.addElement(resize(whitePawn));
@@ -1072,6 +1176,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 				else botListModel.addElement(resize(blackKing));
 				break;
 		}
+
+		if(p.getSide())
+			topCapTypeTable.add(p.getType());
+		else
+			botCapTypeTable.add(p.getType());
 		
 	}
 	

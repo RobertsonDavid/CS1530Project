@@ -16,8 +16,9 @@ public class Stockfish {
 	private Process engineProcess;
 	private BufferedReader processReader;
 	private OutputStreamWriter processWriter;
-
+	
 	private static final String PATH = "stockfish/stockfish_mac";
+	private static final String WINPATH = "stockfish/stockfish_8_x64.exe";
 
 	/**
 	 * Starts Stockfish engine as a process and initializes it
@@ -27,7 +28,11 @@ public class Stockfish {
 	 */
 	public boolean startEngine() {
 		try {
-			engineProcess = Runtime.getRuntime().exec(PATH);
+			if(System.getProperty("os.name").contains("Windows")) 
+				engineProcess = Runtime.getRuntime().exec(WINPATH);			
+			else 
+				engineProcess = Runtime.getRuntime().exec(PATH);
+			
 			processReader = new BufferedReader(new InputStreamReader(
 					engineProcess.getInputStream()));
 			processWriter = new OutputStreamWriter(

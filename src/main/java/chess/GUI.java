@@ -70,8 +70,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private DefaultListModel<ImageIcon> botListModel;
 	private boolean flipCapAreaFlag = true;
 
-  
-  
   //Frame for choosing your color
 	private static JFrame chooseColor;
   private String colorChoice = "White";
@@ -133,7 +131,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		layeredPane.setPreferredSize(new Dimension(600, 600));
 		container.setPreferredSize(new Dimension(1000, 700));
 		//this.setSize(800, 700);
-    boardPanel = resetBoard();
+		boardPanel = resetBoard();
 
     stockfish = new Stockfish();
     if(stockfish.startEngine() == false) {
@@ -226,7 +224,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         gameWindow.revalidate();
         gameWindow.repaint();
         flipCapArea();
-
       }
     });
 
@@ -237,7 +234,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	
   	capArea = resetCapArea();
   	capArea.setPreferredSize(new Dimension(200, 500));
-  	capArea.setBounds(700, 100, 200, 600);
+  	capArea.setBounds(600, 100, 150, 400);
   	
   	container.add(layeredPane);
   	container.add(capArea);
@@ -504,11 +501,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
 
-          capArea.remove(capTitle);
-          capArea.remove(topScroller);
-          capArea.remove(botScroller);
+          topListModel.clear();
+          botListModel.clear();
 
-          capArea = resetCapArea();
         }
     });
 
@@ -516,6 +511,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     cancel.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           chooseColor.setVisible(false);
+          
         }
     });
 
@@ -1037,16 +1033,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	
 	
 	private void flipCapArea() {
-		if(flipCapAreaFlag) {
-			topCap.setModel(botListModel);
-			botCap.setModel(topListModel);
-		}
-		else {
-			topCap.setModel(topListModel);
-			botCap.setModel(botListModel);
-		}
 		
-		flipCapAreaFlag = !flipCapAreaFlag;
+		ListModel temp = topCap.getModel();
+		topCap.setModel(botCap.getModel());
+		botCap.setModel(temp);
+		
 	}
 	
 	
@@ -1117,6 +1108,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     for (Component jc : compSquare.getComponents()) {
       if(jc instanceof JLabel) {
         hasLabel = true;
+        //potentially taken piece
+        takenPiece = board.getPieceAt(compNewRow, compNewCol);
         break;
       }
     }
@@ -1132,6 +1125,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       System.out.println("there was a piece there");
       parent.remove(0);
       parent.add(compSpace);
+      //capture the piece taken by computer
+      capture(takenPiece);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {

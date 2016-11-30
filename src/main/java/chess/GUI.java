@@ -401,10 +401,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
    private void showEndGame(boolean bottomTurn)
   {
     gameOver = new JFrame("Game Over");
-    gameOver.setSize(700,300);
+    gameOver.getContentPane().setBackground( Color.BLUE );
+    gameOver.setSize(300,300);
+    gameOver.setLocationRelativeTo ( null );
     gameOver.setLayout(new GridLayout(3,1));
 
     JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setFont(headerLabel.getFont ().deriveFont(32.0f));
     headerLabel.setText("checkmate!");
 
     JLabel winlose = new JLabel("", JLabel.CENTER);
@@ -415,6 +418,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       winlose.setText("You win");
 
     JToolBar confirmation = new JToolBar();
+    confirmation.setBackground(Color.BLUE);
     confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
     JButton cancel = new JButton("Cancel");
     confirmation.add(cancel);
@@ -427,6 +431,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     });
 
     gameOver.add(headerLabel);
+    gameOver.add(winlose);
     gameOver.add(confirmation);
     gameOver.setVisible(true);
   }
@@ -856,6 +861,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     timers.add(timerLabel);
     revalidate();
     repaint();
+    showEndGame(true);
   }
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.

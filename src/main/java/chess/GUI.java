@@ -67,7 +67,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JScrollPane botScroller;
 	private DefaultListModel<ImageIcon> topListModel;
 	private DefaultListModel<ImageIcon> botListModel;
-	private boolean flipCapAreaFlag = true;
+	private boolean colorChangeFlag = false;
 
 	//to quickly find piece type in captured area
 	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
@@ -743,22 +743,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
             		case "pawn": 
-            			botListModel.setElementAt(whitePawn, i);
+            			botListModel.setElementAt(resize(whitePawn), i);
             			break;
             		case "rook": 
-            			botListModel.setElementAt(whiteRook, i);
+            			botListModel.setElementAt(resize(whiteRook), i);
             			break;
             		case "knight": 
-            			botListModel.setElementAt(whiteKnight, i);
+            			botListModel.setElementAt(resize(whiteKnight), i);
             			break;
             		case "bishop": 
-            			botListModel.setElementAt(whiteBishop, i);
+            			botListModel.setElementAt(resize(whiteBishop), i);
             			break;
             		case "queen": 
-            			botListModel.setElementAt(whiteQueen, i);
+            			botListModel.setElementAt(resize(whiteQueen), i);
             			break;
             		case "king": 
-            			botListModel.setElementAt(whiteKing, i);
+            			botListModel.setElementAt(resize(whiteKing), i);
             			break;
             	}
             }
@@ -767,22 +767,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             	String type = topCapTypeTable.get(i);
             	switch(type) {
             		case "pawn": 
-            			topListModel.setElementAt(blackPawn, i);
+            			topListModel.setElementAt(resize(blackPawn), i);
             			break;
             		case "rook": 
-            			topListModel.setElementAt(blackRook, i);
+            			topListModel.setElementAt(resize(blackRook), i);
             			break;
             		case "knight": 
-            			topListModel.setElementAt(blackKnight, i);
+            			topListModel.setElementAt(resize(blackKnight), i);
             			break;
             		case "bishop": 
-            			topListModel.setElementAt(blackBishop, i);
+            			topListModel.setElementAt(resize(blackBishop), i);
             			break;
             		case "queen": 
-            			topListModel.setElementAt(blackQueen, i);
+            			topListModel.setElementAt(resize(blackQueen), i);
             			break;
             		case "king": 
-            			topListModel.setElementAt(blackKing, i);
+            			topListModel.setElementAt(resize(blackKing), i);
             			break;
             	}
             }
@@ -851,22 +851,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
             		case "pawn": 
-            			botListModel.setElementAt(whitePawn, i);
+            			botListModel.setElementAt(resize(whitePawn), i);
             			break;
             		case "rook": 
-            			botListModel.setElementAt(whiteRook, i);
+            			botListModel.setElementAt(resize(whiteRook), i);
             			break;
             		case "knight": 
-            			botListModel.setElementAt(whiteKnight, i);
+            			botListModel.setElementAt(resize(whiteKnight), i);
             			break;
             		case "bishop": 
-            			botListModel.setElementAt(whiteBishop, i);
+            			botListModel.setElementAt(resize(whiteBishop), i);
             			break;
             		case "queen": 
-            			botListModel.setElementAt(whiteQueen, i);
+            			botListModel.setElementAt(resize(whiteQueen), i);
             			break;
             		case "king": 
-            			botListModel.setElementAt(whiteKing, i);
+            			botListModel.setElementAt(resize(whiteKing), i);
             			break;
             	}
             }
@@ -875,22 +875,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             	String type = topCapTypeTable.get(i);
             	switch(type) {
             		case "pawn": 
-            			topListModel.setElementAt(blackPawn, i);
+            			topListModel.setElementAt(resize(blackPawn), i);
             			break;
             		case "rook": 
-            			topListModel.setElementAt(blackRook, i);
+            			topListModel.setElementAt(resize(blackRook), i);
             			break;
             		case "knight": 
-            			topListModel.setElementAt(blackKnight, i);
+            			topListModel.setElementAt(resize(blackKnight), i);
             			break;
             		case "bishop": 
-            			topListModel.setElementAt(blackBishop, i);
+            			topListModel.setElementAt(resize(blackBishop), i);
             			break;
             		case "queen": 
-            			topListModel.setElementAt(blackQueen, i);
+            			topListModel.setElementAt(resize(blackQueen), i);
             			break;
             		case "king": 
-            			topListModel.setElementAt(blackKing, i);
+            			topListModel.setElementAt(resize(blackKing), i);
             			break;
             	}
             }
@@ -902,7 +902,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(kibitz);
           gameWindow.revalidate();
           gameWindow.repaint();
-
+          colorChangeFlag = !colorChangeFlag;
         }
       }
     });
@@ -1160,10 +1160,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	
 	private void flipCapArea() {
 		
-		ListModel temp = topCap.getModel();
+		ListModel tempLM = topCap.getModel();
 		topCap.setModel(botCap.getModel());
-		botCap.setModel(temp);
+		botCap.setModel(tempLM);
 		
+		ArrayList<String> tempAL = topCapTypeTable;
+		topCapTypeTable = botCapTypeTable;
+		botCapTypeTable = tempAL;
 	}
 	
 	
@@ -1171,32 +1174,63 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	//todo: style it
 	private void capture(ChessPiece p) {
 		System.out.println(p.getType() + " is captured");
-
-		switch (p.getType()) {
-			case "pawn":
-				if(p.getSide()) topListModel.addElement(resize(whitePawn));
-				else botListModel.addElement(resize(blackPawn));
-				break;
-			case "rook":
-				if(p.getSide()) topListModel.addElement(resize(whiteRook));
-				else botListModel.addElement(resize(blackRook));
-				break;
-			case "knight":
-				if(p.getSide()) topListModel.addElement(resize(whiteKnight));
-				else botListModel.addElement(resize(blackKnight));
-				break;
-			case "bishop":
-				if(p.getSide()) topListModel.addElement(resize(whiteBishop));
-				else botListModel.addElement(resize(blackBishop));
-				break;
-			case "queen":
-				if(p.getSide()) topListModel.addElement(resize(whiteQueen));
-				else botListModel.addElement(resize(blackQueen));
-				break;
-			case "king":
-				if(p.getSide()) topListModel.addElement(resize(whiteKing));
-				else botListModel.addElement(resize(blackKing));
-				break;
+		
+		if(!colorChangeFlag) {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(whitePawn));
+					else botListModel.addElement(resize(blackPawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(whiteRook));
+					else botListModel.addElement(resize(blackRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(whiteKnight));
+					else botListModel.addElement(resize(blackKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(whiteBishop));
+					else botListModel.addElement(resize(blackBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(whiteQueen));
+					else botListModel.addElement(resize(blackQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(whiteKing));
+					else botListModel.addElement(resize(blackKing));
+					break;
+			}
+		}
+		
+		else {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(blackPawn));
+					else botListModel.addElement(resize(whitePawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(blackRook));
+					else botListModel.addElement(resize(whiteRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(blackKnight));
+					else botListModel.addElement(resize(whiteKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(blackBishop));
+					else botListModel.addElement(resize(whiteBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(blackQueen));
+					else botListModel.addElement(resize(whiteQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(blackKing));
+					else botListModel.addElement(resize(whiteKing));
+					break;
+			}
 		}
 
 

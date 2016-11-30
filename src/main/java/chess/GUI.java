@@ -60,6 +60,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private static JFrame chooseColor;
   private String colorChoice = "White";
 
+  private static JFrame gameOver;
+
   //Timer
 	private JLabel timerLabel = new JLabel();
 	JToolBar timers = new JToolBar();
@@ -98,6 +100,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //for turn taking
   private boolean bottomTurn = false;
+
+  //for gameover
+  private boolean checkmate = false;
+  private JPanel endGame;
 
   private Stockfish stockfish;
   boolean first = true;
@@ -174,6 +180,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	//toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
   	//toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
     toolbar.add(dropDown);  //Options menu for things like changing the color and flipping the board
+
+    if (checkmate == true)
+      showEndGame(bottomTurn);
 
     //if new Game is selected
   	newGame.addActionListener(new ActionListener() {
@@ -388,6 +397,39 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
 		return boardPanel;
 	}
+
+   private void showEndGame(boolean bottomTurn)
+  {
+    gameOver = new JFrame("Game Over");
+    gameOver.setSize(700,300);
+    gameOver.setLayout(new GridLayout(3,1));
+
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setText("checkmate!");
+
+    JLabel winlose = new JLabel("", JLabel.CENTER);
+
+    if(bottomTurn == true)
+      winlose.setText("You lose");
+    else
+      winlose.setText("You win");
+
+    JToolBar confirmation = new JToolBar();
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton cancel = new JButton("Cancel");
+    confirmation.add(cancel);
+
+    //if cancel is chosen remove window
+    cancel.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          gameOver.setVisible(false);
+        }
+    });
+
+    gameOver.add(headerLabel);
+    gameOver.add(confirmation);
+    gameOver.setVisible(true);
+  }
 
   //Method that gets the color the user chooses
   private void getColor(){

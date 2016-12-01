@@ -61,15 +61,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel container;
 
 	//captured area components
+	//JList and scroll pane 
 	private JList<ImageIcon> topCap;
 	private JList<ImageIcon> botCap;
 	private JScrollPane topScroller;
 	private JScrollPane botScroller;
+	//list model actually holds contents
 	private DefaultListModel<ImageIcon> topListModel;
 	private DefaultListModel<ImageIcon> botListModel;
+	//a flag to check whether color is changed to help with capture
 	private boolean colorChangeFlag = false;
 
-	//to quickly find piece type in captured area
+	//the two arraylists work as reference table to each elements added to captured area
+	//the type of the pieces captured can be looked up from this table with list element index
 	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
 	private ArrayList<String> botCapTypeTable = new ArrayList<String>();
 
@@ -246,6 +250,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	capArea.setPreferredSize(new Dimension(200, 500));
   	capArea.setBounds(600, 100, 150, 400);
 
+  	//rigid areas are empty components that is only for positioning purpose
   	container.add(Box.createRigidArea(new Dimension(50, 0)));
   	container.add(layeredPane);
   	container.add(capArea);
@@ -292,19 +297,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	private JPanel resetCapArea(){
+		
 		capArea = new JPanel();
 		capArea.setLayout(new BoxLayout(capArea, BoxLayout.Y_AXIS));
 
+		//initialize everything for capture area at the top
 		topListModel = new DefaultListModel<ImageIcon>();
-
 		topCap = new JList<ImageIcon>(topListModel);
 		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		topCap.setVisibleRowCount(-1);
 		topScroller = new JScrollPane(topCap);
 		topScroller.setPreferredSize(new Dimension(80, 50));
-
+		
+		
+		//initialize everything for capture area at the bot
 		botListModel = new DefaultListModel<ImageIcon>();
-
 		botCap = new JList<ImageIcon>(botListModel);
 		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		botCap.setVisibleRowCount(-1);
@@ -312,6 +319,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		botScroller.setPreferredSize(new Dimension(80, 50));
 		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
+		//adding rigid area for better look positioning
 		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
 		capArea.add(topScroller);
 		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -802,6 +810,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             }
 
             //loop through images in captured area
+            //grab the icon inside and change them to corresponding icons with new color
             for(int i = 0; i < botListModel.size(); i++) {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
@@ -910,6 +919,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             }
 
           //loop through images in captured area
+          //grab the icon inside and change them to corresponding icons with new color
             for(int i = 0; i < botListModel.size(); i++) {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
@@ -1232,12 +1242,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     pawnPromotion.setVisible(true);
   }
 
+  
+  //to flip capture area
   private void flipCapArea() {
 
+	  	//swap list models between two capture areas
 		DefaultListModel<ImageIcon> tempLM = (DefaultListModel<ImageIcon>)topCap.getModel();
 		topCap.setModel(botCap.getModel());
 		botCap.setModel(tempLM);
-
+		
+		//swap type reference tables
 		ArrayList<String> tempAL = topCapTypeTable;
 		topCapTypeTable = botCapTypeTable;
 		botCapTypeTable = tempAL;
@@ -1245,13 +1259,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 
 	//capture piece logic
-	//todo: style it
+  	//@param ChessPiece p: the ChessPiece object that is captured
 	private void capture(ChessPiece p) {
-		System.out.println(p.getType() + " is captured");
-
+		
 		if(!colorChangeFlag) {
+			//determine which type
 			switch (p.getType()) {
 				case "pawn":
+					//add correct piece image icon to the correct captured area
 					if(p.getSide()) topListModel.addElement(resize(whitePawn));
 					else botListModel.addElement(resize(blackPawn));
 					break;
@@ -1307,7 +1322,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
-
+		//add recent added piece type to the captured table
+		//when changing color we can find corresponding type from captured area
 		if(p.getSide())
 			topCapTypeTable.add(p.getType());
 		else

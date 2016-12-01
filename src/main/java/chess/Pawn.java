@@ -47,6 +47,10 @@ public class Pawn implements ChessPiece, Serializable {
     return this.column;
   }
 
+  public void setType(String newType) {
+    this.type = newType;
+  }
+
   public Pawn(String type, boolean side, boolean firstMove, boolean topOfBoard, boolean enpassant, int row, int column) {
     this.type = type;
   this.side = side;

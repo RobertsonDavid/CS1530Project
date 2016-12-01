@@ -127,6 +127,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //for gameover
   private boolean checkmate = false;
+  private boolean timerup = false;
   private JPanel endGame;
 
   private Stockfish stockfish;
@@ -174,7 +175,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       	   long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
         	timerLabel.setText(minute + ":"+ second);
         	if (seconds == 0) {
-        		System.exit(0);
+            timerup = true;
+        		showEndGame(true, timerup);
       		}
     	}
     };
@@ -466,24 +468,43 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		return boardPanel;
 	}
 
-   private void showEndGame(boolean bottomTurn)
+   private void showEndGame(boolean bottomTurn, boolean timerup)
   {
+    timer.stop();
     gameOver = new JFrame("Game Over");
-    gameOver.getContentPane().setBackground( Color.BLUE );
     gameOver.setSize(300,300);
     gameOver.setLocationRelativeTo ( null );
     gameOver.setLayout(new GridLayout(3,1));
+    JLabel headerLabel;
+    JLabel loseLabel;
+    JLabel winlose;
 
-    JLabel headerLabel = new JLabel("", JLabel.CENTER);
-    headerLabel.setFont(headerLabel.getFont ().deriveFont(32.0f));
-    headerLabel.setText("checkmate!");
+    if(timerup){
+      gameOver.getContentPane().setBackground( Color.RED );
 
-    JLabel winlose = new JLabel("", JLabel.CENTER);
+      headerLabel = new JLabel("", JLabel.CENTER);
+      headerLabel.setFont(headerLabel.getFont ().deriveFont(22.0f));
+      headerLabel.setText("You ran out of time");
 
-    if(bottomTurn == true)
-      winlose.setText("You lose");
-    else
-      winlose.setText("You win");
+      winlose = new JLabel("", JLabel.CENTER);
+      winlose.setFont(headerLabel.getFont ().deriveFont(22.0f));
+      winlose.setText("You Lose");
+    }
+
+    else{
+      gameOver.getContentPane().setBackground( Color.BLUE );
+
+      headerLabel = new JLabel("", JLabel.CENTER);
+      headerLabel.setFont(headerLabel.getFont ().deriveFont(32.0f));
+      headerLabel.setText("checkmate!");
+
+      winlose = new JLabel("", JLabel.CENTER);
+
+      if(bottomTurn == true)
+        winlose.setText("You lose");
+      else
+        winlose.setText("You win");
+    }
 
     JToolBar confirmation = new JToolBar();
     confirmation.setBackground(Color.BLUE);
@@ -571,15 +592,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
           if(bottomTurn == false) {
             if(isCheckMate(false)) {
-              showEndGame(false);
+              timerup = false;
+              showEndGame(false, timerup);
             }
             computerMove();
             if(isCheckMate(true)) {
-              showEndGame(true);
+              timerup = false;
+              showEndGame(true, timerup);
             }
             bottomTurn = true;
             resetTimer();
           }
+
+          resetTimer();
 
         }
     });
@@ -1050,7 +1075,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
            long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
           timerLabel.setText(minute + ":"+ second);
           if (seconds == 0) {
-            System.exit(0);
+            timerup = true;
+            showEndGame(true, timerup);
           }
       }
     };
@@ -1549,11 +1575,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     if(bottomTurn == false) {
       if(isCheckMate(false)) {
-        showEndGame(false);
+        timerup = false;
+        showEndGame(false, timerup);
       }
       computerMove();
       if(isCheckMate(true)) {
-        showEndGame(true);
+        timerup = false;
+        showEndGame(true, timerup);
       }
       bottomTurn = true;
       resetTimer();

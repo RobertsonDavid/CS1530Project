@@ -61,8 +61,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private JPanel container;
 
 	//captured area components
-	private JList topCap;
-	private JList botCap;
+	private JList<ImageIcon> topCap;
+	private JList<ImageIcon> botCap;
 	private JScrollPane topScroller;
 	private JScrollPane botScroller;
 	private DefaultListModel<ImageIcon> topListModel;
@@ -302,7 +302,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 		topListModel = new DefaultListModel<ImageIcon>();
 
-		topCap = new JList(topListModel);
+		topCap = new JList<ImageIcon>(topListModel);
 		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		topCap.setVisibleRowCount(-1);
 		topScroller = new JScrollPane(topCap);
@@ -310,7 +310,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 		botListModel = new DefaultListModel<ImageIcon>();
 
-		botCap = new JList(botListModel);
+		botCap = new JList<ImageIcon>(botListModel);
 		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		botCap.setVisibleRowCount(-1);
 		botScroller = new JScrollPane(botCap);

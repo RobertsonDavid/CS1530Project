@@ -1254,12 +1254,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 
 	//capture piece logic
+  	//@param ChessPiece p: the ChessPiece object that is captured
 	private void capture(ChessPiece p) {
-		System.out.println(p.getType() + " is captured");
-
+		
 		if(!colorChangeFlag) {
+			//determine which type
 			switch (p.getType()) {
 				case "pawn":
+					//add correct piece image icon to the correct captured area
 					if(p.getSide()) topListModel.addElement(resize(whitePawn));
 					else botListModel.addElement(resize(blackPawn));
 					break;
@@ -1315,7 +1317,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
-
+		//add recent added piece type to the captured table
+		//when changing color we can find corresponding type from captured area
 		if(p.getSide())
 			topCapTypeTable.add(p.getType());
 		else

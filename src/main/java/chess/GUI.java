@@ -1400,7 +1400,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 	private void flipCapArea() {
 
-		ListModel tempLM = topCap.getModel();
+		DefaultListModel<ImageIcon> tempLM = (DefaultListModel<ImageIcon>) topCap.getModel();
 		topCap.setModel(botCap.getModel());
 		botCap.setModel(tempLM);
 

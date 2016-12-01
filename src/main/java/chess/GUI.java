@@ -1479,20 +1479,53 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           pawnPromotion(newRow, newCol);
         }
 
-        //If the move was an en passant, we need to remove the piece appropriately
+        //If the move was an en passant or castle, we need to update the board appropriately
         if(newPos[2] != -1) {
-          BoardSquare enPassant = squares[newPos[2]][newPos[3]];
+          //en passant
+          if(piece.getType().equals("pawn")) {
+            BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
-          takenPiece = board.getPieceAt(newPos[2], newPos[3]);
-          enPassant.removeAll();
-          enPassant.revalidate();
-          enPassant.repaint();
+            takenPiece = board.getPieceAt(newPos[2], newPos[3]);
+            enPassant.removeAll();
+            enPassant.revalidate();
+            enPassant.repaint();
 
-          board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
-          capture(takenPiece);
+            board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+            capture(takenPiece);
+          }
+          //castle
+          else if(piece.getType().equals("king")) {
+            BoardSquare castleRook;
+            BoardSquare oldRookPos;
+            //castle king side
+            if(newCol > oldCol) {
+              castleRook = squares[newPos[2]][newPos[3]];
+              oldRookPos = squares[newPos[2]][newPos[3] + 2];
+            }
+            //castle queen side
+            else {
+              castleRook = squares[newPos[2]][newPos[3]];
+              oldRookPos = squares[newPos[2]][newPos[3] - 3];
+            }
+            JLabel movedRook = null;
+            //get the rook we're moving
+            for (Component jc : oldRookPos.getComponents()) {
+              if(jc instanceof JLabel) {
+                  movedRook = (JLabel)jc;
+                  break;
+              }
+            }
+
+            movedRook.setVisible(false);
+            Container oldRookParent = (Container)oldRookPos;
+            oldRookPos.remove(0);
+            Container rookParent = (Container)castleRook;
+            rookParent.add(movedRook);
+            movedRook.setVisible(true);
+            rookParent.revalidate();
+            rookParent.repaint();
+          }
         }
-
-
 
         //Update turn accordingly
         bottomTurn = false;

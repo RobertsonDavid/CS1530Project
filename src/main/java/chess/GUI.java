@@ -77,11 +77,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	private static JFrame chooseColor;
   private String colorChoice = "White";
 
+  private static JFrame gameOver;
+
   //Timer
 	private JLabel timerLabel = new JLabel();
-	JToolBar timers;
+	JToolBar timers = new JToolBar();
   private static int seconds = 300;
-  Timer timer;
+  private Timer timer;
   ActionListener displayTime;
 
   //For clicking and dragging pieces
@@ -115,6 +117,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //for turn taking
   private boolean bottomTurn = false;
+
+  //for gameover
+  private boolean checkmate = false;
+  private JPanel endGame;
 
   private Stockfish stockfish;
   boolean first = true;
@@ -195,6 +201,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	//toolbar.add(new JButton("Save Game"));	//When they click this, bring up window that lets them name game save (or maybe just automatically name it like day/month/year/time
   	//toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
     toolbar.add(dropDown);  //Options menu for things like changing the color and flipping the board
+
+    if (checkmate == true)
+      showEndGame(bottomTurn);
 
     //if new Game is selected
   	newGame.addActionListener(new ActionListener() {
@@ -449,6 +458,44 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
 		return boardPanel;
 	}
+
+   private void showEndGame(boolean bottomTurn)
+  {
+    gameOver = new JFrame("Game Over");
+    gameOver.getContentPane().setBackground( Color.BLUE );
+    gameOver.setSize(300,300);
+    gameOver.setLocationRelativeTo ( null );
+    gameOver.setLayout(new GridLayout(3,1));
+
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setFont(headerLabel.getFont ().deriveFont(32.0f));
+    headerLabel.setText("checkmate!");
+
+    JLabel winlose = new JLabel("", JLabel.CENTER);
+
+    if(bottomTurn == true)
+      winlose.setText("You lose");
+    else
+      winlose.setText("You win");
+
+    JToolBar confirmation = new JToolBar();
+    confirmation.setBackground(Color.BLUE);
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton cancel = new JButton("Cancel");
+    confirmation.add(cancel);
+
+    //if cancel is chosen remove window
+    cancel.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          gameOver.setVisible(false);
+        }
+    });
+
+    gameOver.add(headerLabel);
+    gameOver.add(winlose);
+    gameOver.add(confirmation);
+    gameOver.setVisible(true);
+  }
 
   //Method that gets the color the user chooses
   private void getColor(){
@@ -960,7 +1007,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   public void resetTimer() {
     timer.removeActionListener(displayTime);
-
+    seconds = 300;
     displayTime = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -973,11 +1020,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           }
       }
     };
-
+    Border blackline = BorderFactory.createLineBorder(Color.black);
     timer.addActionListener(displayTime);
     timer.start();
+    timerLabel.setBorder(blackline);
+    timers.add(timerLabel);
     revalidate();
     repaint();
+    showEndGame(true);
   }
 
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
@@ -1112,11 +1162,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       //If the newPos is of the new square, the move was legal
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
+        System.out.println("new row is "+ newRow + " " + newCol);
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
         //If the move was an en passant, we need to remove the piece appropriately
+        System.out.println("new pos"+newPos[2]);
         if(newPos[2] != -1) {
+          System.out.println("AA" + newPos[2] + newPos[3]);
           BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);

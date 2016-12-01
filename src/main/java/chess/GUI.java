@@ -1489,7 +1489,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             //castle queen side
             else {
               castleRook = squares[newPos[2]][newPos[3]];
-              oldRookPos = squares[newPos[2]][newPos[3] -3];
+              oldRookPos = squares[newPos[2]][newPos[3] - 3];
             }
             JLabel movedRook = null;
             //get the rook we're moving
@@ -1501,9 +1501,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             }
 
             movedRook.setVisible(false);
+            Container oldRookParent = (Container)oldRookPos;
+            oldRookPos.remove(0);
             Container rookParent = (Container)castleRook;
             rookParent.add(movedRook);
             movedRook.setVisible(true);
+            rookParent.revalidate();
+            rookParent.repaint();
           }
         }
 

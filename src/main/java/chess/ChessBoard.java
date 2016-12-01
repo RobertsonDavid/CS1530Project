@@ -50,7 +50,6 @@ public class ChessBoard implements Serializable{
 
  //return updated board to refresh GUI and test purpose
  public ChessPiece[][] update(int rOrigin, int cOrigin, int rDest, int cDest) {
-   System.out.println("update");
    int captureHelp= piecesLeft();
 
    if(b[rOrigin][cOrigin]!=null) {

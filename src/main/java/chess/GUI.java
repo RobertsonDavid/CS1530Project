@@ -16,18 +16,18 @@ import javax.swing.border.LineBorder;
 
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
-  private ImageIcon whitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
-  private ImageIcon blackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
-  private ImageIcon whiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
-  private ImageIcon blackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
-  private ImageIcon whiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
-  private ImageIcon blackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
-  private ImageIcon whiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
-  private ImageIcon blackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
-  private ImageIcon whiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
-  private ImageIcon blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
-  private ImageIcon whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
-  private ImageIcon blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+  private ImageIcon whitePawn;
+  private ImageIcon blackPawn;
+  private ImageIcon whiteRook;
+  private ImageIcon blackRook;
+  private ImageIcon whiteKnight;
+  private ImageIcon blackKnight;
+  private ImageIcon whiteBishop;
+  private ImageIcon blackBishop;
+  private ImageIcon whiteQueen;
+  private ImageIcon blackQueen;
+  private ImageIcon whiteKing;
+  private ImageIcon blackKing;
 
   //Array of kibitzes
   private String[] kibitzes = new String[]{"The longest game of chess that is possible is of 5,949 moves.",
@@ -323,7 +323,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
-	boardPanel = new JPanel();
+    whitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
+    blackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
+    whiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
+    blackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
+    whiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
+    blackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
+    whiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
+    blackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
+    whiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
+    blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
+    whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
+    blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+	  boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
 
@@ -479,13 +491,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     JToolBar confirmation = new JToolBar();
     confirmation.setBackground(Color.BLUE);
     confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
-    JButton cancel = new JButton("Cancel");
-    confirmation.add(cancel);
+    JButton newGame = new JButton("New Game");
+    confirmation.add(newGame);
 
-    //if cancel is chosen remove window
-    cancel.addActionListener(new ActionListener() {
+    //if new game is chosen start new gamer
+    newGame.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           gameOver.setVisible(false);
+          getColor();
         }
     });
 
@@ -556,21 +569,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           botListModel.clear();
           botCapTypeTable = new ArrayList<String>();
           topCapTypeTable = new ArrayList<String>();
-          
+
           flipCapArea();
-          
-          if(bottomTurn == false) {
-            if(isCheckMate(false)) {
-              System.out.println("you win");
-            }
-            computerMove();
-            if(isCheckMate(true)) {
-              System.out.println("you lose");
-            }
-            bottomTurn = true;
-            resetTimer();
-            board.printBoard();
-          }
+
         }
     });
 
@@ -1218,6 +1219,97 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     pawnPromotion.setVisible(true);
   }
 
+  private void flipCapArea() {
+
+		DefaultListModel<ImageIcon> tempLM = (DefaultListModel<ImageIcon>)topCap.getModel();
+		topCap.setModel(botCap.getModel());
+		botCap.setModel(tempLM);
+
+		ArrayList<String> tempAL = topCapTypeTable;
+		topCapTypeTable = botCapTypeTable;
+		botCapTypeTable = tempAL;
+	}
+
+
+	//capture piece logic
+	//todo: style it
+	private void capture(ChessPiece p) {
+		System.out.println(p.getType() + " is captured");
+
+		if(!colorChangeFlag) {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(whitePawn));
+					else botListModel.addElement(resize(blackPawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(whiteRook));
+					else botListModel.addElement(resize(blackRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(whiteKnight));
+					else botListModel.addElement(resize(blackKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(whiteBishop));
+					else botListModel.addElement(resize(blackBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(whiteQueen));
+					else botListModel.addElement(resize(blackQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(whiteKing));
+					else botListModel.addElement(resize(blackKing));
+					break;
+			}
+		}
+
+		else {
+			switch (p.getType()) {
+				case "pawn":
+					if(p.getSide()) topListModel.addElement(resize(blackPawn));
+					else botListModel.addElement(resize(whitePawn));
+					break;
+				case "rook":
+					if(p.getSide()) topListModel.addElement(resize(blackRook));
+					else botListModel.addElement(resize(whiteRook));
+					break;
+				case "knight":
+					if(p.getSide()) topListModel.addElement(resize(blackKnight));
+					else botListModel.addElement(resize(whiteKnight));
+					break;
+				case "bishop":
+					if(p.getSide()) topListModel.addElement(resize(blackBishop));
+					else botListModel.addElement(resize(whiteBishop));
+					break;
+				case "queen":
+					if(p.getSide()) topListModel.addElement(resize(blackQueen));
+					else botListModel.addElement(resize(whiteQueen));
+					break;
+				case "king":
+					if(p.getSide()) topListModel.addElement(resize(blackKing));
+					else botListModel.addElement(resize(whiteKing));
+					break;
+			}
+		}
+
+
+		if(p.getSide())
+			topCapTypeTable.add(p.getType());
+		else
+			botCapTypeTable.add(p.getType());
+
+	}
+
+	//helper method resize image to fit capture area
+	//the only reason to implement the process as a method is to reduce unnecessary code repeat
+	private ImageIcon resize(ImageIcon icon) {
+		Image img = icon.getImage();
+		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		return new ImageIcon(img);
+	}
+
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
 
@@ -1396,104 +1488,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       }
       bottomTurn = true;
       resetTimer();
-      board.printBoard();
     }
 	}
-
-
-	private void flipCapArea() {
-
-		DefaultListModel<ImageIcon> tempLM = (DefaultListModel<ImageIcon>) topCap.getModel();
-		topCap.setModel(botCap.getModel());
-		botCap.setModel(tempLM);
-
-		ArrayList<String> tempAL = topCapTypeTable;
-		topCapTypeTable = botCapTypeTable;
-		botCapTypeTable = tempAL;
-	}
-
-
-	//capture piece logic
-	private void capture(ChessPiece p) {
-		System.out.println(p.getType() + " is captured");
-		boolean currentSide = p.getSide();
-		if(colorChoice == "Black" )
-			currentSide = !currentSide;
-		
-		if(!colorChangeFlag) {
-			switch (p.getType()) {
-				case "pawn":
-					if(currentSide) topListModel.addElement(resize(whitePawn));
-					else botListModel.addElement(resize(blackPawn));
-					break;
-				case "rook":
-					if(currentSide) topListModel.addElement(resize(whiteRook));
-					else botListModel.addElement(resize(blackRook));
-					break;
-				case "knight":
-					if(currentSide) topListModel.addElement(resize(whiteKnight));
-					else botListModel.addElement(resize(blackKnight));
-					break;
-				case "bishop":
-					if(currentSide) topListModel.addElement(resize(whiteBishop));
-					else botListModel.addElement(resize(blackBishop));
-					break;
-				case "queen":
-					if(currentSide) topListModel.addElement(resize(whiteQueen));
-					else botListModel.addElement(resize(blackQueen));
-					break;
-				case "king":
-					if(currentSide) topListModel.addElement(resize(whiteKing));
-					else botListModel.addElement(resize(blackKing));
-					break;
-			}
-		}
-
-		else {
-			switch (p.getType()) {
-				case "pawn":
-					if(currentSide) topListModel.addElement(resize(blackPawn));
-					else botListModel.addElement(resize(whitePawn));
-					break;
-				case "rook":
-					if(currentSide) topListModel.addElement(resize(blackRook));
-					else botListModel.addElement(resize(whiteRook));
-					break;
-				case "knight":
-					if(currentSide) topListModel.addElement(resize(blackKnight));
-					else botListModel.addElement(resize(whiteKnight));
-					break;
-				case "bishop":
-					if(currentSide) topListModel.addElement(resize(blackBishop));
-					else botListModel.addElement(resize(whiteBishop));
-					break;
-				case "queen":
-					if(currentSide) topListModel.addElement(resize(blackQueen));
-					else botListModel.addElement(resize(whiteQueen));
-					break;
-				case "king":
-					if(currentSide) topListModel.addElement(resize(blackKing));
-					else botListModel.addElement(resize(whiteKing));
-					break;
-			}
-		}
-
-
-		if(p.getSide())
-			topCapTypeTable.add(p.getType());
-		else
-			botCapTypeTable.add(p.getType());
-
-	}
-
-	//helper method resize image to fit capture area
-	//the only reason to implement the process as a method is to reduce unnecessary code repeat
-	private ImageIcon resize(ImageIcon icon) {
-		Image img = icon.getImage();
-		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
-		return new ImageIcon(img);
-	}
-
 
   public boolean isCheckMate(boolean bottom) {
     String fen = board.generateFEN(bottom);

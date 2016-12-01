@@ -205,9 +205,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	//toolbar.add(new JButton("Load Game")); 	//When they click this, bring up a window that lets them choose a new game
     toolbar.add(dropDown);  //Options menu for things like changing the color and flipping the board
 
-    if (checkmate == true)
-      showEndGame(bottomTurn);
-
     //if new Game is selected
   	newGame.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
@@ -1030,7 +1027,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     timers.add(timerLabel);
     revalidate();
     repaint();
-    showEndGame(true);
   }
 
   //Pops up a frame for the user to choose a piece to promote their pawn to,
@@ -1351,7 +1347,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
       //If the newPos is of the new square, the move was legal
       if((newPos[0] == newRow) && (newPos[1] == newCol)) {
-        System.out.println("new row is "+ newRow + " " + newCol);
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
@@ -1361,9 +1356,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         //If the move was an en passant, we need to remove the piece appropriately
-        System.out.println("new pos"+newPos[2]);
         if(newPos[2] != -1) {
-          System.out.println("AA" + newPos[2] + newPos[3]);
           BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
           takenPiece = board.getPieceAt(newPos[2], newPos[3]);
@@ -1392,11 +1385,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     if(bottomTurn == false) {
       if(isCheckMate(false)) {
-        System.out.println("you win");
+        showEndGame(false);
       }
       computerMove();
       if(isCheckMate(true)) {
-        System.out.println("you lose");
+        showEndGame(true);
       }
       bottomTurn = true;
       resetTimer();
@@ -1537,8 +1530,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         break;
       }
     }
-
-    //Component spotOnBoard2 = gameWindow.findComponentAt(compSquare.getLocation().x, compSquare.getLocation().y);
 
     compSpace.setVisible(false);
     Container parent = (Container)compSquare;

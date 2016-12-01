@@ -72,7 +72,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	//a flag to check whether color is changed to help with capture
 	private boolean colorChangeFlag = false;
 
-	//to quickly find piece type in captured area
+	//the two arraylists work as reference table to each elements added to captured area
+	//the type of the pieces captured can be looked up from this table with list element index
 	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
 	private ArrayList<String> botCapTypeTable = new ArrayList<String>();
 
@@ -1241,12 +1242,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     pawnPromotion.setVisible(true);
   }
 
+  
+  //to flip capture area
   private void flipCapArea() {
 
+	  	//swap list models between two capture areas
 		DefaultListModel<ImageIcon> tempLM = (DefaultListModel<ImageIcon>)topCap.getModel();
 		topCap.setModel(botCap.getModel());
 		botCap.setModel(tempLM);
-
+		
+		//swap type reference tables
 		ArrayList<String> tempAL = topCapTypeTable;
 		topCapTypeTable = botCapTypeTable;
 		botCapTypeTable = tempAL;

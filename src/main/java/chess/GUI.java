@@ -333,18 +333,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
   //Resets the board by resetting the ChessBoard object and the array of BoardSquares.
 	private JPanel resetBoard(){
-    whitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
-    blackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
-    whiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
-    blackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
-    whiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
-    blackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
-    whiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
-    blackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
-    whiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
-    blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
-    whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
-    blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
+    resetColors();
 	  boardPanel = new JPanel();
     boardPanel.setLayout(new GridLayout(8, 8));
     boolean white;
@@ -677,6 +666,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //Blue : 65,105,225
   //Gold : 218,165,32
   public void changeColors(){
+
+    resetColors();
 
     //First, convert all the images to BufferedImages so we can work with their properties
     BufferedImage newWhitePawn = toBufferedImage(whitePawn.getImage());
@@ -1055,6 +1046,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
      // Return the buffered image
      return bimage;
+ }
+
+//Resets the piece colors back to their initial state
+ public void resetColors() {
+   whitePawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_plt60.png");
+   blackPawn = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_pdt60.png");
+   whiteRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rlt60.png");
+   blackRook = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_rdt60.png");
+   whiteKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_nlt60.png");
+   blackKnight = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_ndt60.png");
+   whiteBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_blt60.png");
+   blackBishop = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_bdt60.png");
+   whiteQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qlt60.png");
+   blackQueen = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_qdt60.png");
+   whiteKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_klt60.png");
+   blackKing = new ImageIcon("src/main/java/ChessPiecesPictures/Chess_kdt60.png");
  }
 
   public void resetTimer() {
@@ -1505,20 +1512,53 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           pawnPromotion(newRow, newCol);
         }
 
-        //If the move was an en passant, we need to remove the piece appropriately
+        //If the move was an en passant or castle, we need to update the board appropriately
         if(newPos[2] != -1) {
-          BoardSquare enPassant = squares[newPos[2]][newPos[3]];
+          //en passant
+          if(piece.getType().equals("pawn")) {
+            BoardSquare enPassant = squares[newPos[2]][newPos[3]];
 
-          takenPiece = board.getPieceAt(newPos[2], newPos[3]);
-          enPassant.removeAll();
-          enPassant.revalidate();
-          enPassant.repaint();
+            takenPiece = board.getPieceAt(newPos[2], newPos[3]);
+            enPassant.removeAll();
+            enPassant.revalidate();
+            enPassant.repaint();
 
-          board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
-          capture(takenPiece);
+            board.removePiece(newPos[2], newPos[3]); //remove the piece from the ChessBoard object
+            capture(takenPiece);
+          }
+          //castle
+          else if(piece.getType().equals("king")) {
+            BoardSquare castleRook;
+            BoardSquare oldRookPos;
+            //castle king side
+            if(newCol > oldCol) {
+              castleRook = squares[newPos[2]][newPos[3]];
+              oldRookPos = squares[newPos[2]][newPos[3] + 2];
+            }
+            //castle queen side
+            else {
+              castleRook = squares[newPos[2]][newPos[3]];
+              oldRookPos = squares[newPos[2]][newPos[3] - 3];
+            }
+            JLabel movedRook = null;
+            //get the rook we're moving
+            for (Component jc : oldRookPos.getComponents()) {
+              if(jc instanceof JLabel) {
+                  movedRook = (JLabel)jc;
+                  break;
+              }
+            }
+
+            movedRook.setVisible(false);
+            Container oldRookParent = (Container)oldRookPos;
+            oldRookPos.remove(0);
+            Container rookParent = (Container)castleRook;
+            rookParent.add(movedRook);
+            movedRook.setVisible(true);
+            rookParent.revalidate();
+            rookParent.repaint();
+          }
         }
-
-
 
         //Update turn accordingly
         bottomTurn = false;

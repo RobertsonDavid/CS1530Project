@@ -137,12 +137,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		this.board = board;
 		this.setTitle("Laboon Chess");
 		setContentPane(container);
-		//getContentPane().add(layeredPane);
 		layeredPane.addMouseListener(this);
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
 		container.setPreferredSize(new Dimension(1000, 700));
-		//this.setSize(800, 700);
 		boardPanel = resetBoard();
 
     stockfish = new Stockfish();
@@ -564,11 +562,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+          gameWindow.setPreferredSize(new Dimension(600, 600));
+          gameWindow.setBounds(0, 0, 600, 600);
 
           topListModel.clear();
           botListModel.clear();
           botCapTypeTable = new ArrayList<String>();
           topCapTypeTable = new ArrayList<String>();
+
+          flipCapArea();
+
         }
     });
 
@@ -945,6 +948,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           changeColor.dispose();
           gameWindow.remove(boardPanel);
           gameWindow.remove(kibitz);
+          boardPanel = newBoardPanel;
           gameWindow.add(newBoardPanel);
           gameWindow.add(kibitz);
           gameWindow.revalidate();

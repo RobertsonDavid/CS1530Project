@@ -61,7 +61,7 @@ public class ChessBoard implements Serializable{
 
      enPassant="-";
      //check for en passant
-     /*if(b[rDest][cDest].getType().equals("pawn"))
+     if(b[rDest][cDest].getType().equals("pawn"))
      {
        if( (rDest-rOrigin)==2 || (rOrigin-rDest)==2 )
        {
@@ -104,7 +104,7 @@ public class ChessBoard implements Serializable{
              enPassant= "h3";
          }
        }
-     }*/
+     }
 
      //update the halfmove clock
      halfCount++;

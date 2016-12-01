@@ -59,7 +59,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	//panel for captured area
 	private JPanel capArea;
 	private JPanel container;
-	
+
 	//captured area components
 	private JList topCap;
 	private JList botCap;
@@ -72,11 +72,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	//to quickly find piece type in captured area
 	private ArrayList<String> topCapTypeTable = new ArrayList<String>();
 	private ArrayList<String> botCapTypeTable = new ArrayList<String>();
-	
+
   //Frame for choosing your color
 	private static JFrame chooseColor;
   private String colorChoice = "White";
 
+  //Frame for pawn pawnPromotion
+  private static JFrame pawnPromotion;
+  private String promotionChoice = null;
   private static JFrame gameOver;
 
   //Timer
@@ -243,11 +246,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   	gameWindow.setPreferredSize(new Dimension(600, 600));
   	gameWindow.setBounds(0, 0, 600, 600);
   	layeredPane.add(gameWindow, JLayeredPane.DEFAULT_LAYER);
-  	
+
   	capArea = resetCapArea();
   	capArea.setPreferredSize(new Dimension(200, 500));
   	capArea.setBounds(600, 100, 150, 400);
-  	
+
   	container.add(Box.createRigidArea(new Dimension(50, 0)));
   	container.add(layeredPane);
   	container.add(capArea);
@@ -292,34 +295,34 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		gameWindow.add(kibitz);
 		return gameWindow;
 	}
-	
+
 	private JPanel resetCapArea(){
 		capArea = new JPanel();
 		capArea.setLayout(new BoxLayout(capArea, BoxLayout.Y_AXIS));
-		
+
 		topListModel = new DefaultListModel<ImageIcon>();
-		
+
 		topCap = new JList(topListModel);
 		topCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		topCap.setVisibleRowCount(-1);
 		topScroller = new JScrollPane(topCap);
 		topScroller.setPreferredSize(new Dimension(80, 50));
-		
+
 		botListModel = new DefaultListModel<ImageIcon>();
-		
+
 		botCap = new JList(botListModel);
 		botCap.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		botCap.setVisibleRowCount(-1);
 		botScroller = new JScrollPane(botCap);
-		botScroller.setPreferredSize(new Dimension(80, 50)); 
-		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT); 
-		
+		botScroller.setPreferredSize(new Dimension(80, 50));
+		botScroller.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+
 		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
 		capArea.add(topScroller);
 		capArea.add(Box.createRigidArea(new Dimension(0, 50)));
 		capArea.add(botScroller);
 		capArea.add(Box.createRigidArea(new Dimension(0, 150)));
-		
+
 		return capArea;
 	}
 
@@ -576,7 +579,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     cancel.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           chooseColor.setVisible(false);
-          
+
         }
     });
 
@@ -784,27 +787,27 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 newBoardPanel.add(square);
               }
             }
-            
+
             //loop through images in captured area
             for(int i = 0; i < botListModel.size(); i++) {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
-            		case "pawn": 
+            		case "pawn":
             			botListModel.setElementAt(resize(whitePawn), i);
             			break;
-            		case "rook": 
+            		case "rook":
             			botListModel.setElementAt(resize(whiteRook), i);
             			break;
-            		case "knight": 
+            		case "knight":
             			botListModel.setElementAt(resize(whiteKnight), i);
             			break;
-            		case "bishop": 
+            		case "bishop":
             			botListModel.setElementAt(resize(whiteBishop), i);
             			break;
-            		case "queen": 
+            		case "queen":
             			botListModel.setElementAt(resize(whiteQueen), i);
             			break;
-            		case "king": 
+            		case "king":
             			botListModel.setElementAt(resize(whiteKing), i);
             			break;
             	}
@@ -813,22 +816,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             for(int i = 0; i < topListModel.size(); i++) {
             	String type = topCapTypeTable.get(i);
             	switch(type) {
-            		case "pawn": 
+            		case "pawn":
             			topListModel.setElementAt(resize(blackPawn), i);
             			break;
-            		case "rook": 
+            		case "rook":
             			topListModel.setElementAt(resize(blackRook), i);
             			break;
-            		case "knight": 
+            		case "knight":
             			topListModel.setElementAt(resize(blackKnight), i);
             			break;
-            		case "bishop": 
+            		case "bishop":
             			topListModel.setElementAt(resize(blackBishop), i);
             			break;
-            		case "queen": 
+            		case "queen":
             			topListModel.setElementAt(resize(blackQueen), i);
             			break;
-            		case "king": 
+            		case "king":
             			topListModel.setElementAt(resize(blackKing), i);
             			break;
             	}
@@ -892,27 +895,27 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 newBoardPanel.add(square);
               }
             }
-            
+
           //loop through images in captured area
             for(int i = 0; i < botListModel.size(); i++) {
             	String type = botCapTypeTable.get(i);
             	switch(type) {
-            		case "pawn": 
+            		case "pawn":
             			botListModel.setElementAt(resize(whitePawn), i);
             			break;
-            		case "rook": 
+            		case "rook":
             			botListModel.setElementAt(resize(whiteRook), i);
             			break;
-            		case "knight": 
+            		case "knight":
             			botListModel.setElementAt(resize(whiteKnight), i);
             			break;
-            		case "bishop": 
+            		case "bishop":
             			botListModel.setElementAt(resize(whiteBishop), i);
             			break;
-            		case "queen": 
+            		case "queen":
             			botListModel.setElementAt(resize(whiteQueen), i);
             			break;
-            		case "king": 
+            		case "king":
             			botListModel.setElementAt(resize(whiteKing), i);
             			break;
             	}
@@ -921,22 +924,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             for(int i = 0; i < topListModel.size(); i++) {
             	String type = topCapTypeTable.get(i);
             	switch(type) {
-            		case "pawn": 
+            		case "pawn":
             			topListModel.setElementAt(resize(blackPawn), i);
             			break;
-            		case "rook": 
+            		case "rook":
             			topListModel.setElementAt(resize(blackRook), i);
             			break;
-            		case "knight": 
+            		case "knight":
             			topListModel.setElementAt(resize(blackKnight), i);
             			break;
-            		case "bishop": 
+            		case "bishop":
             			topListModel.setElementAt(resize(blackBishop), i);
             			break;
-            		case "queen": 
+            		case "queen":
             			topListModel.setElementAt(resize(blackQueen), i);
             			break;
-            		case "king": 
+            		case "king":
             			topListModel.setElementAt(resize(blackKing), i);
             			break;
             	}
@@ -1030,11 +1033,197 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     showEndGame(true);
   }
 
+  //Pops up a frame for the user to choose a piece to promote their pawn to,
+  //and performs the promotion
+  public void pawnPromotion(int row, int col) {
+    //Color window
+    pawnPromotion = new JFrame("Pawn promotion");
+    pawnPromotion.setSize(700,300);
+    pawnPromotion.setLayout(new GridLayout(3,1));
+
+    newBoardPanel = new JPanel();
+    newBoardPanel.setLayout(new GridLayout(8, 8));
+
+    //label that tells the user to choose a color
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setText("Please select the piece you'd like to promote your pawn to.");
+
+    //displaying the radio choices black and white
+    JRadioButton queen = new JRadioButton("Queen", promotionChoice.equals("queen"));
+    JRadioButton knight = new JRadioButton("Knight", promotionChoice.equals("knight"));
+    JRadioButton bishop = new JRadioButton("Bishop", promotionChoice.equals("bishop"));
+    JRadioButton rook = new JRadioButton("Rook", promotionChoice.equals("rook"));
+
+    JPanel controlPanel = new JPanel();
+    controlPanel.setLayout(new FlowLayout());
+
+    //creating the start game button and the cancel button
+    JToolBar confirmation = new JToolBar();
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton setPromotion = new JButton("Set Promotion");
+    confirmation.add(setPromotion);
+
+    queen.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "queen";
+      }
+    });
+
+    knight.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "knight";
+      }
+    });
+
+    bishop.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "bishop";
+      }
+    });
+
+    rook.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e){
+        promotionChoice = "rook";
+      }
+    });
+
+    //if start game is chosen remove window
+    setPromotion.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          pawnPromotion.setVisible(false);
+          pawnPromotion.dispose();
+
+          ChessPiece piece = board.getPieceAt(row, col);
+          piece.setType(promotionChoice);
+
+          JLabel pieceImage = null;
+          BoardSquare square = squares[row][col];
+
+          //If the player is playing as white, we need to change the pieces accordingly. Only uses white piece images so we can preserve the border and accents
+          if(colorChoice.equals("Black")) {
+
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
+          //If the player is playing as black, we need to change the pieces accordingly
+          else {
+            //Loop through array of BoardSquares, pull out the ChessPiece object
+            //corresponding to that square, and set its new image accordingly
+            for(int i = 0; i < 8; i++) {
+              for(int j = 0; j < 8; j++) {
+                square = squares[i][j];
+                piece = board.getPieceAt(i, j);
+                square.removeAll(); //remove old image
+
+                if(piece != null) {
+                  //opponent piece
+                  if(piece.getSide() == true) {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(whitePawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(whiteRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(whiteKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(whiteBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(whiteQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(whiteKing);
+                  }
+                  else {
+                    if(piece.getType().equals("pawn"))
+                      pieceImage = new JLabel(blackPawn);
+                    else if(piece.getType().equals("rook"))
+                      pieceImage = new JLabel(blackRook);
+                    else if(piece.getType().equals("knight"))
+                      pieceImage = new JLabel(blackKnight);
+                    else if(piece.getType().equals("bishop"))
+                      pieceImage = new JLabel(blackBishop);
+                    else if(piece.getType().equals("queen"))
+                      pieceImage = new JLabel(blackQueen);
+                    else if(piece.getType().equals("king"))
+                      pieceImage = new JLabel(blackKing);
+                  }
+                  square.add(pieceImage);
+                }
+                newBoardPanel.add(square);
+              }
+            }
+          }
+
+          gameWindow.remove(boardPanel);
+          gameWindow.remove(kibitz);
+          gameWindow.add(newBoardPanel);
+          gameWindow.add(kibitz);
+          boardPanel.setVisible(true);
+        }
+    });
+
+    //grouping the buttons together
+    ButtonGroup group = new ButtonGroup();
+    group.add(queen);
+    group.add(knight);
+    group.add(bishop);
+    group.add(rook);
+
+    controlPanel.add(queen);
+    controlPanel.add(knight);
+    controlPanel.add(bishop);
+    controlPanel.add(rook);
+
+    //adding panels and displaying
+    pawnPromotion.add(headerLabel);
+    pawnPromotion.add(controlPanel);
+    pawnPromotion.add(confirmation);
+    pawnPromotion.setVisible(true);
+  }
+
   //Waits for mouse click, and then finds the JPanel representing the square so that we can pick up the piece.
 	public void mousePressed(MouseEvent e){
-	
+
 	try{
-		
+
 		space = null;
     piece = null;
     //Gets the component at the location the user clicked
@@ -1073,7 +1262,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 	catch(NullPointerException npe) {
 		System.out.println("Wrong place to click!");
 	}
-	
+
 	}
 
   //Waits for the mouse to be dragged, and displays the updated location.
@@ -1132,7 +1321,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         //capture the piece when move is legal
         capture(takenPiece);
-        
+
         resetTimer();
       }
       //If the newPos is the old position, the move was not legal
@@ -1166,6 +1355,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         parent.add(space); //Put the piece at this square
         board.update(oldRow, oldCol, newRow, newCol); //Update the ChessBoard object accordingly
 
+        //pawn promotion time
+        if(piece.getType().equals("pawn") && ((newRow == 0) || (newRow == 7))) {
+          pawnPromotion(newRow, newCol);
+        }
+
         //If the move was an en passant, we need to remove the piece appropriately
         System.out.println("new pos"+newPos[2]);
         if(newPos[2] != -1) {
@@ -1181,8 +1375,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           capture(takenPiece);
         }
 
-        
-        
+
+
         //Update turn accordingly
         bottomTurn = false;
         resetTimer();
@@ -1209,25 +1403,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       board.printBoard();
     }
 	}
-	
-	
+
+
 	private void flipCapArea() {
-		
+
 		ListModel tempLM = topCap.getModel();
 		topCap.setModel(botCap.getModel());
 		botCap.setModel(tempLM);
-		
+
 		ArrayList<String> tempAL = topCapTypeTable;
 		topCapTypeTable = botCapTypeTable;
 		botCapTypeTable = tempAL;
 	}
-	
-	
+
+
 	//capture piece logic
 	//todo: style it
 	private void capture(ChessPiece p) {
 		System.out.println(p.getType() + " is captured");
-		
+
 		if(!colorChangeFlag) {
 			switch (p.getType()) {
 				case "pawn":
@@ -1256,7 +1450,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 					break;
 			}
 		}
-		
+
 		else {
 			switch (p.getType()) {
 				case "pawn":
@@ -1291,9 +1485,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 			topCapTypeTable.add(p.getType());
 		else
 			botCapTypeTable.add(p.getType());
-		
+
 	}
-	
+
 	//helper method resize image to fit capture area
 	//the only reason to implement the process as a method is to reduce unnecessary code repeat
 	private ImageIcon resize(ImageIcon icon) {
@@ -1301,7 +1495,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		return new ImageIcon(img);
 	}
-	
+
 
   public boolean isCheckMate(boolean bottom) {
     String fen = board.generateFEN(bottom);
@@ -1326,8 +1520,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     BoardSquare compSquare = squares[compNewRow][compNewCol];
     JLabel pieceToMove = null;
     boolean hasLabel = false;
-
-    System.out.println(compOrigRow + " " + compNewRow);
+    ChessPiece piece = board.getPieceAt(compOrigRow, compOrigCol);
 
     for (Component jc : oldCompSquare.getComponents()) {
       if(jc instanceof JLabel) {
@@ -1350,10 +1543,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     compSpace.setVisible(false);
     Container parent = (Container)compSquare;
 
-    System.out.println(compOrigRow + " " + compOrigCol + " " + compNewRow + " " + compNewCol);
-
     if(hasLabel) {
-      System.out.println("there was a piece there");
       parent.remove(0);
       parent.add(compSpace);
       //capture the piece taken by computer
@@ -1361,7 +1551,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
-      System.out.println("it was empty");
+
+      //need to check for en passant
+      if(piece.getType().equals("pawn")) {
+        //must be an en passant
+        if(compOrigCol != compNewCol) {
+          BoardSquare toClear = squares[compNewRow - 1][compNewCol];
+          Container clearMe = (Container)toClear;
+          toClear.remove(0);
+          board.removePiece(compNewRow - 1, compNewCol);
+        }
+      }
+
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }

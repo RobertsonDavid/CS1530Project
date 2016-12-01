@@ -46,6 +46,10 @@ public class Rook implements ChessPiece, Serializable {
 
  public int getColumn() {
     return this.column;
+ }
+
+  public void setType(String newType) {
+    this.type = newType;
   }
 
   public Rook(String type, boolean side, boolean firstMove, boolean topOfBoard, int row, int column) {

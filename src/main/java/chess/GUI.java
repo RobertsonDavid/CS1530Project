@@ -137,12 +137,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		this.board = board;
 		this.setTitle("Laboon Chess");
 		setContentPane(container);
-		//getContentPane().add(layeredPane);
 		layeredPane.addMouseListener(this);
  		layeredPane.addMouseMotionListener(this);
 		layeredPane.setPreferredSize(new Dimension(600, 600));
 		container.setPreferredSize(new Dimension(1000, 700));
-		//this.setSize(800, 700);
 		boardPanel = resetBoard();
 
     stockfish = new Stockfish();
@@ -551,12 +549,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           gameWindow.add(boardPanel);
           gameWindow.add(kibitz);
           boardPanel.setVisible(true);
+          gameWindow.setPreferredSize(new Dimension(600, 600));
+          gameWindow.setBounds(0, 0, 600, 600);
 
           topListModel.clear();
           botListModel.clear();
           botCapTypeTable = new ArrayList<String>();
           topCapTypeTable = new ArrayList<String>();
-
+          
+          flipCapArea();
+          
           if(bottomTurn == false) {
             if(isCheckMate(false)) {
               System.out.println("you win");
@@ -945,6 +947,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           changeColor.dispose();
           gameWindow.remove(boardPanel);
           gameWindow.remove(kibitz);
+          boardPanel = newBoardPanel;
           gameWindow.add(newBoardPanel);
           gameWindow.add(kibitz);
           gameWindow.revalidate();
@@ -1411,34 +1414,36 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
 
 	//capture piece logic
-	//todo: style it
 	private void capture(ChessPiece p) {
 		System.out.println(p.getType() + " is captured");
-
+		boolean currentSide = p.getSide();
+		if(colorChoice == "Black" )
+			currentSide = !currentSide;
+		
 		if(!colorChangeFlag) {
 			switch (p.getType()) {
 				case "pawn":
-					if(p.getSide()) topListModel.addElement(resize(whitePawn));
+					if(currentSide) topListModel.addElement(resize(whitePawn));
 					else botListModel.addElement(resize(blackPawn));
 					break;
 				case "rook":
-					if(p.getSide()) topListModel.addElement(resize(whiteRook));
+					if(currentSide) topListModel.addElement(resize(whiteRook));
 					else botListModel.addElement(resize(blackRook));
 					break;
 				case "knight":
-					if(p.getSide()) topListModel.addElement(resize(whiteKnight));
+					if(currentSide) topListModel.addElement(resize(whiteKnight));
 					else botListModel.addElement(resize(blackKnight));
 					break;
 				case "bishop":
-					if(p.getSide()) topListModel.addElement(resize(whiteBishop));
+					if(currentSide) topListModel.addElement(resize(whiteBishop));
 					else botListModel.addElement(resize(blackBishop));
 					break;
 				case "queen":
-					if(p.getSide()) topListModel.addElement(resize(whiteQueen));
+					if(currentSide) topListModel.addElement(resize(whiteQueen));
 					else botListModel.addElement(resize(blackQueen));
 					break;
 				case "king":
-					if(p.getSide()) topListModel.addElement(resize(whiteKing));
+					if(currentSide) topListModel.addElement(resize(whiteKing));
 					else botListModel.addElement(resize(blackKing));
 					break;
 			}
@@ -1447,27 +1452,27 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 		else {
 			switch (p.getType()) {
 				case "pawn":
-					if(p.getSide()) topListModel.addElement(resize(blackPawn));
+					if(currentSide) topListModel.addElement(resize(blackPawn));
 					else botListModel.addElement(resize(whitePawn));
 					break;
 				case "rook":
-					if(p.getSide()) topListModel.addElement(resize(blackRook));
+					if(currentSide) topListModel.addElement(resize(blackRook));
 					else botListModel.addElement(resize(whiteRook));
 					break;
 				case "knight":
-					if(p.getSide()) topListModel.addElement(resize(blackKnight));
+					if(currentSide) topListModel.addElement(resize(blackKnight));
 					else botListModel.addElement(resize(whiteKnight));
 					break;
 				case "bishop":
-					if(p.getSide()) topListModel.addElement(resize(blackBishop));
+					if(currentSide) topListModel.addElement(resize(blackBishop));
 					else botListModel.addElement(resize(whiteBishop));
 					break;
 				case "queen":
-					if(p.getSide()) topListModel.addElement(resize(blackQueen));
+					if(currentSide) topListModel.addElement(resize(blackQueen));
 					else botListModel.addElement(resize(whiteQueen));
 					break;
 				case "king":
-					if(p.getSide()) topListModel.addElement(resize(blackKing));
+					if(currentSide) topListModel.addElement(resize(blackKing));
 					else botListModel.addElement(resize(whiteKing));
 					break;
 			}

@@ -119,6 +119,8 @@ public class KingTest {
 	@Test
 	public void testMoveOutOfBounds() {
 		Mockito.when(board.getPieceAt(-1, 4)).thenReturn(null);
+		Mockito.when(k.testMove(board, 0,4,-1,4)).thenReturn(false);
+		Mockito.when(newBoard.update(0,4,-1,4)).doNothing();
 		int[] expected = {0, 4, -1, -1};
 		assertArrayEquals(expected, k.move(board, -1, 4));
 	}

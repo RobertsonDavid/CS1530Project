@@ -89,7 +89,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //Timer
 	private JLabel timerLabel = new JLabel();
 	JToolBar timers = new JToolBar();
-  private static int seconds = 300;
+  private static int seconds = 10;
   private Timer timer;
   ActionListener displayTime;
 
@@ -174,7 +174,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       	   long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
         	timerLabel.setText(minute + ":"+ second);
         	if (seconds == 0) {
-        		System.exit(0);
+        		showEnd();
       		}
     	}
     };
@@ -476,6 +476,44 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     board = new ChessBoard(); //This resets the backing ChessBoard object, which contains the array of ChessPieces
 		return boardPanel;
 	}
+  //if you run out of time you lose
+  private void showEnd()
+  {
+    timer.stop();
+    gameOver = new JFrame("Game Over");
+    gameOver.getContentPane().setBackground( Color.RED );
+    gameOver.setSize(300,300);
+    gameOver.setLocationRelativeTo ( null );
+    gameOver.setLayout(new GridLayout(3,1));
+
+    JLabel headerLabel = new JLabel("", JLabel.CENTER);
+    headerLabel.setFont(headerLabel.getFont ().deriveFont(22.0f));
+    headerLabel.setText("You ran out of time");
+
+    JLabel loseLabel = new JLabel("", JLabel.CENTER);
+    loseLabel.setFont(headerLabel.getFont ().deriveFont(22.0f));
+    loseLabel.setText("You Lose");
+
+
+    JToolBar confirmation = new JToolBar();
+    confirmation.setBackground(Color.BLUE);
+    confirmation.setLayout(new FlowLayout(FlowLayout.CENTER));
+    JButton newGame = new JButton("New Game");
+    confirmation.add(newGame);
+
+    //if new game is chosen start new gamer
+    newGame.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          gameOver.setVisible(false);
+          getColor();
+        }
+    });
+
+    gameOver.add(headerLabel);
+    gameOver.add(loseLabel);
+    gameOver.add(confirmation);
+    gameOver.setVisible(true);
+  }
 
    private void showEndGame(boolean bottomTurn)
   {
@@ -591,6 +629,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             bottomTurn = true;
             resetTimer();
           }
+
+          resetTimer();
 
         }
     });
@@ -1043,7 +1083,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
            long second = TimeUnit.SECONDS.toSeconds(seconds)- (TimeUnit.SECONDS.toMinutes(seconds) * 60);
           timerLabel.setText(minute + ":"+ second);
           if (seconds == 0) {
-            System.exit(0);
+            showEnd();
           }
       }
     };

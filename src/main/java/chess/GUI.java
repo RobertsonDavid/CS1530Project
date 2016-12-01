@@ -1196,8 +1196,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     boolean hasLabel = false;
     ChessPiece piece = board.getPieceAt(compOrigRow, compOrigCol);
 
-    System.out.println(compOrigRow + " " + compNewRow);
-
     for (Component jc : oldCompSquare.getComponents()) {
       if(jc instanceof JLabel) {
           compSpace = (JLabel)jc;
@@ -1217,16 +1215,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     compSpace.setVisible(false);
     Container parent = (Container)compSquare;
 
-    System.out.println(compOrigRow + " " + compOrigCol + " " + compNewRow + " " + compNewCol);
-
     if(hasLabel) {
-      System.out.println("there was a piece there");
       parent.remove(0);
       parent.add(compSpace);
       board.update(compOrigRow, compOrigCol, compNewRow, compNewCol); //Update the ChessBoard object accordingly
     }
     else {
-      System.out.println("it was empty");
 
       //need to check for en passant
       if(piece.getType().equals("pawn")) {

@@ -89,7 +89,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
   //Timer
 	private JLabel timerLabel = new JLabel();
 	JToolBar timers = new JToolBar();
-  private static int seconds = 10;
+  private static int seconds = 300;
   private Timer timer;
   ActionListener displayTime;
 

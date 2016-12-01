@@ -572,6 +572,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
           flipCapArea();
 
+          if(bottomTurn == false) {
+            if(isCheckMate(false)) {
+              showEndGame(false);
+            }
+            computerMove();
+            if(isCheckMate(true)) {
+              showEndGame(true);
+            }
+            bottomTurn = true;
+            resetTimer();
+          }
+
         }
     });
 
@@ -596,6 +608,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     chooseColor.add(controlPanel);
     chooseColor.add(confirmation);
     chooseColor.setVisible(true);
+
   }
 
   //Flips board by simply swapping the square positions, using subtraction to find the appropriate coordinates.
@@ -1501,11 +1514,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     return false;
   }
 
-
+  //This manages the computer's moves
   public void computerMove() {
-    String fen = board.generateFEN(false);
+    String fen = board.generateFEN(false); //get FEN of board
 
-    String move = stockfish.getBestMove(fen, 50);
+    String move = stockfish.getBestMove(fen, 50); //Get stockfish's move - think time of 50ms
     int compOrigCol = (int)move.charAt(0) - (int)'a'; //Gets array position of the letter - for instance, 'a' becomes 0
     int compOrigRow = 8 - (Character.getNumericValue(move.charAt(1)) - 1) - 1;
     int compNewCol = (int)move.charAt(2) - (int)'a';
@@ -1516,6 +1529,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     boolean hasLabel = false;
     ChessPiece piece = board.getPieceAt(compOrigRow, compOrigCol);
 
+    //get the piece we're moving
     for (Component jc : oldCompSquare.getComponents()) {
       if(jc instanceof JLabel) {
           compSpace = (JLabel)jc;
@@ -1523,6 +1537,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
       }
     }
 
+    //Get the piece we're removing, if it exists
     for (Component jc : compSquare.getComponents()) {
       if(jc instanceof JLabel) {
         hasLabel = true;
@@ -1535,6 +1550,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     compSpace.setVisible(false);
     Container parent = (Container)compSquare;
 
+    //update the board (frontend and backend)
     if(hasLabel) {
       parent.remove(0);
       parent.add(compSpace);

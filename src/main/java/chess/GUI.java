@@ -1479,7 +1479,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
           }
           //castle
           else if(piece.getType().equals("king")) {
-            System.out.println("it was a castle");
             BoardSquare castleRook;
             BoardSquare oldRookPos;
             //castle king side
@@ -1504,7 +1503,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             movedRook.setVisible(false);
             Container rookParent = (Container)castleRook;
             rookParent.add(movedRook);
-
+            movedRook.setVisible(true);
           }
         }
 

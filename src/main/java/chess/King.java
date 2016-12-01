@@ -155,12 +155,12 @@ public class King implements ChessPiece, Serializable {
         }
         else{
           //move rook and then move king
-          Rook r = (Rook)board.getPieceAt(this.row, this.column+3);
+          ChessPiece r = board.getPieceAt(this.row, this.column+3);
           if(!r.getFirstMove()) {
             return this.position;
           }
-          r.updateCoord(newRow, newCol-2);
-          board.update(this.row, this.column+3, newRow, newCol-2);
+          r.updateCoord(newRow, r.getColumn()-2);
+          board.update(this.row, this.column+3, newRow, r.getColumn()-2);
           r.setFirstMove(false);
 
           this.firstMove = false;
@@ -179,12 +179,12 @@ public class King implements ChessPiece, Serializable {
         }
         else{
           //move rook and then move king
-          Rook r = (Rook)board.getPieceAt(this.row, this.column-4);
+          ChessPiece r = board.getPieceAt(this.row, this.column-4);
           if(!r.getFirstMove()) {
             return this.position;
           }
-          r.updateCoord(newRow, newCol+3);
-          board.update(this.row, this.column-4, newRow, newCol+3);
+          r.updateCoord(newRow, r.getColumn()+3);
+          board.update(this.row, this.column-4, newRow, r.getColumn()+3);
           r.setFirstMove(false);
 
           this.firstMove = false;

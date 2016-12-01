@@ -572,6 +572,18 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
           flipCapArea();
 
+          if(bottomTurn == false) {
+            if(isCheckMate(false)) {
+              showEndGame(false);
+            }
+            computerMove();
+            if(isCheckMate(true)) {
+              showEndGame(true);
+            }
+            bottomTurn = true;
+            resetTimer();
+          }
+
         }
     });
 
@@ -596,6 +608,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     chooseColor.add(controlPanel);
     chooseColor.add(confirmation);
     chooseColor.setVisible(true);
+
   }
 
   //Flips board by simply swapping the square positions, using subtraction to find the appropriate coordinates.
